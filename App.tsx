@@ -7,11 +7,11 @@ import {
   StatusBar,
   TextInput,
   Button,
+  Alert,
 } from "react-native";
 
 import { Colors } from "react-native/Libraries/NewAppScreen";
-
-declare const global: { HermesInternal: null | {} };
+import login from "./api/login";
 
 interface Login {
   userId: string;
@@ -51,7 +51,14 @@ function LoginForm(): JSX.Element {
         value={password}
         onChangeText={updatePassword}
       />
-      <Button title="Submit" onPress={() => {}} />
+      <Button
+        title="Submit"
+        onPress={() =>
+          login(username, password)
+            .then(res => Alert.alert("SUCCESS: " + res.data.user.id))
+            .catch(err => Alert.alert("ERR: " + err))
+        }
+      />
     </View>
   );
 }
