@@ -3,12 +3,11 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import LoginForm from "./src/LoginForm";
-import * as ActiveUser from "./types/active_user";
 
-const UserContext = React.createContext<ActiveUser.ActiveUser>(
-  ActiveUser.None(),
-);
+import LoginForm from "./src/LoginForm";
+import Settings from "./src/Settings";
+import UserContext from "./state/user_context";
+import * as ActiveUser from "./types/active_user";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -40,29 +39,13 @@ function App(): JSX.Element {
   );
 }
 
-// Placeholder componentws
+// Placeholder components
 
 const Home = () => <View style={{ flex: 1, backgroundColor: "green" }} />;
 
 const Tables = () => <View style={{ flex: 1, backgroundColor: "blue" }} />;
 
 const Waitlist = () => <View style={{ flex: 1, backgroundColor: "pink" }} />;
-
-const Settings = () => (
-  <UserContext.Consumer>
-    {activeUser =>
-      activeUser.caseOf({
-        None: () => null,
-        User: (id, token, email) => (
-          <View style={{ flex: 1, backgroundColor: "yellow" }}>
-            <Text>Logged in as: {email}</Text>
-            <Text>With id: {id}</Text>
-          </View>
-        ),
-      })
-    }
-  </UserContext.Consumer>
-);
 
 // -- STYLES
 
