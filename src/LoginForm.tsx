@@ -31,7 +31,7 @@ function LoginForm(props: LoginFormProps): JSX.Element {
         onPress={() =>
           requestLogin(username, password)
             .then(res => res.data.user)
-            .then(user => ActiveUser.User(user.id, user.token))
+            .then(({ id, token, email }) => ActiveUser.User(id, token, email))
             .then(props.onLogin)
             .catch(err => Alert.alert("Login Failed" + err))
         }
