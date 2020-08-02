@@ -6,11 +6,13 @@ Motivation for this app comes from years of restaurant work experience, where I 
 
 ### Dependencies
 
+```
+npm install
+```
+
 This project was initialized with `npx react-native init WaitLess --template react-native-template-typescript`.
 Additionally:
 
 - React Navigation
-- SumTypes by @hojberg/sums-up
-- Axios for network requests
-
-`npm install` to install dependencies
+- SumTypes by [@hojberg/sums-up](https://github.com/hojberg/sums-up)
+- [axios](https://github.com/axios/axios) for network requests
