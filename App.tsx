@@ -6,6 +6,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 
 import LoginForm from "./src/LoginForm";
 import Settings from "./src/Settings";
+import Waitlist from "./src/Waitlist";
 import UserContext from "./state/user_context";
 import * as ActiveUser from "./types/active_user";
 
@@ -44,8 +45,6 @@ function App(): JSX.Element {
 const Home = () => <View style={{ flex: 1, backgroundColor: "green" }} />;
 
 const Tables = () => <View style={{ flex: 1, backgroundColor: "blue" }} />;
-
-const Waitlist = () => <View style={{ flex: 1, backgroundColor: "pink" }} />;
 
 // -- STYLES
 
