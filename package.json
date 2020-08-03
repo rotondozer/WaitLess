@@ -21,6 +21,7 @@
     "react-native-safe-area-context": "^3.1.1",
     "react-native-screens": "^2.9.0",
     "react-native-tab-view": "^2.15.0",
+    "seidr": "^1.8.0",
     "sums-up": "^2.2.0"
   },
   "devDependencies": {
