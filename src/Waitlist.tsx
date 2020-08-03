@@ -26,19 +26,48 @@ function WaitList(): JSX.Element {
   );
 }
 
+/**
+ * TODO: Make entire cell touchable with just name and size, then push new screen onPress
+ */
 function PartyWaiting(party: Party.Party): JSX.Element {
   const { id, name, size } = party;
   return (
-    <View key={id}>
-      <Text>
-        Name: {name}, Size: {size}
-      </Text>
+    <View style={styles.partyContainer} key={id}>
+      <View style={styles.partyNameContainer}>
+        <Text>{name}</Text>
+      </View>
+      <View style={styles.partySizeContainer}>
+        <Text>{size}</Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "pink" },
+  container: { flex: 1, padding: 5, backgroundColor: "pink" },
+
+  partyContainer: {
+    flexDirection: "row",
+    height: 55,
+    width: "100%",
+    margin: 2,
+    padding: 3,
+    borderWidth: 2,
+    borderColor: "black",
+    borderRadius: 12,
+  },
+  partyNameContainer: {
+    flex: 0.7,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  partySizeContainer: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default WaitList;
