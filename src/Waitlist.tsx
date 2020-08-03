@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { ReactNode, useEffect, useState, useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Maybe, Nothing } from "seidr";
 
@@ -18,15 +18,21 @@ function WaitList(): JSX.Element {
 
   return (
     <View style={styles.container}>
-      {parties.caseOf({
-        Nothing: () => [<Text key={0}>No Parties on the Waitlist!</Text>], // React.Children type or something to get rid of `[]`
-        Just: ps =>
-          ps.map(({ id, name, size }) => (
-            <Text key={id}>
-              Name: {name}, Size: {size}
-            </Text>
-          )),
+      {parties.caseOf<ReactNode>({
+        Nothing: () => <Text>No Parties on the Waitlist!</Text>,
+        Just: ps => ps.map(PartyWaiting),
       })}
+    </View>
+  );
+}
+
+function PartyWaiting(party: Party.Party): JSX.Element {
+  const { id, name, size } = party;
+  return (
+    <View key={id}>
+      <Text>
+        Name: {name}, Size: {size}
+      </Text>
     </View>
   );
 }
