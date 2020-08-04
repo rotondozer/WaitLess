@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState, useContext } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import { Maybe, Nothing } from "seidr";
 
 import UserContext from "../state/user_context";
@@ -17,12 +17,21 @@ function WaitList(): JSX.Element {
   }, [user]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
+      <Pressable
+        onPress={() => {}}
+        style={({ pressed }) =>
+          pressed
+            ? [styles.addPartyButton, styles.buttonPressed]
+            : styles.addPartyButton
+        }>
+        <Text style={styles.buttonText}>Add Party</Text>
+      </Pressable>
       {parties.caseOf<ReactNode>({
         Nothing: () => <Text>No Parties on the Waitlist!</Text>,
         Just: ps => ps.map(PartyWaiting),
       })}
-    </View>
+    </ScrollView>
   );
 }
 
@@ -34,10 +43,10 @@ function PartyWaiting(party: Party.Party): JSX.Element {
   return (
     <View style={styles.partyContainer} key={id}>
       <View style={styles.partyNameContainer}>
-        <Text>{name}</Text>
+        <Text style={styles.text}>{name}</Text>
       </View>
       <View style={styles.partySizeContainer}>
-        <Text>{size}</Text>
+        <Text style={styles.text}>{size}</Text>
       </View>
     </View>
   );
@@ -46,11 +55,34 @@ function PartyWaiting(party: Party.Party): JSX.Element {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 5, backgroundColor: "pink" },
 
+  text: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  buttonText: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+
+  addPartyButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 12,
+    height: 35,
+    width: "50%",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    // borderColor: "orange",
+    borderWidth: 3,
+  },
+  buttonPressed: {
+    backgroundColor: "rgba(120, 120, 120, 0.1)",
+  },
+
   partyContainer: {
     flexDirection: "row",
     height: 55,
     width: "100%",
-    margin: 2,
+    marginTop: 2,
     padding: 3,
     borderWidth: 2,
     borderColor: "black",
