@@ -18,20 +18,26 @@ function WaitList(): JSX.Element {
 
   return (
     <ScrollView style={styles.container}>
-      <Pressable
-        onPress={() => {}}
-        style={({ pressed }) =>
-          pressed
-            ? [styles.addPartyButton, styles.buttonPressed]
-            : styles.addPartyButton
-        }>
-        <Text style={styles.buttonText}>Add Party</Text>
-      </Pressable>
+      <AddPartyButton />
       {parties.caseOf<ReactNode>({
         Nothing: () => <Text>No Parties on the Waitlist!</Text>,
         Just: ps => ps.map(PartyWaiting),
       })}
     </ScrollView>
+  );
+}
+
+function AddPartyButton(): JSX.Element {
+  return (
+    <Pressable
+      onPress={() => {}}
+      style={({ pressed }) =>
+        pressed
+          ? [styles.addPartyButton, styles.buttonPressed]
+          : styles.addPartyButton
+      }>
+      <Text style={styles.buttonText}>Add Party</Text>
+    </Pressable>
   );
 }
 
