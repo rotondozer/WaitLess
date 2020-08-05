@@ -27,10 +27,8 @@ function App(): JSX.Element {
                 <Text>Hello, {email}!</Text>
               </View>
               <Tab.Navigator>
-                <Tab.Screen name="Home" component={Home} />
-                <Tab.Screen name="Tables" component={Tables} />
                 <Tab.Screen name="Waitlist" component={Waitlist} />
-                <Tab.Screen name="Settings" component={Settings} />
+                <Tab.Screen name="Tables" component={Tables} />
               </Tab.Navigator>
             </UserContext.Provider>
           ),
