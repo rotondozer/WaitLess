@@ -1,9 +1,15 @@
 import React, { ReactNode, useEffect, useState, useContext } from "react";
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
+import { enableScreens } from "react-native-screens";
+import { createNativeStackNavigator } from "react-native-screens/native-stack";
+import { useNavigation } from "@react-navigation/native";
 import { Maybe, Nothing } from "seidr";
 
 import UserContext from "../state/user_context";
 import * as Party from "../api/party";
+
+enableScreens();
+const Stack = createNativeStackNavigator();
 
 type PartiesState = Maybe<Array<Party.Party>>;
 
@@ -16,21 +22,40 @@ function WaitList(): JSX.Element {
     Party.getAll(user).then(updateParties);
   }, [user]);
 
-  return (
-    <ScrollView style={styles.container}>
+  // Defining the component here lets me get the parties const and still use the
+  // `component` prop on the Stack Screen
+  const Parties = () => (
+    <View style={styles.container}>
       <AddPartyButton />
-      {parties.caseOf<ReactNode>({
-        Nothing: () => <Text>No Parties on the Waitlist!</Text>,
-        Just: ps => ps.map(PartyWaiting),
-      })}
-    </ScrollView>
+      <ScrollView>
+        {parties.caseOf<ReactNode>({
+          Nothing: () => <Text>No Parties on the Waitlist!</Text>,
+          Just: ps => ps.map(PartyWaiting),
+        })}
+      </ScrollView>
+    </View>
+  );
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Waitlist" component={Parties} />
+      <Stack.Screen name="Add Party Form" component={AddPartyForm} />
+    </Stack.Navigator>
   );
 }
 
+// -- PRIVATE
+
+function AddPartyForm(): JSX.Element {
+  return <View style={{ flex: 1, backgroundColor: "purple" }} />;
+}
+
 function AddPartyButton(): JSX.Element {
+  const navigation = useNavigation();
+
   return (
     <Pressable
-      onPress={() => {}}
+      onPress={() => navigation.navigate("Add Party Form")}
       style={({ pressed }) =>
         pressed
           ? [styles.addPartyButton, styles.buttonPressed]
@@ -58,6 +83,8 @@ function PartyWaiting(party: Party.Party): JSX.Element {
   );
 }
 
+// -- STYLES
+
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 5, backgroundColor: "pink" },
 
@@ -73,11 +100,11 @@ const styles = StyleSheet.create({
   addPartyButton: {
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 12,
     height: 35,
     width: "50%",
+    marginVertical: 10,
     backgroundColor: "rgba(0, 0, 0, 0.1)",
-    // borderColor: "orange",
+    borderRadius: 12,
     borderWidth: 3,
   },
   buttonPressed: {
