@@ -15,13 +15,13 @@ function LoginForm(props: LoginFormProps): JSX.Element {
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionTitle}>Login</Text>
       <TextInput
-        style={styles.sectionDescription}
+        style={styles.textInput}
         placeholder="Username"
         value={username}
         onChangeText={updateUsername}
       />
       <TextInput
-        style={styles.sectionDescription}
+        style={styles.textInput}
         placeholder="Password"
         value={password}
         onChangeText={updatePassword}
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "600",
   },
-  sectionDescription: {
+  textInput: {
     marginTop: 8,
     fontSize: 18,
     fontWeight: "400",
