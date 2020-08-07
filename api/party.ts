@@ -1,5 +1,5 @@
-import axios, { AxiosPromise } from "axios";
-import { Maybe, Nothing } from "seidr";
+import axios from "axios";
+import { Maybe, Nothing, Result, Ok, Err } from "seidr";
 import baseUrl from "./base_url";
 import * as ActiveUser from "../types/active_user";
 
@@ -58,6 +58,34 @@ function getAll(
   });
 }
 
+function create(
+  party: Party,
+  activeUser: ActiveUser.ActiveUser,
+): Promise<Result<string, Party>> {
+  return activeUser.caseOf({
+    None: () => Promise.reject("User Required"),
+    User: (id, token, _) =>
+      axios({
+        url: `${baseUrl}/users/${id}/parties`,
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Token token=" + token,
+        },
+        data: {
+          party: {
+            name: party.name,
+            size: party.size,
+            checked_in: party.checkedInAt,
+            est_wait: party.estimatedWait,
+            notes: party.notes,
+            user_id: id,
+          },
+        },
+      }).then(res => (res.status === 201 ? Ok(party) : Err(res.statusText))),
+  });
+}
+
 // TODO: namespace to enforce the `Party.getAll()` syntax?
 
-export { getAll };
+export { getAll, create };
