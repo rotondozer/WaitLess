@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Maybe, Nothing, Result, Ok, Err } from "seidr";
+import { Maybe, Nothing, Result, Ok, Err, Just } from "seidr";
 import baseUrl from "./base_url";
 import * as ActiveUser from "../types/active_user";
 
@@ -10,28 +10,6 @@ export interface Party {
   estimatedWait: string; // what type should this be?
   notes: string;
   checkedInAt: Maybe<string>; // this one too
-}
-
-interface PartySchema {
-  id: string;
-  name: string;
-  size: string;
-  est_wait: string;
-  notes: string;
-  checked_in?: string;
-}
-function serialize(party: PartySchema): Party {
-  const { id, name, size, est_wait, notes, checked_in } = party;
-  console.log("name: ", name);
-  console.log("id: ", id);
-  return {
-    id,
-    name,
-    size: Maybe.fromNullable(parseInt(size)).getOrElse(0),
-    estimatedWait: est_wait,
-    notes,
-    checkedInAt: Maybe.fromNullable(checked_in),
-  };
 }
 
 function getAll(
@@ -58,10 +36,17 @@ function getAll(
   });
 }
 
+/**
+ * @variation Ok -> name; Server responded with a 201 (created)
+ * @variation Err -> statusText; TODO: more specific error types generated from status code!
+ */
 function create(
-  party: Party,
   activeUser: ActiveUser.ActiveUser,
-): Promise<Result<string, Party>> {
+  name: string,
+  size: Maybe<number>,
+  estWait: string,
+  notes: string,
+): Promise<Result<string, string>> {
   return activeUser.caseOf({
     None: () => Promise.reject("User Required"),
     User: (id, token, _) =>
@@ -74,18 +59,41 @@ function create(
         },
         data: {
           party: {
-            name: party.name,
-            size: party.size,
-            checked_in: party.checkedInAt,
-            est_wait: party.estimatedWait,
-            notes: party.notes,
+            name,
+            size: size.getOrElse(0),
+            checked_in: Just(Date.now().toString()),
+            est_wait: estWait,
+            notes,
             user_id: id,
           },
         },
-      }).then(res => (res.status === 201 ? Ok(party) : Err(res.statusText))),
+      }).then(res => (res.status === 201 ? Ok(name) : Err(res.statusText))),
   });
 }
 
-// TODO: namespace to enforce the `Party.getAll()` syntax?
+// -- PRIVATE
+
+interface PartySchema {
+  id: string;
+  name: string;
+  size: string;
+  est_wait: string;
+  notes: string;
+  checked_in?: string;
+  user_id: string;
+}
+function serialize(party: PartySchema): Party {
+  const { id, name, size, est_wait, notes, checked_in } = party;
+  console.log("name: ", name);
+  console.log("id: ", id);
+  return {
+    id,
+    name,
+    size: Maybe.fromNullable(parseInt(size)).getOrElse(0),
+    estimatedWait: est_wait,
+    notes,
+    checkedInAt: Maybe.fromNullable(checked_in),
+  };
+}
 
 export { getAll, create };
