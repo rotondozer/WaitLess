@@ -1,13 +1,22 @@
-import React, { useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { Input, Button } from "./common";
+import React, { useState, useContext } from "react";
+import { Text, View, StyleSheet, Alert, ToastAndroid } from "react-native";
+import { NavigationProp } from "@react-navigation/native";
+import { Maybe, Just, Nothing } from "seidr";
 
-// Instad of 'time checked in' input, make it a new Date() to get the current time
-function AddPartyForm(): JSX.Element {
+import * as Party from "../api/party";
+import UserContext from "../state/user_context";
+import { Input, Button } from "./common";
+import * as ActiveUser from "../types/active_user";
+import { stringToNum, ParseError } from "../util/string_to_num";
+
+// TODO: Navigation Types? Get rid of `any`!
+function AddPartyForm(props: { navigation: NavigationProp<any> }): JSX.Element {
   const [name, updateName] = useState("");
-  const [partySize, updatePartySize] = useState(""); // numOfGuests instead?
+  const [partySize, updatePartySize] = useState<Maybe<number>>(Nothing());
   const [estWait, updateEstWait] = useState("");
   const [notes, updateNotes] = useState("");
+
+  const user = useContext(UserContext); // TODO: HOC for UserContext
 
   return (
     <View style={[styles.container, { backgroundColor: "purple" }]}>
@@ -22,8 +31,8 @@ function AddPartyForm(): JSX.Element {
         <Input
           placeholder="# Guests"
           keyboardType="number-pad"
-          value={partySize}
-          onChangeText={updatePartySize}
+          value={partySize.map(String).getOrElse("")}
+          onChangeText={v => onChangePartySize(v, updatePartySize)}
           style={styles.guestCountInput}
         />
       </View>
@@ -43,9 +52,62 @@ function AddPartyForm(): JSX.Element {
         maxLength={400}
         numberOfLines={4}
       />
-      <Button onPress={() => {}} text="Add to Waitlist" />
+      <Button
+        onPress={() =>
+          onCreateParty(props.navigation, user, name, partySize, estWait, notes)
+        }
+        text="Add to Waitlist"
+      />
     </View>
   );
+}
+
+// -- PRIVATE
+
+// TODO: Ditch Err enum, instead sumType for all 3 parse outcomes
+function onChangePartySize(
+  input: string,
+  updateState: (num: Maybe<number>) => void,
+): void {
+  return stringToNum(input).caseOf({
+    Err: err => {
+      switch (err) {
+        case ParseError.EMPTY_STRING:
+          updateState(Nothing());
+          break;
+        case ParseError.NaN:
+          Alert.alert("Needs to be a number!");
+          break;
+      }
+    },
+    Ok: num => updateState(Just(num)),
+  });
+}
+
+function onCreateParty(
+  navigation: NavigationProp<any>, // TODO get rid of `any`
+  user: ActiveUser.ActiveUser,
+  name: string,
+  size: Maybe<number>,
+  estWait: string,
+  notes: string,
+): Promise<void> {
+  const alertFailedCreation = (message: string) =>
+    Alert.alert(`Failed creating party!\n${message}`);
+
+  return Party.create(user, name, size, estWait, notes)
+    .then(res => {
+      res.caseOf({
+        Err: alertFailedCreation,
+        Ok: name =>
+          ToastAndroid.show(
+            `${name} successfully added to the waitlist!`,
+            ToastAndroid.SHORT,
+          ),
+      });
+    })
+    .then(_ => navigation.goBack())
+    .catch(alertFailedCreation);
 }
 
 // -- STYLES
