@@ -14,5 +14,5 @@ This project was initialized with `npx react-native init WaitLess --template rea
 Additionally:
 
 - React Navigation
-- SumTypes by [@hojberg/sums-up](https://github.com/hojberg/sums-up)
+- SumTypes by [@hojberg/sums-up](https://github.com/hojberg/sums-up) and [@hojberg/seidr](https://github.com/hojberg/sums-up)
 - [axios](https://github.com/axios/axios) for network requests
