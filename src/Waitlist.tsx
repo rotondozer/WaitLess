@@ -1,8 +1,8 @@
-import React, { ReactNode, useEffect, useState, useContext } from "react";
-import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
+import React, { ReactNode, useCallback, useState, useContext } from "react";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { enableScreens } from "react-native-screens";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { Maybe, Nothing } from "seidr";
 
 import { UserContext } from "../state/user_context";
@@ -20,16 +20,18 @@ function WaitList(): JSX.Element {
 
   const user = useContext(UserContext);
 
-  useEffect(() => {
-    Party.getAll(user).then(updateParties);
-  }, [user]);
+  useFocusEffect(
+    useCallback(() => {
+      Party.getAll(user).then(updateParties);
+    }, [user]),
+  );
 
   // Defining the component here lets me get the parties const and still use the
   // `component` prop on the Stack Screen
   const Parties = () => (
     <View style={styles.container}>
       <AddPartyButton />
-      <ScrollView>
+      <ScrollView alwaysBounceVertical>
         {parties.caseOf<ReactNode>({
           Nothing: () => <Text>No Parties on the Waitlist!</Text>,
           Just: ps => ps.map(PartyWaiting),
