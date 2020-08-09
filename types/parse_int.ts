@@ -10,7 +10,17 @@ class ParseInt extends SumType<{
   EmptyString: [];
   NaN: [];
   Parsed: [number];
-}> {}
+}> {
+  /**
+   * Provide a fallback number for all other cases
+   */
+  public orElse(fallback: number): number {
+    return this.caseOf({
+      Parsed: n => n,
+      _: () => fallback,
+    });
+  }
+}
 
 function EmptyString(): ParseInt {
   return new ParseInt("EmptyString");

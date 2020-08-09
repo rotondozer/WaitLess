@@ -1,7 +1,7 @@
 import axios from "axios";
-import { Maybe, Nothing, Result, Ok, Err, Just } from "seidr";
+import { Maybe, Result, Ok, Err, Just } from "seidr";
 import baseUrl from "./base_url";
-import { ActiveUser } from "../types";
+import { ActiveUser, ParseInt } from "../types";
 
 export interface Party {
   id: string;
@@ -25,14 +25,9 @@ function getAll(
           "content-type": "application/json",
           Authorization: "Token token=" + token,
         },
-      })
-        .then(res =>
-          Maybe.fromNullable(res.data.parties).map(ps => ps.map(serialize)),
-        )
-        .catch(err => {
-          console.warn(err);
-          return Nothing();
-        }),
+      }).then(res =>
+        Maybe.fromNullable(res.data.parties).map(ps => ps.map(serialize)),
+      ),
   });
 }
 
@@ -91,7 +86,7 @@ function serialize(party: PartySchema): Party {
   return {
     id,
     name,
-    size: Maybe.fromNullable(parseInt(size)).getOrElse(0),
+    size: ParseInt.parse(size).orElse(0),
     estimatedWait: est_wait,
     notes,
     checkedInAt: Maybe.fromNullable(checked_in),
