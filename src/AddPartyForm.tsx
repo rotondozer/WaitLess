@@ -1,18 +1,16 @@
 import React, { useState, useContext } from "react";
 import { Text, View, StyleSheet, Alert, ToastAndroid } from "react-native";
 import { NavigationProp } from "@react-navigation/native";
-import { Maybe, Just, Nothing } from "seidr";
 
 import * as Party from "../api/party";
 import UserContext from "../state/user_context";
 import { Input, Button } from "./common";
-import * as ActiveUser from "../types/active_user";
-import { stringToNum, ParseError } from "../util/string_to_num";
+import { ActiveUser, ParseInt } from "../types";
 
 // TODO: Navigation Types? Get rid of `any`!
 function AddPartyForm(props: { navigation: NavigationProp<any> }): JSX.Element {
   const [name, updateName] = useState("");
-  const [partySize, updatePartySize] = useState<Maybe<number>>(Nothing());
+  const [partySize, updatePartySize] = useState("");
   const [estWait, updateEstWait] = useState("");
   const [notes, updateNotes] = useState("");
 
@@ -31,8 +29,14 @@ function AddPartyForm(props: { navigation: NavigationProp<any> }): JSX.Element {
         <Input
           placeholder="# Guests"
           keyboardType="number-pad"
-          value={partySize.map(String).getOrElse("")}
-          onChangeText={v => onChangePartySize(v, updatePartySize)}
+          value={partySize}
+          onChangeText={v =>
+            ParseInt.parse(v).caseOf({
+              EmptyString: () => updatePartySize(""),
+              NaN: () => Alert.alert("Needs to be a number!"),
+              Parsed: num => updatePartySize(num.toString()),
+            })
+          }
           style={styles.guestCountInput}
         />
       </View>
@@ -64,48 +68,30 @@ function AddPartyForm(props: { navigation: NavigationProp<any> }): JSX.Element {
 
 // -- PRIVATE
 
-// TODO: Ditch Err enum, instead sumType for all 3 parse outcomes
-function onChangePartySize(
-  input: string,
-  updateState: (num: Maybe<number>) => void,
-): void {
-  return stringToNum(input).caseOf({
-    Err: err => {
-      switch (err) {
-        case ParseError.EMPTY_STRING:
-          updateState(Nothing());
-          break;
-        case ParseError.NaN:
-          Alert.alert("Needs to be a number!");
-          break;
-      }
-    },
-    Ok: num => updateState(Just(num)),
-  });
-}
-
 function onCreateParty(
   navigation: NavigationProp<any>, // TODO get rid of `any`
   user: ActiveUser.ActiveUser,
   name: string,
-  size: Maybe<number>,
+  size: string,
   estWait: string,
   notes: string,
 ): Promise<void> {
   const alertFailedCreation = (message: string) =>
     Alert.alert(`Failed creating party!\n${message}`);
 
+  const toastSuccess = (name: string) =>
+    ToastAndroid.show(
+      `${name} successfully added to the waitlist!`,
+      ToastAndroid.SHORT,
+    );
+
   return Party.create(user, name, size, estWait, notes)
-    .then(res => {
+    .then(res =>
       res.caseOf({
         Err: alertFailedCreation,
-        Ok: name =>
-          ToastAndroid.show(
-            `${name} successfully added to the waitlist!`,
-            ToastAndroid.SHORT,
-          ),
-      });
-    })
+        Ok: toastSuccess,
+      }),
+    )
     .then(_ => navigation.goBack())
     .catch(alertFailedCreation);
 }

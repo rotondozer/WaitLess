@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Maybe, Nothing, Result, Ok, Err, Just } from "seidr";
 import baseUrl from "./base_url";
-import * as ActiveUser from "../types/active_user";
+import { ActiveUser } from "../types";
 
 export interface Party {
   id: string;
@@ -43,7 +43,7 @@ function getAll(
 function create(
   activeUser: ActiveUser.ActiveUser,
   name: string,
-  size: Maybe<number>,
+  size: string,
   estWait: string,
   notes: string,
 ): Promise<Result<string, string>> {
@@ -60,7 +60,7 @@ function create(
         data: {
           party: {
             name,
-            size: size.getOrElse(0),
+            size,
             checked_in: Just(Date.now().toString()),
             est_wait: estWait,
             notes,
@@ -84,8 +84,10 @@ interface PartySchema {
 }
 function serialize(party: PartySchema): Party {
   const { id, name, size, est_wait, notes, checked_in } = party;
-  console.log("name: ", name);
+
   console.log("id: ", id);
+  console.log("name: ", name);
+
   return {
     id,
     name,
