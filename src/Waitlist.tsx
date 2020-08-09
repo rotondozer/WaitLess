@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { Maybe, Nothing } from "seidr";
 
-import UserContext from "../state/user_context";
+import { UserContext } from "../state/user_context";
 import * as Party from "../api/party";
 import { Button } from "./common";
 import AddPartyForm from "./AddPartyForm";

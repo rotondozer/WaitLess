@@ -3,18 +3,20 @@ import { Text, View, StyleSheet, Alert, ToastAndroid } from "react-native";
 import { NavigationProp } from "@react-navigation/native";
 
 import * as Party from "../api/party";
-import UserContext from "../state/user_context";
+import { WithUserContext, withUserContext } from "../state/user_context";
 import { Input, Button } from "./common";
 import { ActiveUser, ParseInt } from "../types";
 
 // TODO: Navigation Types? Get rid of `any`!
-function AddPartyForm(props: { navigation: NavigationProp<any> }): JSX.Element {
+type Props = WithUserContext<{ navigation: NavigationProp<any> }>;
+
+function AddPartyForm(props: Props): JSX.Element {
+  const { user, navigation } = props;
+
   const [name, updateName] = useState("");
   const [partySize, updatePartySize] = useState("");
   const [estWait, updateEstWait] = useState("");
   const [notes, updateNotes] = useState("");
-
-  const user = useContext(UserContext); // TODO: HOC for UserContext
 
   return (
     <View style={[styles.container, { backgroundColor: "purple" }]}>
@@ -58,7 +60,7 @@ function AddPartyForm(props: { navigation: NavigationProp<any> }): JSX.Element {
       />
       <Button
         onPress={() =>
-          onCreateParty(props.navigation, user, name, partySize, estWait, notes)
+          onCreateParty(navigation, user, name, partySize, estWait, notes)
         }
         text="Add to Waitlist"
       />
@@ -115,4 +117,4 @@ const styles = StyleSheet.create({
   notesInput: { textAlignVertical: "top" },
 });
 
-export default AddPartyForm;
+export default withUserContext(AddPartyForm);
