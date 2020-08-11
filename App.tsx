@@ -11,8 +11,12 @@ import Settings from "./src/Settings";
 import { UserContext } from "./state/user_context";
 import { ActiveUser, RootStackParamList } from "./types";
 
+// -- NAVIGATOR
+
 enableScreens();
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+// -- ROOT VIEW
 
 function App(): JSX.Element {
   const [activeUser, updateUser] = useState<ActiveUser.ActiveUser>(
@@ -23,19 +27,18 @@ function App(): JSX.Element {
       <View style={{ flex: 1 }}>
         {activeUser.caseOf({
           None: () => <LoginForm onLogin={updateUser} />,
-          User: (userId, token, email) => (
+          User: (_, __, email) => (
             <UserContext.Provider value={activeUser}>
-              <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Navigator
+                screenOptions={({ route }) => ({
+                  headerShown: route.name === "Settings",
+                })}>
                 <Stack.Screen
                   name="Home"
                   component={Home}
                   initialParams={{ email }}
                 />
-                <Stack.Screen
-                  name="Settings"
-                  component={Settings}
-                  initialParams={{ userId, token, email }}
-                />
+                <Stack.Screen name="Settings" component={Settings} />
               </Stack.Navigator>
             </UserContext.Provider>
           ),

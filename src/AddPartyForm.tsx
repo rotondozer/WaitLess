@@ -1,17 +1,24 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Text, View, StyleSheet, Alert, ToastAndroid } from "react-native";
-import { NavigationProp } from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
 
 import * as Party from "../api/party";
 import { WithUserContext, withUserContext } from "../state/user_context";
 import { Input, Button } from "./common";
-import { ActiveUser, ParseInt } from "../types";
+import { ActiveUser, ParseInt, WaitlistStackParamList } from "../types";
 import { Fonts, Layouts } from "../styles";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-// TODO: Navigation Types? Get rid of `any`!
-type Props = WithUserContext<{ navigation: NavigationProp<any> }>;
+type Navigation = StackNavigationProp<WaitlistStackParamList, "AddPartyForm">;
 
-function AddPartyForm(props: Props): JSX.Element {
+// -- VIEW
+
+interface Props {
+  navigation: Navigation;
+  route: RouteProp<WaitlistStackParamList, "AddPartyForm">;
+}
+
+function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
   const { user, navigation } = props;
 
   const [name, updateName] = useState("");
@@ -72,7 +79,7 @@ function AddPartyForm(props: Props): JSX.Element {
 // -- PRIVATE
 
 function onCreateParty(
-  navigation: NavigationProp<any>, // TODO get rid of `any`
+  navigation: Navigation,
   user: ActiveUser.ActiveUser,
   name: string,
   size: string,

@@ -1,20 +1,33 @@
 import React from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 import Waitlist from "./Waitlist";
 import { Fonts } from "../styles";
-import { WithUserContext, withUserContext } from "../state/user_context";
+import { RootStackParamList } from "../types";
+
+// -- NAVIGATOR
 
 const Tab = createMaterialTopTabNavigator();
 
-// TODO: prop types
-function Home(props: any): JSX.Element {
+type Navigation = StackNavigationProp<RootStackParamList, "Home">;
+
+// -- VIEW
+
+interface Props {
+  navigation: Navigation;
+  route: RouteProp<RootStackParamList, "Home">;
+}
+
+function Home(props: Props): JSX.Element {
+  const { email } = props.route.params;
   return (
     <>
       <View style={styles.headerContainer}>
-        <Text style={Fonts.title}>Hello, {props.route.params.email}!</Text>
-        <SettingsButton />
+        <Text style={Fonts.title}>Hello, {email}!</Text>
+        <SettingsButton navigation={props.navigation} />
       </View>
       <Tab.Navigator>
         <Tab.Screen name="Waitlist" component={Waitlist} />
@@ -28,9 +41,9 @@ const Tables = () => <View style={{ flex: 1, backgroundColor: "blue" }} />;
 
 // -- PRIVATE
 
-function SettingsButton(): JSX.Element {
+function SettingsButton(props: { navigation: Navigation }): JSX.Element {
   return (
-    <Pressable onPress={() => {}}>
+    <Pressable onPress={() => props.navigation.navigate("Settings")}>
       <Text>Settings</Text>
     </Pressable>
   );

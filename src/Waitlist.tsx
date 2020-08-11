@@ -3,16 +3,22 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { enableScreens } from "react-native-screens";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { Maybe, Nothing } from "seidr";
 
 import { UserContext } from "../state/user_context";
 import * as Party from "../api/party";
 import { Fonts, Layouts } from "../styles";
+import { WaitlistStackParamList } from "../types";
 import { Button } from "./common";
 import AddPartyForm from "./AddPartyForm";
 
+// -- NAVIGATOR
+
 enableScreens();
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<WaitlistStackParamList>();
+
+// -- VIEW
 
 type PartiesState = Maybe<Array<Party.Party>>;
 
@@ -44,7 +50,7 @@ function WaitList(): JSX.Element {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Waitlist" component={Parties} />
-      <Stack.Screen name="Add Party Form" component={AddPartyForm} />
+      <Stack.Screen name="AddPartyForm" component={AddPartyForm} />
     </Stack.Navigator>
   );
 }
@@ -52,12 +58,14 @@ function WaitList(): JSX.Element {
 // -- PRIVATE
 
 function AddPartyButton(): JSX.Element {
-  const navigation = useNavigation();
+  const navigation = useNavigation<
+    StackNavigationProp<WaitlistStackParamList, "Waitlist">
+  >();
 
   return (
     <Button
       text="Add Party"
-      onPress={() => navigation.navigate("Add Party Form")}
+      onPress={() => navigation.navigate("AddPartyForm")}
     />
   );
 }
