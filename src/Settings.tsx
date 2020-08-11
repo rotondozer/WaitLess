@@ -1,21 +1,36 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { withUserContext, WithUserContext } from "../state/user_context";
+import { Fonts, Layouts } from "../styles";
+import { Button } from "./common";
+import { User } from "../api";
+import { ActiveUser } from "../types";
 
 function Settings(props: WithUserContext) {
-  return props.user.caseOf({
+  const { user, updateUser } = props;
+
+  return user.caseOf({
     None: () => null,
-    User: (id, _, email) => (
-      <View style={styles.container}>
-        <Text>Logged in as: {email}</Text>
-        <Text>With id: {id}</Text>
+    User: (id, token, email) => (
+      <View style={[Layouts.container, styles.container]}>
+        <Text style={Fonts.text}>Logged in as: {email}</Text>
+        <Text style={Fonts.text}>With id: {id}</Text>
+        <Button
+          text="Logout"
+          onPress={() =>
+            User.logout(id, token)
+              .then(res => console.log("LOGGED OUT", res))
+              .then(_ => updateUser(ActiveUser.None()))
+              .catch(err => console.error(err))
+          }
+        />
       </View>
     ),
   });
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "yellow" },
+  container: { backgroundColor: "yellow" },
 });
 
 export default withUserContext(Settings);

@@ -28,7 +28,7 @@ function App(): JSX.Element {
         {activeUser.caseOf({
           None: () => <LoginForm onLogin={updateUser} />,
           User: (_, __, email) => (
-            <UserContext.Provider value={activeUser}>
+            <UserContext.Provider value={{ user: activeUser, updateUser }}>
               <Stack.Navigator
                 screenOptions={({ route }) => ({
                   headerShown: route.name === "Settings",

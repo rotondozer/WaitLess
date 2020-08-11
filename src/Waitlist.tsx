@@ -25,7 +25,7 @@ type PartiesState = Maybe<Array<Party.Party>>;
 function WaitList(): JSX.Element {
   const [parties, updateParties] = useState<PartiesState>(Nothing());
 
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   useFocusEffect(
     useCallback(() => {

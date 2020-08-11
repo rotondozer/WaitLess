@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, Alert, StyleSheet } from "react-native";
-import requestLogin from "../api/login";
+import { User } from "../api";
 import { ActiveUser } from "../types";
 
 interface LoginFormProps {
@@ -29,7 +29,7 @@ function LoginForm(props: LoginFormProps): JSX.Element {
       <Button
         title="Submit"
         onPress={() =>
-          requestLogin(username, password)
+          User.login(username, password)
             .then(res => res.data.user)
             .then(({ id, token, email }) => ActiveUser.User(id, token, email))
             .then(props.onLogin)
