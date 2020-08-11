@@ -6,6 +6,7 @@ import * as Party from "../api/party";
 import { WithUserContext, withUserContext } from "../state/user_context";
 import { Input, Button } from "./common";
 import { ActiveUser, ParseInt } from "../types";
+import { Fonts, Layouts } from "../styles";
 
 // TODO: Navigation Types? Get rid of `any`!
 type Props = WithUserContext<{ navigation: NavigationProp<any> }>;
@@ -19,8 +20,8 @@ function AddPartyForm(props: Props): JSX.Element {
   const [notes, updateNotes] = useState("");
 
   return (
-    <View style={[styles.container, { backgroundColor: "purple" }]}>
-      <Text style={styles.title}>Get the party's info...</Text>
+    <View style={[Layouts.container, { backgroundColor: "purple" }]}>
+      <Text style={Fonts.title}>Get the party's info...</Text>
       <View style={{ flexDirection: "row" }}>
         <Input
           placeholder="Name"
@@ -101,17 +102,6 @@ function onCreateParty(
 // -- STYLES
 
 const styles = StyleSheet.create({
-  // TODO: share common styles and/or metrics... make padding a shared screen option?
-  container: {
-    flex: 1,
-    padding: 5,
-    backgroundColor: "pink",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "600",
-  },
-
   nameInput: { width: "75%" },
   guestCountInput: { width: "25%", marginLeft: 1 },
   notesInput: { textAlignVertical: "top" },

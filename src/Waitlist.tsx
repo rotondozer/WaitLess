@@ -7,6 +7,7 @@ import { Maybe, Nothing } from "seidr";
 
 import { UserContext } from "../state/user_context";
 import * as Party from "../api/party";
+import { Fonts, Layouts } from "../styles";
 import { Button } from "./common";
 import AddPartyForm from "./AddPartyForm";
 
@@ -29,7 +30,7 @@ function WaitList(): JSX.Element {
   // Defining the component here lets me get the parties const and still use the
   // `component` prop on the Stack Screen
   const Parties = () => (
-    <View style={styles.container}>
+    <View style={[Layouts.container, { backgroundColor: "pink" }]}>
       <AddPartyButton />
       <ScrollView alwaysBounceVertical>
         {parties.caseOf<ReactNode>({
@@ -69,10 +70,10 @@ function PartyWaiting(party: Party.Party): JSX.Element {
   return (
     <View style={styles.partyContainer} key={id}>
       <View style={styles.partyNameContainer}>
-        <Text style={styles.text}>{name}</Text>
+        <Text style={Fonts.text}>{name}</Text>
       </View>
       <View style={styles.partySizeContainer}>
-        <Text style={styles.text}>{size}</Text>
+        <Text style={Fonts.text}>{size}</Text>
       </View>
     </View>
   );
@@ -81,17 +82,6 @@ function PartyWaiting(party: Party.Party): JSX.Element {
 // -- STYLES
 
 const styles = StyleSheet.create({
-  // TODO: share common styles and/or metrics... make padding a shared screen option?
-  container: {
-    flex: 1,
-    padding: 5,
-    backgroundColor: "pink",
-  },
-  text: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-
   partyContainer: {
     flexDirection: "row",
     height: 55,
