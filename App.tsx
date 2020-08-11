@@ -1,17 +1,18 @@
-import "react-native-gesture-handler";
+import "react-native-gesture-handler"; // Needs to stay above everything else
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View } from "react-native";
+import { enableScreens } from "react-native-screens";
+import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 import LoginForm from "./src/LoginForm";
+import Home from "./src/Home";
 import Settings from "./src/Settings";
-import Waitlist from "./src/Waitlist";
 import { UserContext } from "./state/user_context";
-import * as ActiveUser from "./types/active_user";
-import { Fonts, Layouts } from "./styles";
+import { ActiveUser, RootStackParamList } from "./types";
 
-const Tab = createMaterialTopTabNavigator();
+enableScreens();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App(): JSX.Element {
   const [activeUser, updateUser] = useState<ActiveUser.ActiveUser>(
@@ -22,16 +23,20 @@ function App(): JSX.Element {
       <View style={{ flex: 1 }}>
         {activeUser.caseOf({
           None: () => <LoginForm onLogin={updateUser} />,
-          User: (_, __, email) => (
+          User: (userId, token, email) => (
             <UserContext.Provider value={activeUser}>
-              <View style={styles.headerContainer}>
-                <Text style={Fonts.title}>Hello, {email}!</Text>
-                <SettingsButton />
-              </View>
-              <Tab.Navigator>
-                <Tab.Screen name="Waitlist" component={Waitlist} />
-                <Tab.Screen name="Tables" component={Tables} />
-              </Tab.Navigator>
+              <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen
+                  name="Home"
+                  component={Home}
+                  initialParams={{ email }}
+                />
+                <Stack.Screen
+                  name="Settings"
+                  component={Settings}
+                  initialParams={{ userId, token, email }}
+                />
+              </Stack.Navigator>
             </UserContext.Provider>
           ),
         })}
@@ -39,29 +44,5 @@ function App(): JSX.Element {
     </NavigationContainer>
   );
 }
-// Placeholder component
-const Tables = () => <View style={{ flex: 1, backgroundColor: "blue" }} />;
-
-// -- PRIVATE
-
-function SettingsButton(): JSX.Element {
-  return (
-    <Pressable onPress={() => {}}>
-      <Text>Settings</Text>
-    </Pressable>
-  );
-}
-
-// -- STYLES
-
-const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    height: 50,
-    padding: 5,
-  },
-});
 
 export default App;
