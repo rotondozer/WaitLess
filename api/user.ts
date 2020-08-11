@@ -27,4 +27,15 @@ function login(email: string, password: string): AxiosPromise<LoginResponse> {
   });
 }
 
-export default login;
+function logout(userId: string, token: string): AxiosPromise {
+  return axios({
+    url: `${baseUrl}/sign-out/${userId}`,
+    method: "DELETE",
+    headers: {
+      "content-type": "application/json",
+      Authorization: "Token token=" + token,
+    },
+  });
+}
+
+export { login, logout };
