@@ -37,7 +37,9 @@ function Home(props: Props): JSX.Element {
   );
 }
 // Placeholder component
-const Tables = () => <View style={{ flex: 1, backgroundColor: "blue" }} />;
+function Tables(): JSX.Element {
+  return <View style={{ flex: 1, backgroundColor: "blue" }} />;
+}
 
 // -- PRIVATE
 

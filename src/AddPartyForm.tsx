@@ -86,12 +86,12 @@ function onCreateParty(
   estWait: string,
   notes: string,
 ): Promise<void> {
-  const alertFailedCreation = (message: string) =>
-    Alert.alert(`Failed creating party!\n${message}`);
+  const alertFailedCreation: (e: string) => void = e =>
+    Alert.alert(`Failed creating party!\n${e}`);
 
-  const toastSuccess = (name: string) =>
+  const toastSuccess: (n: string) => void = n =>
     ToastAndroid.show(
-      `${name} successfully added to the waitlist!`,
+      `${n} successfully added to the waitlist!`,
       ToastAndroid.SHORT,
     );
 

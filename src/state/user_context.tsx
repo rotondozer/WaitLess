@@ -5,6 +5,7 @@ export type WithUserContext<T = {}> = T & Context;
 
 type Context = {
   user: ActiveUser.ActiveUser;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateUser: (user: ActiveUser.ActiveUser) => any;
 }; // TODO: get rid of any
 

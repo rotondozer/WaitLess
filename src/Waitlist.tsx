@@ -35,7 +35,7 @@ function WaitList(): JSX.Element {
 
   // Defining the component here lets me get the parties const and still use the
   // `component` prop on the Stack Screen
-  const Parties = () => (
+  const Parties: () => JSX.Element = () => (
     <View style={[Layouts.container, { backgroundColor: "pink" }]}>
       <AddPartyButton />
       <ScrollView alwaysBounceVertical>

@@ -6,7 +6,7 @@ import { Button } from "./common";
 import { User } from "./api";
 import { ActiveUser } from "./types";
 
-function Settings(props: WithUserContext) {
+function Settings(props: WithUserContext): JSX.Element | null {
   const { user, updateUser } = props;
 
   return user.caseOf({
