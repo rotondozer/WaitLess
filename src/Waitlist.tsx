@@ -7,7 +7,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Maybe, Nothing } from "seidr";
 
 import { UserContext } from "./state/user_context";
-import * as Party from "./api/party";
+import * as Party from "api/party";
 import { Fonts, Layouts } from "./styles";
 import { WaitlistStackParamList } from "./types";
 import { Button } from "./common";
