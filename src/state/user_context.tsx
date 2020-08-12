@@ -1,5 +1,5 @@
 import React from "react";
-import * as ActiveUser from "../types/active_user";
+import { ActiveUser } from "../types";
 
 export type WithUserContext<T = {}> = T & Context;
 

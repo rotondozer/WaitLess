@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { withUserContext, WithUserContext } from "../state/user_context";
-import { Fonts, Layouts } from "../styles";
+import { withUserContext, WithUserContext } from "./state/user_context";
+import { Fonts, Layouts } from "./styles";
 import { Button } from "./common";
-import { User } from "../api";
-import { ActiveUser } from "../types";
+import { User } from "./api";
+import { ActiveUser } from "./types";
 
 function Settings(props: WithUserContext) {
   const { user, updateUser } = props;

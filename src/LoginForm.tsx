@@ -1,13 +1,19 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, Alert, StyleSheet } from "react-native";
-import { User } from "../api";
-import { ActiveUser } from "../types";
+import React, { useState, Dispatch, SetStateAction } from "react";
+import { View, Text, TextInput, Alert, StyleSheet, Button } from "react-native";
+import { RemoteData, NotAsked, Loading, Failure, Success } from "seidr";
+
+import { User } from "./api";
+import { ActiveUser } from "./types";
 
 interface LoginFormProps {
   onLogin: (user: ActiveUser.ActiveUser) => void;
 }
 
+type LoginRequest = RemoteData<string, string>;
+
 function LoginForm(props: LoginFormProps): JSX.Element {
+  const [loginRequest, updateLoginRequest] = useState<LoginRequest>(NotAsked());
+
   const [username, updateUsername] = useState("");
   const [password, updatePassword] = useState("");
 
@@ -29,15 +35,29 @@ function LoginForm(props: LoginFormProps): JSX.Element {
       <Button
         title="Submit"
         onPress={() =>
-          User.login(username, password)
-            .then(res => res.data.user)
-            .then(({ id, token, email }) => ActiveUser.User(id, token, email))
-            .then(props.onLogin)
-            .catch(err => Alert.alert("Login Failed" + err))
+          login(username, password, updateLoginRequest, props.onLogin)
         }
       />
     </View>
   );
+}
+
+// -- PRIVATE
+
+function login(
+  username: string,
+  password: string,
+  updateLoginState: Dispatch<SetStateAction<LoginRequest>>,
+  updateActiveUser: (u: ActiveUser.ActiveUser) => void,
+): void {
+  updateLoginState(Loading());
+
+  User.login(username, password)
+    .then(res => res.data.user)
+    .then(({ id, token, email }) => ActiveUser.User(id, token, email))
+    .then(updateActiveUser)
+    .then(() => updateLoginState(Success("TODO")))
+    .catch(err => updateLoginState(Failure(JSON.stringify(err))));
 }
 
 // -- STYLES

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet, Alert, ToastAndroid } from "react-native";
 import { RouteProp } from "@react-navigation/native";
-
-import * as Party from "../api/party";
-import { WithUserContext, withUserContext } from "../state/user_context";
-import { Input, Button } from "./common";
-import { ActiveUser, ParseInt, WaitlistStackParamList } from "../types";
-import { Fonts, Layouts } from "../styles";
 import { StackNavigationProp } from "@react-navigation/stack";
+
+import * as Party from "./api/party";
+import { WithUserContext, withUserContext } from "./state/user_context";
+import { Input, Button } from "./common";
+import { ActiveUser, ParseInt, WaitlistStackParamList } from "./types";
+import { Fonts, Layouts } from "./styles";
 
 type Navigation = StackNavigationProp<WaitlistStackParamList, "AddPartyForm">;
 

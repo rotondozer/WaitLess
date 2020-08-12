@@ -5,9 +5,9 @@ import { enableScreens } from "react-native-screens";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
-import LoginForm from "./src/LoginForm";
-import Home from "./src/Home";
-import Settings from "./src/Settings";
+import LoginForm from "./LoginForm";
+import Home from "./Home";
+import Settings from "./Settings";
 import { UserContext } from "./state/user_context";
 import { ActiveUser, RootStackParamList } from "./types";
 
