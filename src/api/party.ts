@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import axios from "axios";
 import { Maybe, Result, Ok, Err, Just } from "seidr";
-import baseUrl from "./base_url";
+import baseUrl from "./network_request";
 import { ActiveUser, ParseInt } from "../types";
 
 export interface Party {

@@ -1,30 +1,30 @@
 import axios, { AxiosPromise } from "axios";
-import baseUrl from "./base_url";
+import { AsyncResult } from "seidr";
+import baseUrl, { toNetworkRequest, toAxiosPromise } from "./network_request";
+import { ActiveUser, NetworkRequestError } from "../types";
 
 interface UserPayload {
-  id: string;
-  email: string;
-  token: string;
+  user: {
+    id: string;
+    email: string;
+    token: string;
+  };
 }
 
-interface LoginResponse {
-  user: UserPayload;
-}
-
-function login(email: string, password: string): AxiosPromise<LoginResponse> {
-  return axios({
-    url: baseUrl + "/sign-in",
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    data: {
+function login(
+  email: string,
+  password: string,
+): AsyncResult<NetworkRequestError.NetworkRequestError, ActiveUser.ActiveUser> {
+  return toNetworkRequest(
+    toAxiosPromise<UserPayload>("/sign-in", "POST", undefined, {
       credentials: {
         email: email,
         password: password,
       },
-    },
-  });
+    }),
+  )
+    .map(res => res.data.user)
+    .map(({ id, token, email }) => ActiveUser.User(id, token, email));
 }
 
 function logout(userId: string, token: string): AxiosPromise {

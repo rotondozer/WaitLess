@@ -42,11 +42,10 @@ function login(
   password: string,
   updateActiveUser: (u: ActiveUser.ActiveUser) => void,
 ): void {
-  User.login(username, password)
-    .then(res => res.data.user)
-    .then(({ id, token, email }) => ActiveUser.User(id, token, email))
-    .then(updateActiveUser)
-    .catch(err => Alert.alert(JSON.stringify(err)));
+  User.login(username, password).caseOf({
+    Err: err => Alert.alert(JSON.stringify(err)),
+    Ok: updateActiveUser,
+  });
 }
 
 // -- STYLES
