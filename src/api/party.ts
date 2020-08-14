@@ -2,7 +2,7 @@
 import axios from "axios";
 import { Maybe, Result, Ok, Err, Just } from "seidr";
 import baseUrl from "./network_request";
-import { ActiveUser, ParseInt } from "../types";
+import { ActiveUser, ParseInt } from "types";
 
 export interface Party {
   id: string;

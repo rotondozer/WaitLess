@@ -18,6 +18,7 @@ module.exports = {
         ],
         alias: {
           api: ["./src/api"],
+          types: ["./src/types"],
         },
       },
     ],

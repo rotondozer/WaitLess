@@ -4,7 +4,7 @@ import baseUrl, {
   toAxiosPromise,
   NetworkRequest,
 } from "./network_request";
-import { ActiveUser } from "../types";
+import { ActiveUser } from "types";
 
 interface UserPayload {
   user: {
