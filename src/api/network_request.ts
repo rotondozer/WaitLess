@@ -2,9 +2,9 @@ import axios, { Method, AxiosPromise, AxiosResponse } from "axios";
 import { Maybe, AsyncResult } from "seidr";
 import { NetworkRequestError } from "types";
 
-type NetworkRequest<T> = AsyncResult<
+export type NetworkRequest<T> = AsyncResult<
   NetworkRequestError.NetworkRequestError,
-  AxiosResponse<T>
+  T
 >;
 
 const BASE_URL = __DEV__
@@ -34,7 +34,7 @@ function toAxiosPromise<T>(
 
 function toNetworkRequest<T>(
   axiosPromise: AxiosPromise<T>,
-): AsyncResult<NetworkRequestError.NetworkRequestError, AxiosResponse<T>> {
+): NetworkRequest<AxiosResponse<T>> {
   return AsyncResult.fromPromise(
     NetworkRequestError.fromGenericError,
     axiosPromise,

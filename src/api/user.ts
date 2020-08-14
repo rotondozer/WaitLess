@@ -1,7 +1,10 @@
 import axios, { AxiosPromise } from "axios";
-import { AsyncResult } from "seidr";
-import baseUrl, { toNetworkRequest, toAxiosPromise } from "./network_request";
-import { ActiveUser, NetworkRequestError } from "../types";
+import baseUrl, {
+  toNetworkRequest,
+  toAxiosPromise,
+  NetworkRequest,
+} from "./network_request";
+import { ActiveUser } from "../types";
 
 interface UserPayload {
   user: {
@@ -14,7 +17,7 @@ interface UserPayload {
 function login(
   email: string,
   password: string,
-): AsyncResult<NetworkRequestError.NetworkRequestError, ActiveUser.ActiveUser> {
+): NetworkRequest<ActiveUser.ActiveUser> {
   return toNetworkRequest(
     toAxiosPromise<UserPayload>("/sign-in", "POST", undefined, {
       credentials: {

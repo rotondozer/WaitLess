@@ -43,7 +43,11 @@ function login(
   updateActiveUser: (u: ActiveUser.ActiveUser) => void,
 ): void {
   User.login(username, password).caseOf({
-    Err: err => Alert.alert(JSON.stringify(err)),
+    Err: err =>
+      err.caseOf({
+        Unauthorized: () => Alert.alert("Wrong email or password"),
+        _: () => Alert.alert("i dom't fucking know"),
+      }),
     Ok: updateActiveUser,
   });
 }
