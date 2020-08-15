@@ -1,6 +1,6 @@
-import axios, { Method, AxiosPromise, AxiosResponse } from "axios";
-import { Maybe, AsyncResult } from "seidr";
-import { NetworkRequestError } from "types";
+import axios, { Method, AxiosResponse, AxiosRequestConfig } from "axios";
+import { AsyncResult } from "seidr";
+import { NetworkRequestError, ActiveUser } from "types";
 
 export type NetworkRequest<T> = AsyncResult<
   NetworkRequestError.NetworkRequestError,
@@ -13,34 +13,42 @@ const BASE_URL = __DEV__
 
 const BASE_HEADER = { "content-type": "application/json" };
 
-function toAxiosPromise<T>(
-  endPoint: string,
-  method: Method,
-  token?: string,
-  data?: {}, // TODO typez
-): AxiosPromise<T> {
-  return axios({
-    url: `${BASE_URL}/${endPoint}`,
-    method,
-    headers: Maybe.fromNullable(token)
-      .map(t => ({
-        ...BASE_HEADER,
-        Authorization: "Token token=" + t,
-      }))
-      .getOrElse(BASE_HEADER),
-    data,
-  });
-}
-
 function toNetworkRequest<T>(
-  axiosPromise: AxiosPromise<T>,
+  method: Method,
+  endPoint: string,
+  activeUser: ActiveUser.ActiveUser,
+  data?: {}, // TODO typez,
 ): NetworkRequest<AxiosResponse<T>> {
   return AsyncResult.fromPromise(
     NetworkRequestError.fromGenericError,
-    axiosPromise,
+    axios({
+      method,
+      ...urlAndHeadersFromActiveUser(activeUser, endPoint),
+      data,
+    }),
   );
+}
+
+// -- PRIVATE
+/**
+ * Build a partial `AxiosRequestConfig` for the url and headers together. Both differ with and without
+ * an `activeUser`
+ * @param activeUser Currently logged in user. All Tables and Parties are user-owned, so the endpoint
+ * is preceded as such, and the header includes a token.
+ */
+function urlAndHeadersFromActiveUser(
+  activeUser: ActiveUser.ActiveUser,
+  endpoint: string,
+): AxiosRequestConfig {
+  return activeUser.caseOf({
+    None: () => ({ url: `${BASE_URL}/${endpoint}`, headers: BASE_HEADER }),
+    User: (id, token, _) => ({
+      url: `${BASE_URL}/users/${id}/${endpoint}`,
+      headers: { ...BASE_HEADER, Authorization: "Token token=" + token },
+    }),
+  });
 }
 
 // TODO: replace url export with config helper
 export default BASE_URL;
-export { toAxiosPromise, toNetworkRequest };
+export { toNetworkRequest };

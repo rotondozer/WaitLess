@@ -1,9 +1,5 @@
 import axios, { AxiosPromise } from "axios";
-import baseUrl, {
-  toNetworkRequest,
-  toAxiosPromise,
-  NetworkRequest,
-} from "./network_request";
+import baseUrl, { toNetworkRequest, NetworkRequest } from "./network_request";
 import { ActiveUser } from "types";
 
 interface UserPayload {
@@ -18,14 +14,9 @@ function login(
   email: string,
   password: string,
 ): NetworkRequest<ActiveUser.ActiveUser> {
-  return toNetworkRequest(
-    toAxiosPromise<UserPayload>("/sign-in", "POST", undefined, {
-      credentials: {
-        email: email,
-        password: password,
-      },
-    }),
-  )
+  return toNetworkRequest<UserPayload>("POST", "/sign-in", ActiveUser.None(), {
+    credentials: { email, password },
+  })
     .map(res => res.data.user)
     .map(({ id, token, email }) => ActiveUser.User(id, token, email));
 }
