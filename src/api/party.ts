@@ -12,7 +12,9 @@ export interface Party {
   checkedInAt: Maybe<string>; // this one too
 }
 
-type Parties = { parties: Array<PartySchema> };
+interface Parties {
+  parties: Array<PartySchema>;
+}
 
 // TODO: does this need to return a Maybe? We render different content for the no parties waiting, but
 // that could be captured by the `[]` state.
@@ -30,7 +32,7 @@ function create(
   size: string,
   estWait: string,
   notes: string,
-): NetworkRequest<unknown> {
+): NetworkRequest<string> {
   return toNetworkRequest("POST", "/parties", activeUser, {
     party: {
       name,
@@ -43,7 +45,7 @@ function create(
         User: (id, _, __) => id,
       }),
     },
-  });
+  }).map(_ => name);
 }
 
 // -- PRIVATE

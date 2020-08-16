@@ -78,6 +78,17 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
 
 // -- PRIVATE
 
+function alertFailedCreation(e: string): void {
+  Alert.alert(`Failed creating party!\n${e}`);
+}
+
+function toastSuccess(n: string): void {
+  ToastAndroid.show(
+    `${n} successfully added to the waitlist!`,
+    ToastAndroid.SHORT,
+  );
+}
+
 function onCreateParty(
   navigation: Navigation,
   user: ActiveUser.ActiveUser,
@@ -85,25 +96,18 @@ function onCreateParty(
   size: string,
   estWait: string,
   notes: string,
-): Promise<void> {
-  const alertFailedCreation: (e: string) => void = e =>
-    Alert.alert(`Failed creating party!\n${e}`);
-
-  const toastSuccess: (n: string) => void = n =>
-    ToastAndroid.show(
-      `${n} successfully added to the waitlist!`,
-      ToastAndroid.SHORT,
-    );
-
-  return Party.create(user, name, size, estWait, notes)
-    .then(res =>
-      res.caseOf({
-        Err: alertFailedCreation,
-        Ok: toastSuccess,
+): void {
+  Party.create(user, name, size, estWait, notes).caseOf({
+    Err: err =>
+      err.caseOf({
+        BadRequest: () => alertFailedCreation("Check the info and try again."),
+        _: () => alertFailedCreation(""),
       }),
-    )
-    .then(_ => navigation.goBack())
-    .catch(alertFailedCreation);
+    Ok: n => {
+      toastSuccess(n);
+      navigation.goBack();
+    },
+  });
 }
 
 // -- STYLES
