@@ -29,7 +29,7 @@ function WaitList(): JSX.Element {
 
   useFocusEffect(
     useCallback(() => {
-      Party.getAll(user).then(updateParties);
+      Party.getAll(user).map(updateParties);
     }, [user]),
   );
 

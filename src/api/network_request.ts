@@ -49,6 +49,4 @@ function urlAndHeadersFromActiveUser(
   });
 }
 
-// TODO: replace url export with config helper
-export default BASE_URL;
-export { toNetworkRequest };
+export { BASE_URL, toNetworkRequest };

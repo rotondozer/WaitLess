@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import axios from "axios";
-import { Maybe, Result, Ok, Err, Just } from "seidr";
-import baseUrl from "./network_request";
+import { Maybe, Just } from "seidr";
 import { ActiveUser, ParseInt } from "types";
+import { toNetworkRequest, NetworkRequest } from "./network_request";
 
 export interface Party {
   id: string;
@@ -13,57 +12,37 @@ export interface Party {
   checkedInAt: Maybe<string>; // this one too
 }
 
+type Parties = { parties: Array<PartySchema> };
+
+// TODO: does this need to return a Maybe? We render different content for the no parties waiting, but
+// that could be captured by the `[]` state.
 function getAll(
   activeUser: ActiveUser.ActiveUser,
-): Promise<Maybe<Array<Party>>> {
-  return activeUser.caseOf({
-    None: () => Promise.reject("User Required"),
-    User: (id, token, _) =>
-      axios({
-        url: `${baseUrl}/users/${id}/parties`,
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-          Authorization: "Token token=" + token,
-        },
-      }).then(res =>
-        Maybe.fromNullable(res.data.parties).map(ps => ps.map(serialize)),
-      ),
-  });
+): NetworkRequest<Maybe<Array<Party>>> {
+  return toNetworkRequest<Parties>("GET", "/parties", activeUser).map(res =>
+    Maybe.fromNullable(res.data.parties).map(ps => ps.map(serialize)),
+  );
 }
 
-/**
- * @variation Ok -> name; Server responded with a 201 (created)
- * @variation Err -> statusText; TODO: more specific error types generated from status code!
- */
 function create(
   activeUser: ActiveUser.ActiveUser,
   name: string,
   size: string,
   estWait: string,
   notes: string,
-): Promise<Result<string, string>> {
-  return activeUser.caseOf({
-    None: () => Promise.reject("User Required"),
-    User: (id, token, _) =>
-      axios({
-        url: `${baseUrl}/users/${id}/parties`,
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          Authorization: "Token token=" + token,
-        },
-        data: {
-          party: {
-            name,
-            size,
-            checked_in: Just(Date.now().toString()),
-            est_wait: estWait,
-            notes,
-            user_id: id,
-          },
-        },
-      }).then(res => (res.status === 201 ? Ok(name) : Err(res.statusText))),
+): NetworkRequest<unknown> {
+  return toNetworkRequest("POST", "/parties", activeUser, {
+    party: {
+      name,
+      size,
+      checked_in: Just(Date.now().toString()),
+      est_wait: estWait,
+      notes,
+      user_id: activeUser.caseOf({
+        None: () => undefined,
+        User: (id, _, __) => id,
+      }),
+    },
   });
 }
 

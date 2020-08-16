@@ -1,5 +1,5 @@
 import axios, { AxiosPromise } from "axios";
-import baseUrl, { toNetworkRequest, NetworkRequest } from "./network_request";
+import { toNetworkRequest, NetworkRequest, BASE_URL } from "./network_request";
 import { ActiveUser } from "types";
 
 interface UserPayload {
@@ -23,7 +23,7 @@ function login(
 
 function logout(userId: string, token: string): AxiosPromise {
   return axios({
-    url: `${baseUrl}/sign-out/${userId}`,
+    url: `${BASE_URL}/sign-out/${userId}`,
     method: "DELETE",
     headers: {
       "content-type": "application/json",
