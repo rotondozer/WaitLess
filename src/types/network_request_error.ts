@@ -7,12 +7,11 @@ function isAxiosError(err: unknown): err is AxiosError {
 
 class NetworkRequestError extends SumType<{
   BadRequest: [];
-  ServerSide: [];
   Unauthorized: [];
-  NotFound: [];
   Forbidden: [];
-  Timeout: [];
+  NotFound: [];
   ServerDown: [];
+  Timeout: [];
   OtherResponse: [number];
   NoResponse: [any]; // return the request (http.ClientRequest in node.js)
   Unknown: [string];
@@ -76,6 +75,7 @@ function fromGenericError(error: unknown): NetworkRequestError {
       case 504:
         return Timeout();
       default:
+        console.warn("Request responded with: ", error.response.status);
         return OtherResponse(error.response.status);
     }
   } else if (error.request) {
