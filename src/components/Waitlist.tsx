@@ -13,6 +13,9 @@ import { WaitlistStackParamList } from "../types";
 import { Button } from "../common";
 import AddPartyForm from "./AddPartyForm";
 
+import { API, graphqlOperation } from "aws-amplify";
+import * as queries from "../graphql/queries";
+
 // -- NAVIGATOR
 
 enableScreens();
@@ -27,11 +30,11 @@ function WaitList(): JSX.Element {
 
   const { user } = useContext(UserContext);
 
-  useFocusEffect(
-    useCallback(() => {
-      Party.getAll(user).map(updateParties);
-    }, [user]),
-  );
+  useFocusEffect(() => {
+    // Party.getAll(user).map(updateParties);
+    const fetchedParties = API.graphql(graphqlOperation(queries.listParties));
+    console.log("Parties ===", fetchedParties);
+  });
 
   // Defining the component here lets me get the parties const and still use the
   // `component` prop on the Stack Screen
