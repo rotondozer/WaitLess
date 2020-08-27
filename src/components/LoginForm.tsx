@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Alert, StyleSheet, Button } from "react-native";
 
-import { User } from "./api";
-import { ActiveUser } from "./types";
+import * as User from "../api/user";
+import { ActiveUser } from "../types";
 
 interface LoginFormProps {
   onLogin: (user: ActiveUser.ActiveUser) => void;

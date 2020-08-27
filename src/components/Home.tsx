@@ -4,9 +4,9 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { Fonts } from "../styles";
+import { RootStackParamList } from "../types";
 import Waitlist from "./Waitlist";
-import { Fonts } from "./styles";
-import { RootStackParamList } from "./types";
 
 // -- NAVIGATOR
 

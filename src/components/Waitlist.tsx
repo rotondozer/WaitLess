@@ -6,11 +6,11 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Maybe, Nothing } from "seidr";
 
-import { UserContext } from "./state/user_context";
+import { UserContext } from "../state/user_context";
 import * as Party from "api/party";
-import { Fonts, Layouts } from "./styles";
-import { WaitlistStackParamList } from "./types";
-import { Button } from "./common";
+import { Fonts, Layouts } from "../styles";
+import { WaitlistStackParamList } from "../types";
+import { Button } from "../common";
 import AddPartyForm from "./AddPartyForm";
 
 // -- NAVIGATOR
