@@ -1,0 +1,15 @@
+projects:
+  WaitLess:
+    schemaPath: src/graphql/schema.json
+    includes:
+      - src/graphql/**/*.ts
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: typescript
+        generatedFileName: src/API.ts
+        docsFilePath: src/graphql
+        region: us-east-1
+        apiId: g235regixzcmfhy62l5bflsrma
+        maxDepth: 2
