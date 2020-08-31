@@ -1,6 +1,6 @@
 projects:
-  WaitLess:
-    schemaPath: amplify/backend/api/WaitLess/build/schema.graphql
+  WaitLess-dev:
+    schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.ts
     excludes:
@@ -11,7 +11,7 @@ projects:
         generatedFileName: src/types/API.ts
         docsFilePath: src/graphql
         region: us-east-1
-        apiId: g235regixzcmfhy62l5bflsrma
+        apiId: ljnl4elolzbgdfrpodbifolbne
         maxDepth: 2
 extensions:
   amplify:
