@@ -40,6 +40,7 @@ export const createParty = /* GraphQL */ `
     createParty(input: $input) {
       id
       name
+      guestCount
       isWaiting
       waitingSince
       phone
@@ -60,6 +61,7 @@ export const updateParty = /* GraphQL */ `
     updateParty(input: $input) {
       id
       name
+      guestCount
       isWaiting
       waitingSince
       phone
@@ -80,6 +82,7 @@ export const deleteParty = /* GraphQL */ `
     deleteParty(input: $input) {
       id
       name
+      guestCount
       isWaiting
       waitingSince
       phone

@@ -36,6 +36,7 @@ export const getParty = /* GraphQL */ `
     getParty(id: $id, waitingSince: $waitingSince) {
       id
       name
+      guestCount
       isWaiting
       waitingSince
       phone
@@ -61,6 +62,7 @@ export const listParties = /* GraphQL */ `
       items {
         id
         name
+        guestCount
         isWaiting
         waitingSince
         phone

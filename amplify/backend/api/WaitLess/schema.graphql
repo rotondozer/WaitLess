@@ -5,11 +5,13 @@
 }
 
 #  Connection types generated from @connection directives
+
 type ModelTableConnection {
   items: [Table]
 }
 
 #  Mutations, Queries & Subscriptions
+
 type Mutation {
   createParty(input: CreatePartyInput!): Party
   createTable(input: CreateTableInput!): Table
@@ -20,8 +22,10 @@ type Mutation {
 }
 
 #  Main types defined by user
+
 type Party @model {
   email: AWSEmail
+  guestCount: Int!
   id: ID!
   isWaiting: Boolean!
   name: String!
@@ -39,17 +43,64 @@ type PartyConnection {
 type Query {
   getParty(id: ID!, waitingSince: AWSTime!): Party
   getTable(id: ID!, maxSeats: Int!): Table
-  listParties(filter: TablePartyFilterInput, limit: Int, nextToken: String): PartyConnection
-  listTables(filter: TableTableFilterInput, limit: Int, nextToken: String): TableConnection
+  listParties(
+    filter: TablePartyFilterInput
+    limit: Int
+    nextToken: String
+  ): PartyConnection
+  listTables(
+    filter: TableTableFilterInput
+    limit: Int
+    nextToken: String
+  ): TableConnection
 }
 
 type Subscription {
-  onCreateParty(id: ID, isWaiting: Boolean, name: String, phone: AWSPhone, waitingSince: AWSTime): Party @aws_subscribe(mutations : ["createParty"])
-  onCreateTable(description: String, id: ID, maxSeats: Int, minSeats: Int, name: String): Table @aws_subscribe(mutations : ["createTable"])
-  onDeleteParty(id: ID, isWaiting: Boolean, name: String, phone: AWSPhone, waitingSince: AWSTime): Party @aws_subscribe(mutations : ["deleteParty"])
-  onDeleteTable(description: String, id: ID, maxSeats: Int, minSeats: Int, name: String): Table @aws_subscribe(mutations : ["deleteTable"])
-  onUpdateParty(id: ID, isWaiting: Boolean, name: String, phone: AWSPhone, waitingSince: AWSTime): Party @aws_subscribe(mutations : ["updateParty"])
-  onUpdateTable(description: String, id: ID, maxSeats: Int, minSeats: Int, name: String): Table @aws_subscribe(mutations : ["updateTable"])
+  onCreateParty(
+    guestCount: Int
+    id: ID
+    isWaiting: Boolean
+    name: String
+    phone: AWSPhone
+    waitingSince: AWSTime
+  ): Party @aws_subscribe(mutations: ["createParty"])
+  onCreateTable(
+    description: String
+    id: ID
+    maxSeats: Int
+    minSeats: Int
+    name: String
+  ): Table @aws_subscribe(mutations: ["createTable"])
+  onDeleteParty(
+    guestCount: Int
+    id: ID
+    isWaiting: Boolean
+    name: String
+    phone: AWSPhone
+    waitingSince: AWSTime
+  ): Party @aws_subscribe(mutations: ["deleteParty"])
+  onDeleteTable(
+    description: String
+    id: ID
+    maxSeats: Int
+    minSeats: Int
+    name: String
+  ): Table @aws_subscribe(mutations: ["deleteTable"])
+  onUpdateParty(
+    guestCount: Int
+    id: ID
+    isWaiting: Boolean
+    name: String
+    phone: AWSPhone
+    waitingSince: AWSTime
+  ): Party @aws_subscribe(mutations: ["updateParty"])
+  onUpdateTable(
+    description: String
+    id: ID
+    maxSeats: Int
+    minSeats: Int
+    name: String
+  ): Table @aws_subscribe(mutations: ["updateTable"])
 }
 
 type Table @model {
@@ -85,8 +136,10 @@ enum ModelSortDirection {
 }
 
 #  inputs generated via @directives
+
 input CreatePartyInput {
   email: AWSEmail
+  guestCount: Int!
   id: ID!
   isWaiting: Boolean!
   name: String!

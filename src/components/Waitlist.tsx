@@ -100,14 +100,14 @@ function AddPartyButton(): JSX.Element {
  * TODO: Make entire cell touchable with just name and size, then push new screen onPress
  */
 function PartyWaiting(party: Party): JSX.Element {
-  const { id, name } = party;
+  const { id, name, guestCount } = party;
   return (
     <View style={styles.partyContainer} key={id}>
       <View style={styles.partyNameContainer}>
         <Text style={Fonts.text}>{name}</Text>
       </View>
       <View style={styles.partySizeContainer}>
-        <Text style={Fonts.text}>guestCount u dummy</Text>
+        <Text style={Fonts.text}>{guestCount}</Text>
       </View>
     </View>
   );
