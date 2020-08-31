@@ -7,14 +7,37 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Maybe, Nothing } from "seidr";
 
 import { UserContext } from "../state/user_context";
-import * as Party from "api/party";
 import { Fonts, Layouts } from "../styles";
-import { WaitlistStackParamList } from "../types";
+import { WaitlistStackParamList, Party } from "../types";
 import { Button } from "../common";
 import AddPartyForm from "./AddPartyForm";
 
 import { API, graphqlOperation } from "aws-amplify";
-import * as queries from "../graphql/queries";
+import { listParties } from "../graphql/queries";
+import { GraphQLResult } from "@aws-amplify/api";
+import { ListPartiesQuery } from "types/API";
+
+type PartiesState = Maybe<Array<Party>>;
+
+async function fetchParties(): Promise<PartiesState> {
+  let parties: PartiesState = Nothing();
+
+  const partiesResult = (await API.graphql(
+    graphqlOperation(listParties),
+  )) as GraphQLResult<ListPartiesQuery>;
+
+  if (partiesResult.data) {
+    if (partiesResult.data.listParties) {
+      parties = Maybe.fromNullable(
+        partiesResult.data.listParties.items,
+      ) as PartiesState;
+
+      console.log("the party's here?", parties.getOrElse([]));
+      return Promise.resolve(parties);
+    }
+  }
+  return Promise.reject(Nothing());
+}
 
 // -- NAVIGATOR
 
@@ -23,18 +46,18 @@ const Stack = createNativeStackNavigator<WaitlistStackParamList>();
 
 // -- VIEW
 
-type PartiesState = Maybe<Array<Party.Party>>;
-
 function WaitList(): JSX.Element {
   const [parties, updateParties] = useState<PartiesState>(Nothing());
 
   const { user } = useContext(UserContext);
 
-  useFocusEffect(() => {
-    // Party.getAll(user).map(updateParties);
-    const fetchedParties = API.graphql(graphqlOperation(queries.listParties));
-    console.log("Parties ===", fetchedParties);
-  });
+  useFocusEffect(
+    useCallback(() => {
+      fetchParties()
+        .then(updateParties)
+        .catch(_ => console.log("I'm doing this wrong"));
+    }, []),
+  );
 
   // Defining the component here lets me get the parties const and still use the
   // `component` prop on the Stack Screen
@@ -76,15 +99,15 @@ function AddPartyButton(): JSX.Element {
 /**
  * TODO: Make entire cell touchable with just name and size, then push new screen onPress
  */
-function PartyWaiting(party: Party.Party): JSX.Element {
-  const { id, name, size } = party;
+function PartyWaiting(party: Party): JSX.Element {
+  const { id, name } = party;
   return (
     <View style={styles.partyContainer} key={id}>
       <View style={styles.partyNameContainer}>
         <Text style={Fonts.text}>{name}</Text>
       </View>
       <View style={styles.partySizeContainer}>
-        <Text style={Fonts.text}>{size}</Text>
+        <Text style={Fonts.text}>guestCount u dummy</Text>
       </View>
     </View>
   );
