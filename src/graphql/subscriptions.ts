@@ -2,156 +2,168 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateBlog = /* GraphQL */ `
-  subscription OnCreateBlog {
-    onCreateBlog {
+export const onCreateTable = /* GraphQL */ `
+  subscription OnCreateTable(
+    $id: ID
+    $name: String
+    $maxSeats: Int
+    $minSeats: Int
+    $description: String
+  ) {
+    onCreateTable(
+      id: $id
+      name: $name
+      maxSeats: $maxSeats
+      minSeats: $minSeats
+      description: $description
+    ) {
       id
       name
-      posts {
-        nextToken
-      }
-      createdAt
-      updatedAt
+      maxSeats
+      minSeats
+      description
     }
   }
 `;
-export const onUpdateBlog = /* GraphQL */ `
-  subscription OnUpdateBlog {
-    onUpdateBlog {
+export const onUpdateTable = /* GraphQL */ `
+  subscription OnUpdateTable(
+    $id: ID
+    $name: String
+    $maxSeats: Int
+    $minSeats: Int
+    $description: String
+  ) {
+    onUpdateTable(
+      id: $id
+      name: $name
+      maxSeats: $maxSeats
+      minSeats: $minSeats
+      description: $description
+    ) {
       id
       name
-      posts {
-        nextToken
-      }
-      createdAt
-      updatedAt
+      maxSeats
+      minSeats
+      description
     }
   }
 `;
-export const onDeleteBlog = /* GraphQL */ `
-  subscription OnDeleteBlog {
-    onDeleteBlog {
+export const onDeleteTable = /* GraphQL */ `
+  subscription OnDeleteTable(
+    $id: ID
+    $name: String
+    $maxSeats: Int
+    $minSeats: Int
+    $description: String
+  ) {
+    onDeleteTable(
+      id: $id
+      name: $name
+      maxSeats: $maxSeats
+      minSeats: $minSeats
+      description: $description
+    ) {
       id
       name
-      posts {
-        nextToken
-      }
-      createdAt
-      updatedAt
+      maxSeats
+      minSeats
+      description
     }
   }
 `;
-export const onCreatePost = /* GraphQL */ `
-  subscription OnCreatePost {
-    onCreatePost {
+export const onCreateParty = /* GraphQL */ `
+  subscription OnCreateParty(
+    $id: ID
+    $name: String
+    $isWaiting: Boolean
+    $waitingSince: AWSTime
+    $phone: AWSPhone
+  ) {
+    onCreateParty(
+      id: $id
+      name: $name
+      isWaiting: $isWaiting
+      waitingSince: $waitingSince
+      phone: $phone
+    ) {
       id
-      title
-      blogID
-      blog {
+      name
+      isWaiting
+      waitingSince
+      phone
+      email
+      notes
+      table {
         id
         name
-        createdAt
-        updatedAt
+        maxSeats
+        minSeats
+        description
       }
-      comments {
-        nextToken
-      }
-      createdAt
-      updatedAt
     }
   }
 `;
-export const onUpdatePost = /* GraphQL */ `
-  subscription OnUpdatePost {
-    onUpdatePost {
+export const onUpdateParty = /* GraphQL */ `
+  subscription OnUpdateParty(
+    $id: ID
+    $name: String
+    $isWaiting: Boolean
+    $waitingSince: AWSTime
+    $phone: AWSPhone
+  ) {
+    onUpdateParty(
+      id: $id
+      name: $name
+      isWaiting: $isWaiting
+      waitingSince: $waitingSince
+      phone: $phone
+    ) {
       id
-      title
-      blogID
-      blog {
+      name
+      isWaiting
+      waitingSince
+      phone
+      email
+      notes
+      table {
         id
         name
-        createdAt
-        updatedAt
+        maxSeats
+        minSeats
+        description
       }
-      comments {
-        nextToken
-      }
-      createdAt
-      updatedAt
     }
   }
 `;
-export const onDeletePost = /* GraphQL */ `
-  subscription OnDeletePost {
-    onDeletePost {
+export const onDeleteParty = /* GraphQL */ `
+  subscription OnDeleteParty(
+    $id: ID
+    $name: String
+    $isWaiting: Boolean
+    $waitingSince: AWSTime
+    $phone: AWSPhone
+  ) {
+    onDeleteParty(
+      id: $id
+      name: $name
+      isWaiting: $isWaiting
+      waitingSince: $waitingSince
+      phone: $phone
+    ) {
       id
-      title
-      blogID
-      blog {
+      name
+      isWaiting
+      waitingSince
+      phone
+      email
+      notes
+      table {
         id
         name
-        createdAt
-        updatedAt
+        maxSeats
+        minSeats
+        description
       }
-      comments {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateComment = /* GraphQL */ `
-  subscription OnCreateComment {
-    onCreateComment {
-      id
-      postID
-      post {
-        id
-        title
-        blogID
-        createdAt
-        updatedAt
-      }
-      content
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateComment = /* GraphQL */ `
-  subscription OnUpdateComment {
-    onUpdateComment {
-      id
-      postID
-      post {
-        id
-        title
-        blogID
-        createdAt
-        updatedAt
-      }
-      content
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteComment = /* GraphQL */ `
-  subscription OnDeleteComment {
-    onDeleteComment {
-      id
-      postID
-      post {
-        id
-        title
-        blogID
-        createdAt
-        updatedAt
-      }
-      content
-      createdAt
-      updatedAt
     }
   }
 `;

@@ -2,105 +2,70 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getBlog = /* GraphQL */ `
-  query GetBlog($id: ID!) {
-    getBlog(id: $id) {
+export const getTable = /* GraphQL */ `
+  query GetTable($id: ID!, $maxSeats: Int!) {
+    getTable(id: $id, maxSeats: $maxSeats) {
       id
       name
-      posts {
-        nextToken
-      }
-      createdAt
-      updatedAt
+      maxSeats
+      minSeats
+      description
     }
   }
 `;
-export const listBlogs = /* GraphQL */ `
-  query ListBlogs(
-    $filter: ModelBlogFilterInput
+export const listTables = /* GraphQL */ `
+  query ListTables(
+    $filter: TableTableFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listBlogs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listTables(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         name
-        createdAt
-        updatedAt
+        maxSeats
+        minSeats
+        description
       }
       nextToken
     }
   }
 `;
-export const getPost = /* GraphQL */ `
-  query GetPost($id: ID!) {
-    getPost(id: $id) {
+export const getParty = /* GraphQL */ `
+  query GetParty($id: ID!, $waitingSince: AWSTime!) {
+    getParty(id: $id, waitingSince: $waitingSince) {
       id
-      title
-      blogID
-      blog {
+      name
+      isWaiting
+      waitingSince
+      phone
+      email
+      notes
+      table {
         id
         name
-        createdAt
-        updatedAt
+        maxSeats
+        minSeats
+        description
       }
-      comments {
-        nextToken
-      }
-      createdAt
-      updatedAt
     }
   }
 `;
-export const listPosts = /* GraphQL */ `
-  query ListPosts(
-    $filter: ModelPostFilterInput
+export const listParties = /* GraphQL */ `
+  query ListParties(
+    $filter: TablePartyFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listParties(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        title
-        blogID
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getComment = /* GraphQL */ `
-  query GetComment($id: ID!) {
-    getComment(id: $id) {
-      id
-      postID
-      post {
-        id
-        title
-        blogID
-        createdAt
-        updatedAt
-      }
-      content
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listComments = /* GraphQL */ `
-  query ListComments(
-    $filter: ModelCommentFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listComments(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        postID
-        content
-        createdAt
-        updatedAt
+        name
+        isWaiting
+        waitingSince
+        phone
+        email
+        notes
       }
       nextToken
     }

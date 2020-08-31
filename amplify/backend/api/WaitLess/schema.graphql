@@ -1,20 +1,288 @@
-type Blog @model {
+﻿schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+#  Connection types generated from @connection directives
+type ModelTableConnection {
+  items: [Table]
+}
+
+#  Mutations, Queries & Subscriptions
+type Mutation {
+  createParty(input: CreatePartyInput!): Party
+  createTable(input: CreateTableInput!): Table
+  deleteParty(input: DeletePartyInput!): Party
+  deleteTable(input: DeleteTableInput!): Table
+  updateParty(input: UpdatePartyInput!): Party
+  updateTable(input: UpdateTableInput!): Table
+}
+
+#  Main types defined by user
+type Party @model {
+  email: AWSEmail
   id: ID!
+  isWaiting: Boolean!
   name: String!
-  posts: [Post] @connection(keyName: "byBlog", fields: ["id"])
+  notes: String
+  phone: AWSPhone
+  table: Table @connection
+  waitingSince: AWSTime!
 }
 
-type Post @model @key(name: "byBlog", fields: ["blogID"]) {
-  id: ID!
-  title: String!
-  blogID: ID!
-  blog: Blog @connection(fields: ["blogID"])
-  comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
+type PartyConnection {
+  items: [Party]
+  nextToken: String
 }
 
-type Comment @model @key(name: "byPost", fields: ["postID", "content"]) {
+type Query {
+  getParty(id: ID!, waitingSince: AWSTime!): Party
+  getTable(id: ID!, maxSeats: Int!): Table
+  listParties(filter: TablePartyFilterInput, limit: Int, nextToken: String): PartyConnection
+  listTables(filter: TableTableFilterInput, limit: Int, nextToken: String): TableConnection
+}
+
+type Subscription {
+  onCreateParty(id: ID, isWaiting: Boolean, name: String, phone: AWSPhone, waitingSince: AWSTime): Party @aws_subscribe(mutations : ["createParty"])
+  onCreateTable(description: String, id: ID, maxSeats: Int, minSeats: Int, name: String): Table @aws_subscribe(mutations : ["createTable"])
+  onDeleteParty(id: ID, isWaiting: Boolean, name: String, phone: AWSPhone, waitingSince: AWSTime): Party @aws_subscribe(mutations : ["deleteParty"])
+  onDeleteTable(description: String, id: ID, maxSeats: Int, minSeats: Int, name: String): Table @aws_subscribe(mutations : ["deleteTable"])
+  onUpdateParty(id: ID, isWaiting: Boolean, name: String, phone: AWSPhone, waitingSince: AWSTime): Party @aws_subscribe(mutations : ["updateParty"])
+  onUpdateTable(description: String, id: ID, maxSeats: Int, minSeats: Int, name: String): Table @aws_subscribe(mutations : ["updateTable"])
+}
+
+type Table @model {
+  description: String
   id: ID!
-  postID: ID!
-  post: Post @connection(fields: ["postID"])
-  content: String!
+  maxSeats: Int!
+  minSeats: Int!
+  name: String!
+}
+
+type TableConnection {
+  items: [Table]
+  nextToken: String
+}
+
+#  Model stuff, auto-generated
+enum ModelAttributeTypes {
+  _null
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+#  inputs generated via @directives
+input CreatePartyInput {
+  email: AWSEmail
+  id: ID!
+  isWaiting: Boolean!
+  name: String!
+  notes: String
+  phone: AWSPhone
+  waitingSince: AWSTime!
+}
+
+input CreateTableInput {
+  description: String
+  id: ID!
+  maxSeats: Int!
+  minSeats: Int!
+  name: String!
+}
+
+input DeletePartyInput {
+  id: ID!
+  waitingSince: AWSTime!
+}
+
+input DeleteTableInput {
+  id: ID!
+  maxSeats: Int!
+}
+
+input ModelBooleanInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  eq: Boolean
+  ne: Boolean
+}
+
+input ModelFloatInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  between: [Float]
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+}
+
+input ModelIDInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+}
+
+input ModelSizeInput {
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+}
+
+input ModelStringInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+  size: ModelSizeInput
+}
+
+input ModelStringKeyConditionInput {
+  beginsWith: String
+  between: [String]
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+}
+
+input TableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input TableFloatFilterInput {
+  between: [Float]
+  contains: Float
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+  notContains: Float
+}
+
+input TableIDFilterInput {
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+}
+
+input TableIntFilterInput {
+  between: [Int]
+  contains: Int
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+  notContains: Int
+}
+
+input TablePartyFilterInput {
+  email: TableStringFilterInput
+  id: TableIDFilterInput
+  isWaiting: TableBooleanFilterInput
+  name: TableStringFilterInput
+  notes: TableStringFilterInput
+  phone: TableStringFilterInput
+  waitingSince: TableStringFilterInput
+}
+
+input TableStringFilterInput {
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+}
+
+input TableTableFilterInput {
+  description: TableStringFilterInput
+  id: TableIDFilterInput
+  maxSeats: TableIntFilterInput
+  minSeats: TableIntFilterInput
+  name: TableStringFilterInput
+}
+
+input UpdatePartyInput {
+  email: AWSEmail
+  id: ID!
+  isWaiting: Boolean
+  name: String
+  notes: String
+  phone: AWSPhone
+  waitingSince: AWSTime!
+}
+
+input UpdateTableInput {
+  description: String
+  id: ID!
+  maxSeats: Int!
+  minSeats: Int
+  name: String
 }
