@@ -15,6 +15,7 @@
     "@react-navigation/material-top-tabs": "^5.2.15",
     "@react-navigation/native": "^5.7.2",
     "@react-navigation/stack": "^5.9.0",
+    "@types/uuid": "^8.3.0",
     "aws-amplify": "^3.0.24",
     "axios": "^0.19.2",
     "react": "16.13.1",
@@ -25,7 +26,8 @@
     "react-native-screens": "^2.9.0",
     "react-native-tab-view": "^2.15.0",
     "seidr": "^1.8.0",
-    "sums-up": "^2.2.0"
+    "sums-up": "^2.2.0",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
