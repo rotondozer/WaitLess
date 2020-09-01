@@ -18,6 +18,10 @@ module.exports = {
         ],
         alias: {
           api: ["./src/api"],
+          common: ["./src/common"],
+          components: ["./src/components"],
+          graphql: ["./src/graphql"],
+          state: ["./src/state"],
           types: ["./src/types"],
         },
       },
