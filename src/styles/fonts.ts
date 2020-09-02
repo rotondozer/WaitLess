@@ -10,4 +10,9 @@ const text: TextStyle = {
   fontWeight: "bold",
 };
 
-export { title, text };
+const text2: TextStyle = {
+  fontSize: 18,
+  fontWeight: "400",
+};
+
+export { title, text, text2 };

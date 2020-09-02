@@ -3,6 +3,7 @@ import { View, Text, TextInput, Alert, StyleSheet, Button } from "react-native";
 
 import * as User from "../api/user";
 import { ActiveUser } from "../types";
+import { Fonts } from "styles";
 
 interface LoginFormProps {
   onLogin: (user: ActiveUser.ActiveUser) => void;
@@ -14,7 +15,7 @@ function LoginForm(props: LoginFormProps): JSX.Element {
 
   return (
     <View style={styles.sectionContainer}>
-      <Text style={styles.sectionTitle}>Login</Text>
+      <Text style={Fonts.title}>Login</Text>
       <TextInput
         style={styles.textInput}
         placeholder="Username"
@@ -22,7 +23,7 @@ function LoginForm(props: LoginFormProps): JSX.Element {
         onChangeText={updateUsername}
       />
       <TextInput
-        style={styles.textInput}
+        style={[Fonts.text2, styles.textInput]}
         placeholder="Password"
         value={password}
         onChangeText={updatePassword}
@@ -56,21 +57,12 @@ function login(
 // -- STYLES
 
 const styles = StyleSheet.create({
-  body: {
-    backgroundColor: "#FFF",
-  },
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: "600",
-  },
   textInput: {
     marginTop: 8,
-    fontSize: 18,
-    fontWeight: "400",
   },
 });
 
