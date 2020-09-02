@@ -7,15 +7,14 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Maybe, Nothing } from "seidr";
 
 import { UserContext } from "../state/user_context";
-import { Fonts, Layouts } from "../styles";
-import { WaitlistStackParamList, Party } from "../types";
-import { Button } from "../common";
+import { Fonts, Layouts, Colors } from "styles";
+import { WaitlistStackParamList, Party, ListPartiesQuery } from "types";
+import { Button } from "common";
 import AddPartyForm from "./AddPartyForm";
 
 import { API, graphqlOperation } from "aws-amplify";
 import { listParties } from "../graphql/queries";
 import { GraphQLResult } from "@aws-amplify/api";
-import { ListPartiesQuery } from "types/API";
 
 type PartiesState = Maybe<Array<Party>>;
 
@@ -66,13 +65,13 @@ function WaitList(): JSX.Element {
   // Defining the component here lets me get the parties const and still use the
   // `component` prop on the Stack Screen
   const Parties: () => JSX.Element = () => (
-    <View style={[Layouts.container, { backgroundColor: "pink" }]}>
-      <AddPartyButton />
+    <View style={Layouts.container}>
       <ScrollView alwaysBounceVertical>
         {parties.caseOf<ReactNode>({
           Nothing: () => <Text>No Parties on the Waitlist!</Text>,
           Just: ps => ps.map(PartyWaiting),
         })}
+        <AddPartyButton />
       </ScrollView>
     </View>
   );
@@ -108,10 +107,10 @@ function PartyWaiting(party: Party): JSX.Element {
   return (
     <View style={styles.partyContainer} key={id}>
       <View style={styles.partyNameContainer}>
-        <Text style={Fonts.text}>{name}</Text>
+        <Text style={Fonts.condensedText}>{name}</Text>
       </View>
       <View style={styles.partySizeContainer}>
-        <Text style={Fonts.text}>{guestCount}</Text>
+        <Text style={Fonts.condensedText}>{guestCount}</Text>
       </View>
     </View>
   );
@@ -125,9 +124,9 @@ const styles = StyleSheet.create({
     height: 55,
     width: "100%",
     marginTop: 2,
-    padding: 3,
-    borderWidth: 2,
-    borderColor: "black",
+    padding: 10,
+    borderWidth: 1,
+    backgroundColor: Colors.grayWhiteOpaque,
     borderRadius: 12,
   },
   partyNameContainer: {

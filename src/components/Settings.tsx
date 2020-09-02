@@ -13,8 +13,8 @@ function Settings(props: WithUserContext): JSX.Element | null {
     None: () => null,
     User: (id, token, email) => (
       <View style={[Layouts.container, styles.container]}>
-        <Text style={Fonts.text}>Logged in as: {email}</Text>
-        <Text style={Fonts.text}>With id: {id}</Text>
+        <Text style={Fonts.condensedText}>Logged in as: {email}</Text>
+        <Text style={Fonts.condensedText}>With id: {id}</Text>
         <Button
           text="Logout"
           onPress={() =>

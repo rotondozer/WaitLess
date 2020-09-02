@@ -1,5 +1,6 @@
 import React from "react";
 import { Pressable, Text, StyleSheet } from "react-native";
+import { Colors, Fonts } from "styles";
 
 interface Props {
   text: string;
@@ -13,28 +14,24 @@ function Button(props: Props): JSX.Element {
       style={({ pressed }) =>
         pressed ? [styles.button, styles.buttonPressed] : styles.button
       }>
-      <Text style={styles.text}>{props.text}</Text>
+      <Text style={Fonts.buttonText}>{props.text}</Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
   button: {
     justifyContent: "center",
     alignItems: "center",
-    height: 35,
-    width: "50%",
+    height: 40,
+    width: "100%",
     marginVertical: 10,
-    backgroundColor: "rgba(0, 0, 0, 0.1)",
-    borderRadius: 12,
-    borderWidth: 3,
+    backgroundColor: Colors.lightBlue,
+    borderRadius: 5,
+    borderWidth: 0.05,
   },
   buttonPressed: {
-    backgroundColor: "rgba(120, 120, 120, 0.1)",
+    backgroundColor: Colors.lightBlueOpaque,
   },
 });
 
