@@ -1,3 +1,4 @@
+import "react-native-get-random-values"; // needs to be above uuid import
 import React, { useState } from "react";
 import { Text, View, StyleSheet, Alert, ToastAndroid } from "react-native";
 import { RouteProp } from "@react-navigation/native";
