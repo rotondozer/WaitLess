@@ -5,9 +5,17 @@ const title: TextStyle = {
   fontWeight: "600",
 };
 
-const text: TextStyle = {
-  fontSize: 16,
-  fontWeight: "bold",
+const buttonText: TextStyle = {
+  fontSize: 20,
+  fontWeight: "400",
+  letterSpacing: 0.6,
+  fontFamily: "serif",
+};
+
+const condensedText: TextStyle = {
+  fontSize: 18,
+  // fontWeight: "bold",
+  fontFamily: "sans-serif-condensed",
 };
 
 const text2: TextStyle = {
@@ -15,4 +23,4 @@ const text2: TextStyle = {
   fontWeight: "400",
 };
 
-export { title, text, text2 };
+export { title, buttonText, condensedText, text2 };
