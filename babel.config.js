@@ -22,6 +22,7 @@ module.exports = {
           components: ["./src/components"],
           graphql: ["./src/graphql"],
           state: ["./src/state"],
+          styles: ["./src/styles"],
           types: ["./src/types"],
         },
       },
