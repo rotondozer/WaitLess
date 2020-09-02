@@ -33,8 +33,8 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
   const [notes, updateNotes] = useState("");
 
   return (
-    <View style={[Layouts.container, { backgroundColor: "purple" }]}>
-      <Text style={Fonts.title}>Get the party's info...</Text>
+    <View style={Layouts.container}>
+      <Text style={Fonts.title}>Enter Party Details</Text>
       <View style={{ flexDirection: "row" }}>
         <Input
           placeholder="Name"

@@ -4,7 +4,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Fonts } from "../styles";
+import { Colors, Fonts, Layouts } from "styles";
 import { RootStackParamList } from "../types";
 import Waitlist from "./Waitlist";
 
@@ -25,11 +25,16 @@ function Home(props: Props): JSX.Element {
   const { email } = props.route.params;
   return (
     <>
-      <View style={styles.headerContainer}>
+      {/* <View style={styles.headerContainer}>
         <Text style={Fonts.title}>Hello, {email}!</Text>
         <SettingsButton navigation={props.navigation} />
-      </View>
-      <Tab.Navigator>
+      </View> */}
+      <Tab.Navigator
+        tabBarOptions={{
+          labelStyle: Fonts.tabBar,
+          style: { backgroundColor: Colors.teal },
+        }}
+        sceneContainerStyle={Layouts.container}>
         <Tab.Screen name="Waitlist" component={Waitlist} />
         <Tab.Screen name="Tables" component={Tables} />
       </Tab.Navigator>
@@ -38,7 +43,7 @@ function Home(props: Props): JSX.Element {
 }
 // Placeholder component
 function Tables(): JSX.Element {
-  return <View style={{ flex: 1, backgroundColor: "blue" }} />;
+  return <View style={{ flex: 1 }} />;
 }
 
 // -- PRIVATE

@@ -6,14 +6,14 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Maybe, Nothing } from "seidr";
 
-import { UserContext } from "../state/user_context";
+import { UserContext } from "state/user_context";
 import { Fonts, Layouts, Colors } from "styles";
 import { WaitlistStackParamList, Party, ListPartiesQuery } from "types";
 import { Button } from "common";
 import AddPartyForm from "./AddPartyForm";
 
 import { API, graphqlOperation } from "aws-amplify";
-import { listParties } from "../graphql/queries";
+import { listParties } from "graphql/queries";
 import { GraphQLResult } from "@aws-amplify/api";
 
 type PartiesState = Maybe<Array<Party>>;
@@ -65,15 +65,13 @@ function WaitList(): JSX.Element {
   // Defining the component here lets me get the parties const and still use the
   // `component` prop on the Stack Screen
   const Parties: () => JSX.Element = () => (
-    <View style={Layouts.container}>
-      <ScrollView alwaysBounceVertical>
-        {parties.caseOf<ReactNode>({
-          Nothing: () => <Text>No Parties on the Waitlist!</Text>,
-          Just: ps => ps.map(PartyWaiting),
-        })}
-        <AddPartyButton />
-      </ScrollView>
-    </View>
+    <ScrollView alwaysBounceVertical style={Layouts.container}>
+      {parties.caseOf<ReactNode>({
+        Nothing: () => <Text>No Parties on the Waitlist!</Text>,
+        Just: ps => ps.map(PartyWaiting),
+      })}
+      <AddPartyButton />
+    </ScrollView>
   );
 
   return (
@@ -123,11 +121,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 55,
     width: "100%",
-    marginTop: 2,
+    marginTop: 4,
     padding: 10,
-    borderWidth: 1,
     backgroundColor: Colors.grayWhiteOpaque,
-    borderRadius: 12,
+    borderRadius: 5,
   },
   partyNameContainer: {
     flex: 0.7,

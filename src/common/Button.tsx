@@ -26,9 +26,9 @@ const styles = StyleSheet.create({
     height: 40,
     width: "100%",
     marginVertical: 10,
-    backgroundColor: Colors.lightBlue,
+    backgroundColor: Colors.teal,
     borderRadius: 5,
-    borderWidth: 0.05,
+    elevation: 10,
   },
   buttonPressed: {
     backgroundColor: Colors.lightBlueOpaque,
