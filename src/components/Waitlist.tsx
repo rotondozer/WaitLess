@@ -22,19 +22,23 @@ type PartiesState = Maybe<Array<Party>>;
 async function fetchParties(): Promise<PartiesState> {
   let parties: PartiesState = Nothing();
 
-  const partiesResult = (await API.graphql(
-    graphqlOperation(listParties),
-  )) as GraphQLResult<ListPartiesQuery>;
+  try {
+    const partiesResult = (await API.graphql(
+      graphqlOperation(listParties),
+    )) as GraphQLResult<ListPartiesQuery>;
 
-  if (partiesResult.data) {
-    if (partiesResult.data.listParties) {
-      parties = Maybe.fromNullable(
-        partiesResult.data.listParties.items,
-      ) as PartiesState;
+    if (partiesResult.data) {
+      if (partiesResult.data.listParties) {
+        parties = Maybe.fromNullable(
+          partiesResult.data.listParties.items,
+        ) as PartiesState;
 
-      console.log("the party's here?", parties.getOrElse([]));
-      return Promise.resolve(parties);
+        console.log("the party's here?", parties.getOrElse([]));
+        return Promise.resolve(parties);
+      }
     }
+  } catch (err) {
+    return Promise.reject(err);
   }
   return Promise.reject(Nothing());
 }
@@ -55,7 +59,7 @@ function WaitList(): JSX.Element {
     useCallback(() => {
       fetchParties()
         .then(updateParties)
-        .catch(_ => console.log("I'm doing this wrong"));
+        .catch(e => console.log("fetchParties failed", JSON.stringify(e)));
     }, []),
   );
 

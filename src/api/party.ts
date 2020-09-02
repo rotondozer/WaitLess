@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { Maybe, Just } from "seidr";
-import { ActiveUser, ParseInt } from "types";
+import { ActiveUser, ParseInt, Party as Party_ } from "types";
 import { toNetworkRequest, NetworkRequest } from "./network_request";
 
-export interface Party {
+export type Party = Party_;
+
+/**
+ * @deprecated Use `Party` declared in src/types
+ */
+interface DeprecatedParty {
   id: string;
   name: string;
   size: number;
@@ -11,7 +16,6 @@ export interface Party {
   notes: string;
   checkedInAt: Maybe<string>; // this one too
 }
-
 interface Parties {
   parties: Array<PartySchema>;
 }
@@ -20,7 +24,7 @@ interface Parties {
 // that could be captured by the `[]` state.
 function getAll(
   activeUser: ActiveUser.ActiveUser,
-): NetworkRequest<Maybe<Array<Party>>> {
+): NetworkRequest<Maybe<Array<DeprecatedParty>>> {
   return toNetworkRequest<Parties>("GET", "/parties", activeUser).map(res =>
     Maybe.fromNullable(res.data.parties).map(ps => ps.map(serialize)),
   );
@@ -59,7 +63,7 @@ interface PartySchema {
   checked_in?: string;
   user_id: string;
 }
-function serialize(party: PartySchema): Party {
+function serialize(party: PartySchema): DeprecatedParty {
   const { id, name, size, est_wait, notes, checked_in } = party;
 
   console.log("id: ", id);

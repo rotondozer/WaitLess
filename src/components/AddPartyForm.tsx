@@ -2,12 +2,18 @@ import React, { useState } from "react";
 import { Text, View, StyleSheet, Alert, ToastAndroid } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { v4 as uuid } from "uuid";
 
 import * as Party from "../api/party";
 import { WithUserContext, withUserContext } from "../state/user_context";
 import { Input, Button } from "../common";
 import { ActiveUser, ParseInt, WaitlistStackParamList } from "../types";
 import { Fonts, Layouts } from "../styles";
+
+import { API, graphqlOperation } from "aws-amplify";
+import { GraphQLResult } from "@aws-amplify/api";
+import { CreatePartyInput, CreatePartyMutation } from "types/API";
+import { createParty } from "graphql/mutations";
 
 type Navigation = StackNavigationProp<WaitlistStackParamList, "AddPartyForm">;
 
@@ -68,7 +74,18 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
       />
       <Button
         onPress={() =>
-          onCreateParty(navigation, user, name, partySize, estWait, notes)
+          onCreateParty({
+            id: uuid(),
+            name,
+            guestCount: ParseInt.parse(partySize).orElse(0),
+            waitingSince: estWait,
+            isWaiting: true,
+          })
+            .then(p => {
+              toastSuccess(p.name);
+              navigation.goBack();
+            })
+            .catch(err => alertFailedCreation(err))
         }
         text="Add to Waitlist"
       />
@@ -89,7 +106,32 @@ function toastSuccess(n: string): void {
   );
 }
 
-function onCreateParty(
+async function onCreateParty(
+  partyDetails: CreatePartyInput,
+): Promise<Party.Party> {
+  try {
+    const createResult = (await API.graphql(
+      graphqlOperation(createParty, { input: partyDetails }),
+    )) as GraphQLResult<CreatePartyMutation>;
+
+    if (createResult.data) {
+      if (createResult.data.createParty) {
+        return Promise.resolve(createResult.data.createParty as Party.Party);
+      }
+    }
+  } catch (err) {
+    console.log("Failed creating party", err);
+    Promise.reject("");
+  }
+
+  return Promise.reject("");
+}
+
+/**
+ *
+ * @deprecated
+ */
+function _onCreateParty(
   navigation: Navigation,
   user: ActiveUser.ActiveUser,
   name: string,
