@@ -13,7 +13,7 @@ export function reset(): Time {
  * [0, 2, 4, 3] -> "02:43"
  */
 export function format(time: Time): string {
-  return `${time[0]} ${time[1]}:${time[2]} ${time[3]}`;
+  return `${time[0]}${time[1]}:${time[2]}${time[3]}`;
 }
 
 /**
@@ -23,7 +23,6 @@ export function format(time: Time): string {
 export function fromNumericalString(numString: string): Time {
   return numString
     .split("")
-    .slice(0, 3)
     .map(ParseInt.parse)
     .reduce(
       (time, num) =>

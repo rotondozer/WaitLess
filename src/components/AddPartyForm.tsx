@@ -15,6 +15,7 @@ import { API, graphqlOperation } from "aws-amplify";
 import { GraphQLResult } from "@aws-amplify/api";
 import { CreatePartyInput, CreatePartyMutation } from "types/API";
 import { createParty } from "graphql/mutations";
+import * as Time from "types/time";
 
 type Navigation = StackNavigationProp<WaitlistStackParamList, "AddPartyForm">;
 
@@ -29,8 +30,8 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
   const { user, navigation } = props;
 
   const [name, updateName] = useState("");
-  const [partySize, updatePartySize] = useState("");
-  const [estWait, updateEstWait] = useState("");
+  const [guestCount, updateGuestCount] = useState(1);
+  const [estWait, updateEstWait] = useState(Time.reset());
   const [notes, updateNotes] = useState("");
 
   return (
@@ -46,12 +47,12 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
         <Input
           placeholder="# Guests"
           keyboardType="number-pad"
-          value={partySize}
+          value={guestCount.toString()}
           onChangeText={v =>
             ParseInt.parse(v).caseOf({
-              EmptyString: () => updatePartySize(""),
+              EmptyString: () => updateGuestCount(1),
               NaN: () => Alert.alert("Needs to be a number!"),
-              Parsed: num => updatePartySize(num.toString()),
+              Parsed: updateGuestCount,
             })
           }
           style={styles.guestCountInput}
@@ -60,8 +61,9 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
 
       <Input
         placeholder="How long will their wait be?"
-        value={estWait}
-        onChangeText={updateEstWait}
+        keyboardType="number-pad"
+        value={Time.format(estWait)}
+        onChangeText={t => updateEstWait(Time.fromNumericalString(t))}
       />
       <Input
         placeholder="Notes"
@@ -75,18 +77,12 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
       />
       <Button
         onPress={() =>
-          onCreateParty({
-            id: uuid(),
-            name,
-            guestCount: ParseInt.parse(partySize).orElse(0),
-            waitingSince: estWait,
-            isWaiting: true,
-          })
+          onCreateParty(name, guestCount, estWait)
             .then(p => {
               toastSuccess(p.name);
               navigation.goBack();
             })
-            .catch(err => alertFailedCreation(err))
+            .catch(alertFailedCreation)
         }
         text="Add to Waitlist"
       />
@@ -108,8 +104,18 @@ function toastSuccess(n: string): void {
 }
 
 async function onCreateParty(
-  partyDetails: CreatePartyInput,
+  name: string,
+  guestCount: number,
+  estWait: Time.Time,
 ): Promise<Party.Party> {
+  const partyDetails: CreatePartyInput = {
+    id: uuid(),
+    name,
+    guestCount,
+    waitingSince: Time.format(estWait),
+    isWaiting: true,
+  };
+
   try {
     const createResult = (await API.graphql(
       graphqlOperation(createParty, { input: partyDetails }),
