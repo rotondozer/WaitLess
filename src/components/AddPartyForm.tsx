@@ -12,7 +12,7 @@ import {
   WaitlistStackParamList,
   CreatePartyMutation,
 } from "types";
-import { Fonts, Layouts } from "../styles";
+import { Fonts, Layouts, Colors } from "../styles";
 
 import { API, graphqlOperation } from "aws-amplify";
 import { GraphQLResult } from "@aws-amplify/api";
@@ -30,52 +30,66 @@ interface Props {
 function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
   const { user, navigation } = props;
 
-  const [name, updateName] = useState("");
+  const [name, updateName] = useState("New Party");
   const [guestCount, updateGuestCount] = useState(1);
   const [estWait, updateEstWait] = useState(Time.reset());
   const [notes, updateNotes] = useState("");
 
   return (
     <View style={Layouts.container}>
-      <Text style={Fonts.title}>Enter Party Details</Text>
-      <View style={{ flexDirection: "row" }}>
+      <Text style={styles.title}>Enter Party Details</Text>
+      <View style={styles.partyFormContainer}>
         <Input
-          placeholder="Name"
+          withLabel="Name"
           value={name}
+          selectTextOnFocus
           onChangeText={updateName}
-          style={styles.nameInput}
         />
+        <View style={styles.guestsAndWaitContainer}>
+          <View style={styles.inputWithSuffixContainer}>
+            <Input
+              withLabel="# Guests"
+              keyboardType="number-pad"
+              selectTextOnFocus
+              value={guestCount.toString()}
+              onChangeText={v =>
+                ParseInt.parse(v).caseOf({
+                  EmptyString: () => updateGuestCount(1),
+                  NaN: () => Alert.alert("Needs to be a number!"),
+                  Parsed: updateGuestCount,
+                })
+              }
+              style={styles.guestCountInput}
+            />
+            <Text style={styles.suffix}>
+              {guestCount === 1 ? "person" : "people"}
+            </Text>
+          </View>
+
+          <View style={{ flexDirection: "row" }}>
+            <Input
+              withLabel="Estimated Wait"
+              keyboardType="number-pad"
+              value={Time.format(estWait)}
+              onChangeText={t => updateEstWait(Time.fromNumericalString(t))}
+              style={styles.estWaitInput}
+            />
+            <Text style={styles.suffix}>{estWait[1] > 0 ? "hrs" : "min"}</Text>
+          </View>
+        </View>
+
         <Input
-          placeholder="# Guests"
-          keyboardType="number-pad"
-          value={guestCount.toString()}
-          onChangeText={v =>
-            ParseInt.parse(v).caseOf({
-              EmptyString: () => updateGuestCount(1),
-              NaN: () => Alert.alert("Needs to be a number!"),
-              Parsed: updateGuestCount,
-            })
-          }
-          style={styles.guestCountInput}
+          placeholder="Any special requests?"
+          value={notes}
+          onChangeText={updateNotes}
+          style={styles.notesInput}
+          multiline
+          editable
+          maxLength={400}
+          numberOfLines={4}
         />
       </View>
 
-      <Input
-        placeholder="How long will their wait be?"
-        keyboardType="number-pad"
-        value={Time.format(estWait)}
-        onChangeText={t => updateEstWait(Time.fromNumericalString(t))}
-      />
-      <Input
-        placeholder="Any special requests?"
-        value={notes}
-        onChangeText={updateNotes}
-        style={styles.notesInput}
-        multiline
-        editable
-        maxLength={400}
-        numberOfLines={4}
-      />
       <Button
         onPress={() =>
           onCreateParty(name, guestCount, estWait)
@@ -132,9 +146,39 @@ async function onCreateParty(
 // -- STYLES
 
 const styles = StyleSheet.create({
-  nameInput: { width: "75%" },
-  guestCountInput: { width: "25%", marginLeft: 1 },
-  notesInput: { textAlignVertical: "top" },
+  title: {
+    ...Fonts.title,
+    marginLeft: 10,
+  },
+  partyFormContainer: {
+    backgroundColor: Colors.tan,
+    padding: 6,
+    margin: 10,
+    borderColor: Colors.red420,
+    borderWidth: 1,
+    borderRadius: 3,
+  },
+  guestsAndWaitContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  inputWithSuffixContainer: {
+    flexDirection: "row",
+  },
+  estWaitInput: {
+    textAlign: "center",
+  },
+  guestCountInput: {
+    textAlign: "center",
+  },
+  notesInput: {
+    textAlignVertical: "top",
+  },
+  suffix: {
+    alignSelf: "flex-end",
+    marginBottom: 20,
+    letterSpacing: 0.5,
+  },
 });
 
 export default withUserContext(AddPartyForm);
