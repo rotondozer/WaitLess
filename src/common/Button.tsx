@@ -1,22 +1,42 @@
 import React from "react";
-import { Pressable, Text, StyleSheet } from "react-native";
+import {
+  Pressable,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  StyleProp,
+  TextStyle,
+} from "react-native";
 import { Colors, Fonts } from "styles";
 
 interface Props {
   text: string;
   onPress: () => void;
+  style?: ViewStyle;
+  textStyle?: TextStyle;
 }
 
 function Button(props: Props): JSX.Element {
+  const { text, style, textStyle, onPress } = props;
   return (
-    <Pressable
-      onPress={props.onPress}
-      style={({ pressed }) =>
-        pressed ? [styles.button, styles.buttonPressed] : styles.button
-      }>
-      <Text style={Fonts.buttonText}>{props.text}</Text>
+    <Pressable onPress={onPress} style={s => buttonStyle(s, style)}>
+      <Text style={[Fonts.buttonText, textStyle]}>{text}</Text>
     </Pressable>
   );
+}
+
+function buttonStyle(
+  { pressed }: { pressed: boolean },
+  extraStyle?: ViewStyle,
+): StyleProp<ViewStyle> {
+  const style: StyleProp<ViewStyle> = [styles.button];
+  if (extraStyle) {
+    style.push(extraStyle);
+  }
+  if (pressed) {
+    style.push(styles.buttonPressed);
+  }
+  return style;
 }
 
 const backgroundColor = Colors.blue;
@@ -34,6 +54,7 @@ const styles = StyleSheet.create({
   },
   buttonPressed: {
     backgroundColor: backgroundColor.concat("70"),
+    elevation: 0,
   },
 });
 
