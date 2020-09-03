@@ -1,21 +1,22 @@
-import "react-native-get-random-values"; // needs to be above uuid import
 import React, { useState } from "react";
 import { Text, View, StyleSheet, Alert, ToastAndroid } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { v4 as uuid } from "uuid";
 
-import * as Party from "../api/party";
+import { Party } from "api";
 import { WithUserContext, withUserContext } from "../state/user_context";
 import { Input, Button } from "../common";
-import { ActiveUser, ParseInt, WaitlistStackParamList } from "../types";
+import {
+  ParseInt,
+  Time,
+  WaitlistStackParamList,
+  CreatePartyMutation,
+} from "types";
 import { Fonts, Layouts } from "../styles";
 
 import { API, graphqlOperation } from "aws-amplify";
 import { GraphQLResult } from "@aws-amplify/api";
-import { CreatePartyInput, CreatePartyMutation } from "types/API";
 import { createParty } from "graphql/mutations";
-import * as Time from "types/time";
 
 type Navigation = StackNavigationProp<WaitlistStackParamList, "AddPartyForm">;
 
@@ -108,17 +109,11 @@ async function onCreateParty(
   guestCount: number,
   estWait: Time.Time,
 ): Promise<Party.Party> {
-  const partyDetails: CreatePartyInput = {
-    id: uuid(),
-    name,
-    guestCount,
-    waitingSince: Time.format(estWait),
-    isWaiting: true,
-  };
-
   try {
     const createResult = (await API.graphql(
-      graphqlOperation(createParty, { input: partyDetails }),
+      graphqlOperation(createParty, {
+        input: Party.createInput(name, guestCount, estWait),
+      }),
     )) as GraphQLResult<CreatePartyMutation>;
 
     if (createResult.data) {
@@ -132,31 +127,6 @@ async function onCreateParty(
   }
 
   return Promise.reject("");
-}
-
-/**
- *
- * @deprecated
- */
-function _onCreateParty(
-  navigation: Navigation,
-  user: ActiveUser.ActiveUser,
-  name: string,
-  size: string,
-  estWait: string,
-  notes: string,
-): void {
-  Party.create(user, name, size, estWait, notes).caseOf({
-    Err: err =>
-      err.caseOf({
-        BadRequest: () => alertFailedCreation("Check the info and try again."),
-        _: () => alertFailedCreation(""),
-      }),
-    Ok: n => {
-      toastSuccess(n);
-      navigation.goBack();
-    },
-  });
 }
 
 // -- STYLES

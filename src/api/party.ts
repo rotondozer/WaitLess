@@ -1,82 +1,27 @@
-/* eslint-disable @typescript-eslint/camelcase */
+import "react-native-get-random-values"; // needs to be above uuid import
+import { v4 as uuid } from "uuid";
 import { Maybe, Just } from "seidr";
-import { ActiveUser, ParseInt, Party as Party_ } from "types";
-import { toNetworkRequest, NetworkRequest } from "./network_request";
+import {
+  ActiveUser,
+  ParseInt,
+  Party as Party_,
+  Time,
+  CreatePartyInput,
+} from "types";
 
 export type Party = Party_;
 
-/**
- * @deprecated Use `Party` declared in src/types
- */
-interface DeprecatedParty {
-  id: string;
-  name: string;
-  size: number;
-  estimatedWait: string; // what type should this be?
-  notes: string;
-  checkedInAt: Maybe<string>; // this one too
-}
-interface Parties {
-  parties: Array<PartySchema>;
-}
-
-// TODO: does this need to return a Maybe? We render different content for the no parties waiting, but
-// that could be captured by the `[]` state.
-function getAll(
-  activeUser: ActiveUser.ActiveUser,
-): NetworkRequest<Maybe<Array<DeprecatedParty>>> {
-  return toNetworkRequest<Parties>("GET", "/parties", activeUser).map(res =>
-    Maybe.fromNullable(res.data.parties).map(ps => ps.map(serialize)),
-  );
-}
-
-function create(
-  activeUser: ActiveUser.ActiveUser,
+export function createInput(
   name: string,
-  size: string,
-  estWait: string,
-  notes: string,
-): NetworkRequest<string> {
-  return toNetworkRequest("POST", "/parties", activeUser, {
-    party: {
-      name,
-      size,
-      checked_in: Just(Date.now().toString()),
-      est_wait: estWait,
-      notes,
-      user_id: activeUser.caseOf({
-        None: () => undefined,
-        User: (id, _, __) => id,
-      }),
-    },
-  }).map(_ => name);
-}
-
-// -- PRIVATE
-
-interface PartySchema {
-  id: string;
-  name: string;
-  size: string;
-  est_wait: string;
-  notes: string;
-  checked_in?: string;
-  user_id: string;
-}
-function serialize(party: PartySchema): DeprecatedParty {
-  const { id, name, size, est_wait, notes, checked_in } = party;
-
-  console.log("id: ", id);
-  console.log("name: ", name);
-
+  guestCount: number,
+  estWait: Time.Time,
+): CreatePartyInput {
   return {
-    id,
+    id: uuid(),
     name,
-    size: ParseInt.parse(size).orElse(0),
-    estimatedWait: est_wait,
-    notes,
-    checkedInAt: Maybe.fromNullable(checked_in),
+    guestCount,
+    waitingSince: new Date().toISOString(),
+    estWait: Time.format(estWait),
+    isWaiting: true,
   };
 }
-
-export { getAll, create };
