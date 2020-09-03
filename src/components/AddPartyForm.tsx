@@ -66,7 +66,7 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
             </Text>
           </View>
 
-          <View style={{ flexDirection: "row" }}>
+          <View style={styles.inputWithSuffixContainer}>
             <Input
               withLabel="Estimated Wait"
               keyboardType="number-pad"
@@ -74,9 +74,13 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
               onChangeText={t => updateEstWait(Time.fromNumericalString(t))}
               style={styles.estWaitInput}
             />
-            <Text style={styles.suffix}>{estWait[1] > 0 ? "hrs" : "min"}</Text>
+            <Text style={styles.suffix}>
+              {estWait[0] > 0 || estWait[1] > 0 ? "hrs" : "min"}
+            </Text>
           </View>
         </View>
+
+        <Input placeholder="Phone" value="" />
 
         <Input
           placeholder="Any special requests?"
@@ -100,6 +104,12 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
             .catch(alertFailedCreation)
         }
         text="Add to Waitlist"
+      />
+      <Button
+        text="Cancel"
+        onPress={() => navigation.goBack()}
+        textStyle={{ color: Colors.darkRed, fontSize: 18 }}
+        style={{ backgroundColor: undefined, elevation: 0 }}
       />
     </View>
   );
@@ -178,6 +188,14 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     marginBottom: 20,
     letterSpacing: 0.5,
+  },
+  cancelButtonText: {
+    color: Colors.darkRed,
+    fontSize: 18,
+  },
+  cancelButton: {
+    backgroundColor: undefined,
+    elevation: 0,
   },
 });
 
