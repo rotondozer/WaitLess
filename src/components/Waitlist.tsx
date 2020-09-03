@@ -108,7 +108,9 @@ function PartyWaiting(party: Party): JSX.Element {
         <Text style={Fonts.condensedText}>{name}</Text>
       </View>
       <View style={styles.partySizeContainer}>
-        <Text style={Fonts.condensedText}>{guestCount}</Text>
+        <Text style={Fonts.condensedText}>
+          {guestCount} {guestCount > 1 ? "people" : "person"}
+        </Text>
       </View>
     </View>
   );
@@ -123,7 +125,9 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 4,
     padding: 10,
-    backgroundColor: Colors.grayWhiteOpaque,
+    backgroundColor: Colors.tanOpaque,
+    borderColor: Colors.red420,
+    borderWidth: 0.5,
     borderRadius: 5,
   },
   partyNameContainer: {

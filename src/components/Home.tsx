@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet, StatusBar } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Colors, Fonts, Layouts } from "styles";
+import { Colors, Fonts } from "styles";
 import { RootStackParamList } from "../types";
 import Waitlist from "./Waitlist";
 
@@ -21,6 +21,8 @@ interface Props {
   route: RouteProp<RootStackParamList, "Home">;
 }
 
+const backgroundColor = Colors.blueGray;
+
 function Home(props: Props): JSX.Element {
   const { email } = props.route.params;
   return (
@@ -29,12 +31,13 @@ function Home(props: Props): JSX.Element {
         <Text style={Fonts.title}>Hello, {email}!</Text>
         <SettingsButton navigation={props.navigation} />
       </View> */}
+      <StatusBar backgroundColor={backgroundColor} barStyle="dark-content" />
       <Tab.Navigator
         tabBarOptions={{
           labelStyle: Fonts.tabBar,
-          style: { backgroundColor: Colors.teal },
-        }}
-        sceneContainerStyle={Layouts.container}>
+          style: { backgroundColor },
+          indicatorStyle: { backgroundColor: Colors.darkRed },
+        }}>
         <Tab.Screen name="Waitlist" component={Waitlist} />
         <Tab.Screen name="Tables" component={Tables} />
       </Tab.Navigator>

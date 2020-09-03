@@ -1,10 +1,10 @@
 import { ViewStyle } from "react-native";
-import { grayBlue } from "./colors";
+import { whitish } from "./colors";
 
 const container: ViewStyle = {
   flex: 1,
   padding: 5,
-  backgroundColor: grayBlue,
+  backgroundColor: whitish,
 };
 
 export { container };

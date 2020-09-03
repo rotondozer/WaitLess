@@ -19,6 +19,8 @@ function Button(props: Props): JSX.Element {
   );
 }
 
+const backgroundColor = Colors.blue;
+
 const styles = StyleSheet.create({
   button: {
     justifyContent: "center",
@@ -26,12 +28,12 @@ const styles = StyleSheet.create({
     height: 40,
     width: "100%",
     marginVertical: 10,
-    backgroundColor: Colors.teal,
+    backgroundColor,
     borderRadius: 5,
     elevation: 10,
   },
   buttonPressed: {
-    backgroundColor: Colors.lightBlueOpaque,
+    backgroundColor: backgroundColor.concat("70"),
   },
 });
 

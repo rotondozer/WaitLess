@@ -67,7 +67,7 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
         onChangeText={t => updateEstWait(Time.fromNumericalString(t))}
       />
       <Input
-        placeholder="Notes"
+        placeholder="Any special requests?"
         value={notes}
         onChangeText={updateNotes}
         style={styles.notesInput}

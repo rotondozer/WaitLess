@@ -1,5 +1,5 @@
 import { TextStyle } from "react-native";
-import { grayWhite, blackish } from "./colors";
+import { blackish } from "./colors";
 
 const title: TextStyle = {
   fontSize: 24,
@@ -9,10 +9,9 @@ const title: TextStyle = {
 };
 
 const tabBar: TextStyle = {
-  fontFamily: "serif",
+  fontFamily: "sans-serif",
   fontSize: 20,
   fontWeight: "400",
-  color: grayWhite,
   letterSpacing: 2,
 };
 
@@ -20,12 +19,12 @@ const buttonText: TextStyle = {
   fontFamily: "sans-serif",
   fontSize: 22,
   fontWeight: "600",
-  color: blackish,
   letterSpacing: 1,
 };
 
 const condensedText: TextStyle = {
   fontFamily: "sans-serif-condensed",
+  letterSpacing: 0.6,
   fontSize: 18,
   color: blackish,
 };
