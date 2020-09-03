@@ -43,6 +43,8 @@ export const createParty = /* GraphQL */ `
       guestCount
       isWaiting
       waitingSince
+      estWait
+      seatedAt
       phone
       email
       notes
@@ -64,6 +66,8 @@ export const updateParty = /* GraphQL */ `
       guestCount
       isWaiting
       waitingSince
+      estWait
+      seatedAt
       phone
       email
       notes
@@ -85,6 +89,8 @@ export const deleteParty = /* GraphQL */ `
       guestCount
       isWaiting
       waitingSince
+      estWait
+      seatedAt
       phone
       email
       notes

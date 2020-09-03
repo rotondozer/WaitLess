@@ -32,13 +32,15 @@ export const listTables = /* GraphQL */ `
   }
 `;
 export const getParty = /* GraphQL */ `
-  query GetParty($id: ID!, $waitingSince: AWSTime!) {
+  query GetParty($id: ID!, $waitingSince: AWSDateTime!) {
     getParty(id: $id, waitingSince: $waitingSince) {
       id
       name
       guestCount
       isWaiting
       waitingSince
+      estWait
+      seatedAt
       phone
       email
       notes
@@ -65,6 +67,8 @@ export const listParties = /* GraphQL */ `
         guestCount
         isWaiting
         waitingSince
+        estWait
+        seatedAt
         phone
         email
         notes

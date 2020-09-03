@@ -72,27 +72,15 @@ export const onDeleteTable = /* GraphQL */ `
   }
 `;
 export const onCreateParty = /* GraphQL */ `
-  subscription OnCreateParty(
-    $id: ID
-    $name: String
-    $guestCount: Int
-    $isWaiting: Boolean
-    $waitingSince: AWSTime
-    $phone: AWSPhone
-  ) {
-    onCreateParty(
-      id: $id
-      name: $name
-      guestCount: $guestCount
-      isWaiting: $isWaiting
-      waitingSince: $waitingSince
-      phone: $phone
-    ) {
+  subscription OnCreateParty {
+    onCreateParty {
       id
       name
       guestCount
       isWaiting
       waitingSince
+      estWait
+      seatedAt
       phone
       email
       notes
@@ -107,27 +95,15 @@ export const onCreateParty = /* GraphQL */ `
   }
 `;
 export const onUpdateParty = /* GraphQL */ `
-  subscription OnUpdateParty(
-    $id: ID
-    $name: String
-    $guestCount: Int
-    $isWaiting: Boolean
-    $waitingSince: AWSTime
-    $phone: AWSPhone
-  ) {
-    onUpdateParty(
-      id: $id
-      name: $name
-      guestCount: $guestCount
-      isWaiting: $isWaiting
-      waitingSince: $waitingSince
-      phone: $phone
-    ) {
+  subscription OnUpdateParty {
+    onUpdateParty {
       id
       name
       guestCount
       isWaiting
       waitingSince
+      estWait
+      seatedAt
       phone
       email
       notes
@@ -142,27 +118,15 @@ export const onUpdateParty = /* GraphQL */ `
   }
 `;
 export const onDeleteParty = /* GraphQL */ `
-  subscription OnDeleteParty(
-    $id: ID
-    $name: String
-    $guestCount: Int
-    $isWaiting: Boolean
-    $waitingSince: AWSTime
-    $phone: AWSPhone
-  ) {
-    onDeleteParty(
-      id: $id
-      name: $name
-      guestCount: $guestCount
-      isWaiting: $isWaiting
-      waitingSince: $waitingSince
-      phone: $phone
-    ) {
+  subscription OnDeleteParty {
+    onDeleteParty {
       id
       name
       guestCount
       isWaiting
       waitingSince
+      estWait
+      seatedAt
       phone
       email
       notes

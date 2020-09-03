@@ -29,6 +29,8 @@ export type CreatePartyInput = {
   guestCount: number,
   isWaiting: boolean,
   waitingSince: string,
+  estWait?: string | null,
+  seatedAt?: string | null,
   phone?: string | null,
   email?: string | null,
   notes?: string | null,
@@ -40,6 +42,8 @@ export type UpdatePartyInput = {
   guestCount: number,
   isWaiting?: boolean | null,
   waitingSince: string,
+  estWait?: string | null,
+  seatedAt?: string | null,
   phone?: string | null,
   email?: string | null,
   notes?: string | null,
@@ -102,6 +106,8 @@ export type TablePartyFilterInput = {
   guestCount?: TableIntFilterInput | null,
   isWaiting?: TableBooleanFilterInput | null,
   waitingSince?: TableStringFilterInput | null,
+  estWait?: TableStringFilterInput | null,
+  seatedAt?: TableStringFilterInput | null,
   phone?: TableStringFilterInput | null,
   email?: TableStringFilterInput | null,
   notes?: TableStringFilterInput | null,
@@ -169,6 +175,8 @@ export type CreatePartyMutation = {
     guestCount: number,
     isWaiting: boolean,
     waitingSince: string,
+    estWait: string | null,
+    seatedAt: string | null,
     phone: string | null,
     email: string | null,
     notes: string | null,
@@ -195,6 +203,8 @@ export type UpdatePartyMutation = {
     guestCount: number,
     isWaiting: boolean,
     waitingSince: string,
+    estWait: string | null,
+    seatedAt: string | null,
     phone: string | null,
     email: string | null,
     notes: string | null,
@@ -221,6 +231,8 @@ export type DeletePartyMutation = {
     guestCount: number,
     isWaiting: boolean,
     waitingSince: string,
+    estWait: string | null,
+    seatedAt: string | null,
     phone: string | null,
     email: string | null,
     notes: string | null,
@@ -285,6 +297,8 @@ export type GetPartyQuery = {
     guestCount: number,
     isWaiting: boolean,
     waitingSince: string,
+    estWait: string | null,
+    seatedAt: string | null,
     phone: string | null,
     email: string | null,
     notes: string | null,
@@ -315,6 +329,8 @@ export type ListPartiesQuery = {
       guestCount: number,
       isWaiting: boolean,
       waitingSince: string,
+      estWait: string | null,
+      seatedAt: string | null,
       phone: string | null,
       email: string | null,
       notes: string | null,
@@ -380,15 +396,6 @@ export type OnDeleteTableSubscription = {
   } | null,
 };
 
-export type OnCreatePartySubscriptionVariables = {
-  id?: string | null,
-  name?: string | null,
-  guestCount?: number | null,
-  isWaiting?: boolean | null,
-  waitingSince?: string | null,
-  phone?: string | null,
-};
-
 export type OnCreatePartySubscription = {
   onCreateParty:  {
     __typename: "Party",
@@ -397,6 +404,8 @@ export type OnCreatePartySubscription = {
     guestCount: number,
     isWaiting: boolean,
     waitingSince: string,
+    estWait: string | null,
+    seatedAt: string | null,
     phone: string | null,
     email: string | null,
     notes: string | null,
@@ -409,15 +418,6 @@ export type OnCreatePartySubscription = {
       description: string | null,
     } | null,
   } | null,
-};
-
-export type OnUpdatePartySubscriptionVariables = {
-  id?: string | null,
-  name?: string | null,
-  guestCount?: number | null,
-  isWaiting?: boolean | null,
-  waitingSince?: string | null,
-  phone?: string | null,
 };
 
 export type OnUpdatePartySubscription = {
@@ -428,6 +428,8 @@ export type OnUpdatePartySubscription = {
     guestCount: number,
     isWaiting: boolean,
     waitingSince: string,
+    estWait: string | null,
+    seatedAt: string | null,
     phone: string | null,
     email: string | null,
     notes: string | null,
@@ -442,15 +444,6 @@ export type OnUpdatePartySubscription = {
   } | null,
 };
 
-export type OnDeletePartySubscriptionVariables = {
-  id?: string | null,
-  name?: string | null,
-  guestCount?: number | null,
-  isWaiting?: boolean | null,
-  waitingSince?: string | null,
-  phone?: string | null,
-};
-
 export type OnDeletePartySubscription = {
   onDeleteParty:  {
     __typename: "Party",
@@ -459,6 +452,8 @@ export type OnDeletePartySubscription = {
     guestCount: number,
     isWaiting: boolean,
     waitingSince: string,
+    estWait: string | null,
+    seatedAt: string | null,
     phone: string | null,
     email: string | null,
     notes: string | null,
