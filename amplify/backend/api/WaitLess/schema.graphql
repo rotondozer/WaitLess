@@ -17,7 +17,7 @@ type Mutation {
   updateTable(input: UpdateTableInput!): Table
 }
 
-type Party @model {
+type Party {
   email: AWSEmail
   estWait: AWSTime
   guestCount: Int!
@@ -27,7 +27,7 @@ type Party @model {
   notes: String
   phone: AWSPhone
   seatedAt: AWSDateTime
-  table: Table @connection
+  table: Table
   waitingSince: AWSDateTime!
 }
 
@@ -39,20 +39,46 @@ type PartyConnection {
 type Query {
   getParty(id: ID!, waitingSince: AWSDateTime!): Party
   getTable(id: ID!, maxSeats: Int!): Table
-  listParties(filter: TablePartyFilterInput, limit: Int, nextToken: String): PartyConnection
-  listTables(filter: TableTableFilterInput, limit: Int, nextToken: String): TableConnection
+  listParties(
+    filter: TablePartyFilterInput
+    limit: Int
+    nextToken: String
+  ): PartyConnection
+  listTables(
+    filter: TableTableFilterInput
+    limit: Int
+    nextToken: String
+  ): TableConnection
 }
 
 type Subscription {
-  onCreateParty: Party @aws_subscribe(mutations : ["createParty"])
-  onCreateTable(description: String, id: ID, maxSeats: Int, minSeats: Int, name: String): Table @aws_subscribe(mutations : ["createTable"])
-  onDeleteParty: Party @aws_subscribe(mutations : ["deleteParty"])
-  onDeleteTable(description: String, id: ID, maxSeats: Int, minSeats: Int, name: String): Table @aws_subscribe(mutations : ["deleteTable"])
-  onUpdateParty: Party @aws_subscribe(mutations : ["updateParty"])
-  onUpdateTable(description: String, id: ID, maxSeats: Int, minSeats: Int, name: String): Table @aws_subscribe(mutations : ["updateTable"])
+  onCreateParty: Party @aws_subscribe(mutations: ["createParty"])
+  onCreateTable(
+    description: String
+    id: ID
+    maxSeats: Int
+    minSeats: Int
+    name: String
+  ): Table @aws_subscribe(mutations: ["createTable"])
+  onDeleteParty: Party @aws_subscribe(mutations: ["deleteParty"])
+  onDeleteTable(
+    description: String
+    id: ID
+    maxSeats: Int
+    minSeats: Int
+    name: String
+  ): Table @aws_subscribe(mutations: ["deleteTable"])
+  onUpdateParty: Party @aws_subscribe(mutations: ["updateParty"])
+  onUpdateTable(
+    description: String
+    id: ID
+    maxSeats: Int
+    minSeats: Int
+    name: String
+  ): Table @aws_subscribe(mutations: ["updateTable"])
 }
 
-type Table @model {
+type Table {
   description: String
   id: ID!
   maxSeats: Int!
