@@ -1,4 +1,10 @@
-import React, { ReactNode, useCallback, useState, useContext } from "react";
+import React, {
+  ReactNode,
+  useCallback,
+  useState,
+  useContext,
+  useEffect,
+} from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { enableScreens } from "react-native-screens";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
@@ -8,13 +14,20 @@ import { Maybe, Nothing } from "seidr";
 
 import { UserContext } from "state/user_context";
 import { Fonts, Layouts, Colors } from "styles";
-import { WaitlistStackParamList, Party, ListPartiesQuery } from "types";
+import {
+  WaitlistStackParamList,
+  Party,
+  ListPartiesQuery,
+  OnCreatePartySubscription,
+} from "types";
 import { Button } from "common";
 import AddPartyForm from "./AddPartyForm";
 
 import { API, graphqlOperation } from "aws-amplify";
 import { listParties } from "graphql/queries";
 import { GraphQLResult } from "@aws-amplify/api";
+import { onCreateParty } from "graphql/subscriptions";
+import Observable from "zen-observable-ts";
 
 type PartiesState = Maybe<Array<Party>>;
 
@@ -42,6 +55,28 @@ async function fetchParties(): Promise<PartiesState> {
   return Promise.reject(Nothing());
 }
 
+/**
+ * Tracking down the types for the AppSync subscriptions has been difficult.
+ * `any` will have to do for now, because `OnCreatePartySubscription` is nested
+ * inside 2 objects returned from the sub, so I'd still need to make a custom type
+ * to represent that if there isn't one out of the codegen box that I'm missing
+ */
+function partyCreationSub<T extends object = any>(): Observable<T> {
+  console.log("Subscribing to `onCreateParty`");
+  return API.graphql(graphqlOperation(onCreateParty)) as Observable<T>;
+}
+
+/**
+ * Return a callback to be executed when the component unmounts
+ * @param subscription the real type is in the zen-observable-ts package
+ */
+function unsubscribeToPartyCreation(subscription: any): () => void {
+  return () => {
+    console.log("Unsubscribing to `onCreateParty`");
+    subscription.unsubscribe();
+  };
+}
+
 // -- NAVIGATOR
 
 enableScreens();
@@ -56,11 +91,34 @@ function WaitList(): JSX.Element {
 
   useFocusEffect(
     useCallback(() => {
+      console.log("Fetching Parties...");
       fetchParties()
         .then(updateParties)
         .catch(e => console.log("fetchParties failed", JSON.stringify(e)));
     }, []),
   );
+
+  useEffect(() => {
+    function partyUpdater(prevState: PartiesState, party: Party): PartiesState {
+      console.log(`Adding party '${party.name}' to state`);
+      return prevState.map(ps => ps.concat(party));
+    }
+
+    const subscription = partyCreationSub().subscribe({
+      next: data => {
+        console.log("New party received via subscription", data);
+
+        // Generous null checks while this has type `any` (and because Maybe is missing chain)
+        if (data.value && data.value.data && data.value.data.onCreateParty) {
+          updateParties(prevState =>
+            partyUpdater(prevState, data.value.data.onCreateParty as Party),
+          );
+        }
+      },
+    });
+
+    return unsubscribeToPartyCreation(subscription);
+  }, []); // Passing an empty deps array tells React to only run this on mount
 
   // Defining the component here lets me get the parties const and still use the
   // `component` prop on the Stack Screen
