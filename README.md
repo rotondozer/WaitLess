@@ -15,4 +15,4 @@ Additionally:
 
 - React Navigation
 - SumTypes by [@hojberg/sums-up](https://github.com/hojberg/sums-up) and [@hojberg/seidr](https://github.com/hojberg/sums-up)
-- [axios](https://github.com/axios/axios) for network requests
+- GraphQL through AWS Amplify & AppSync API
