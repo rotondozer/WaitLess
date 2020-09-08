@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Text, View, StyleSheet, Alert, ToastAndroid } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { Maybe } from "seidr";
 
 import { Party } from "api";
 import { WithUserContext, withUserContext } from "../state/user_context";
@@ -17,6 +18,8 @@ import { Fonts, Layouts, Colors } from "../styles";
 import { API, graphqlOperation } from "aws-amplify";
 import { GraphQLResult } from "@aws-amplify/api";
 import { createParty } from "graphql/mutations";
+
+const maybeNull = Maybe.fromNullable;
 
 type Navigation = StackNavigationProp<WaitlistStackParamList, "AddPartyForm">;
 
@@ -140,11 +143,9 @@ async function onCreateParty(
       }),
     )) as GraphQLResult<CreatePartyMutation>;
 
-    if (createResult.data) {
-      if (createResult.data.createParty) {
-        return Promise.resolve(createResult.data.createParty as Party.Party);
-      }
-    }
+    return maybeNull(createResult.data)
+      .flatMap(d => maybeNull(d.createParty))
+      .caseOf({ Just: Promise.resolve, Nothing: () => Promise.reject("") });
   } catch (err) {
     console.log("Failed creating party", err);
     Promise.reject("");

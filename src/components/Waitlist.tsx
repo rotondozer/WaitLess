@@ -29,30 +29,25 @@ import { GraphQLResult } from "@aws-amplify/api";
 import { onCreateParty } from "graphql/subscriptions";
 import Observable from "zen-observable-ts";
 
+const maybeNull = Maybe.fromNullable;
+
 type PartiesState = Maybe<Array<Party>>;
 
 async function fetchParties(): Promise<PartiesState> {
-  let parties: PartiesState = Nothing();
-
   try {
     const partiesResult = (await API.graphql(
       graphqlOperation(listParties),
     )) as GraphQLResult<ListPartiesQuery>;
 
-    if (partiesResult.data) {
-      if (partiesResult.data.listParties) {
-        parties = Maybe.fromNullable(
-          partiesResult.data.listParties.items,
-        ) as PartiesState;
+    const parties = maybeNull(partiesResult.data)
+      .flatMap(d => maybeNull(d.listParties))
+      .flatMap(lp => maybeNull(lp.items) as PartiesState);
 
-        console.log("the party's here?", parties.getOrElse([]));
-        return Promise.resolve(parties);
-      }
-    }
+    console.log("the party's here?", parties.getOrElse([]));
+    return Promise.resolve(parties);
   } catch (err) {
     return Promise.reject(err);
   }
-  return Promise.reject(Nothing());
 }
 
 /**
@@ -108,12 +103,12 @@ function WaitList(): JSX.Element {
       next: data => {
         console.log("New party received via subscription", data);
 
-        // Generous null checks while this has type `any` (and because Maybe is missing chain)
-        if (data.value && data.value.data && data.value.data.onCreateParty) {
-          updateParties(prevState =>
-            partyUpdater(prevState, data.value.data.onCreateParty as Party),
+        maybeNull(data.value)
+          .flatMap(v => maybeNull(v.data))
+          .flatMap(d => maybeNull(d.onCreateParty))
+          .map(p =>
+            updateParties(prevState => partyUpdater(prevState, p as Party)),
           );
-        }
       },
     });
 
