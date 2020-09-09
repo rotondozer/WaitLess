@@ -10,6 +10,7 @@ import { Colors, Fonts } from "styles";
 import { RootStackParamList, WaitlistStackParamList } from "types";
 import Waitlist from "./Waitlist";
 import AddPartyForm from "./AddPartyForm";
+import EditPartyForm from "./EditPartyForm";
 
 // -- NAVIGATOR
 
@@ -62,6 +63,7 @@ function WaitlistStack(): JSX.Element {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Waitlist" component={Waitlist} />
       <Stack.Screen name="AddPartyForm" component={AddPartyForm} />
+      <Stack.Screen name="EditPartyForm" component={EditPartyForm} />
     </Stack.Navigator>
   );
 }

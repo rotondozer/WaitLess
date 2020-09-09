@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { Maybe, Nothing } from "seidr";
 
 import { UserContext } from "state/user_context";
@@ -67,7 +67,9 @@ function unsubscribeToPartyCreation(subscription: any): () => void {
 
 // -- VIEW
 
-function WaitList(): JSX.Element {
+type Props = StackScreenProps<WaitlistStackParamList, "Waitlist">;
+
+function WaitList({ navigation }: Props): JSX.Element {
   const [parties, updateParties] = useState<PartiesState>(Nothing());
 
   const { user } = useContext(UserContext);
@@ -117,7 +119,9 @@ function WaitList(): JSX.Element {
         {parties.caseOf<ReactNode>({
           Nothing: () => <Text>No Parties on the Waitlist!</Text>,
           Just: ps =>
-            ps.map(party => ({ party, onSeatOrRemoveParty })).map(PartyWaiting),
+            ps
+              .map(party => ({ party, onSeatOrRemoveParty, navigation }))
+              .map(PartyWaiting),
         })}
       </ScrollView>
       <AddPartyButton />

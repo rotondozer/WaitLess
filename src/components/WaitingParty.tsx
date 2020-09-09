@@ -10,9 +10,15 @@ import {
   StyleProp,
   ImageStyle,
 } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { Maybe } from "seidr";
 
-import { Party, UpdatePartyMutation, DeletePartyMutation } from "types";
+import {
+  Party,
+  UpdatePartyMutation,
+  DeletePartyMutation,
+  WaitlistStackParamList,
+} from "types";
 import { Fonts, Colors } from "styles";
 import { Button } from "common";
 
@@ -20,28 +26,25 @@ import { API, graphqlOperation } from "aws-amplify";
 import { GraphQLResult } from "@aws-amplify/api";
 import { updateParty, deleteParty } from "graphql/mutations";
 
-/**
- * TODO: Make entire cell touchable with just name and size, then push new screen onPress
- */
 interface Props {
+  navigation: StackNavigationProp<WaitlistStackParamList, "Waitlist">;
   party: Party;
   onSeatOrRemoveParty: (p: Party) => Party;
 }
-function PartyWaiting({ party, onSeatOrRemoveParty }: Props): JSX.Element {
-  const { id, name, guestCount } = party;
+function PartyWaiting(props: Props): JSX.Element {
+  const { navigation, party, onSeatOrRemoveParty } = props;
+
   return (
-    <View style={styles.guestCount} key={id}>
+    <View style={styles.guestCount} key={party.id}>
       <View style={styles.topContainer}>
         <View style={styles.nameContainer}>
-          <Text style={Fonts.title}>{name}</Text>
+          <Text style={Fonts.title}>{party.name}</Text>
         </View>
         <Pressable
           style={editPartyButtonStyle}
-          onPress={() => {
-            console.log("EDIT PRESS");
-          }}>
+          onPress={() => navigation.navigate("EditPartyForm", { party })}>
           <Text style={[Fonts.condensedText, { paddingRight: 5 }]}>
-            {guestCount} {guestCount > 1 ? "people" : "person"}
+            {party.guestCount} {party.guestCount > 1 ? "people" : "person"}
           </Text>
 
           <Image

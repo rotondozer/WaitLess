@@ -1,3 +1,4 @@
+import { Party } from "./data";
 /**
  * A types API for React Navigation
  * ParamList types are are defined and exported here because the same type is needed by the parent component
@@ -12,4 +13,5 @@ export type RootStackParamList = {
 export type WaitlistStackParamList = {
   Waitlist: undefined;
   AddPartyForm: undefined; // ActiveUser not on the param list because it's supplied with a React.Context HOC
+  EditPartyForm: { party: Party };
 };
