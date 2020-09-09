@@ -26,10 +26,10 @@ const maybeNull = Maybe.fromNullable;
 
 type PartiesState = Maybe<Array<Party>>;
 
-async function fetchParties(): Promise<PartiesState> {
+async function fetchPartiesWaiting(): Promise<PartiesState> {
   try {
     const partiesResult = (await API.graphql(
-      graphqlOperation(listParties),
+      graphqlOperation(listParties, { filter: { isWaiting: { eq: true } } }),
     )) as GraphQLResult<ListPartiesQuery>;
 
     const parties = maybeNull(partiesResult.data)
@@ -75,12 +75,13 @@ function WaitList(): JSX.Element {
   useFocusEffect(
     useCallback(() => {
       console.log("Fetching Parties...");
-      fetchParties()
+      fetchPartiesWaiting()
         .then(updateParties)
         .catch(e => console.log("fetchParties failed", JSON.stringify(e)));
     }, []),
   );
 
+  // TODO: callback isntead of sub?
   useEffect(() => {
     function partyUpdater(prevState: PartiesState, party: Party): PartiesState {
       console.log(`Adding party '${party.name}' to state`);
@@ -103,12 +104,20 @@ function WaitList(): JSX.Element {
     return unsubscribeToPartyCreation(subscription);
   }, []); // Passing an empty deps array tells React to only run this on mount
 
+  function onSeatParty(party: Party): Party {
+    updateParties(prevState =>
+      prevState.map(ps => ps.filter(p => p.id !== party.id)),
+    );
+    return party;
+  }
+
   return (
     <View style={Layouts.container}>
       <ScrollView alwaysBounceVertical style={styles.listContainer}>
         {parties.caseOf<ReactNode>({
           Nothing: () => <Text>No Parties on the Waitlist!</Text>,
-          Just: ps => ps.map(PartyWaiting),
+          Just: ps =>
+            ps.map(party => ({ party, onSeatParty })).map(PartyWaiting),
         })}
       </ScrollView>
       <AddPartyButton />
