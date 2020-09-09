@@ -28,6 +28,7 @@ import { listParties } from "graphql/queries";
 import { GraphQLResult } from "@aws-amplify/api";
 import { onCreateParty } from "graphql/subscriptions";
 import Observable from "zen-observable-ts";
+import PartyWaiting from "./WaitingParty";
 
 const maybeNull = Maybe.fromNullable;
 
@@ -149,52 +150,5 @@ function AddPartyButton(): JSX.Element {
     />
   );
 }
-
-/**
- * TODO: Make entire cell touchable with just name and size, then push new screen onPress
- */
-function PartyWaiting(party: Party): JSX.Element {
-  const { id, name, guestCount } = party;
-  return (
-    <View style={styles.partyContainer} key={id}>
-      <View style={styles.partyNameContainer}>
-        <Text style={Fonts.condensedText}>{name}</Text>
-      </View>
-      <View style={styles.partySizeContainer}>
-        <Text style={Fonts.condensedText}>
-          {guestCount} {guestCount > 1 ? "people" : "person"}
-        </Text>
-      </View>
-    </View>
-  );
-}
-
-// -- STYLES
-
-const styles = StyleSheet.create({
-  partyContainer: {
-    flexDirection: "row",
-    height: 55,
-    width: "100%",
-    marginTop: 4,
-    padding: 10,
-    backgroundColor: Colors.tanOpaque,
-    borderColor: Colors.red420,
-    borderWidth: 0.5,
-    borderRadius: 5,
-  },
-  partyNameContainer: {
-    flex: 0.7,
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-  partySizeContainer: {
-    flex: 0.3,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 
 export default WaitList;

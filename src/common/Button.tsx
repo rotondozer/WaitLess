@@ -12,8 +12,8 @@ import { Colors, Fonts } from "styles";
 interface Props {
   text: string;
   onPress: () => void;
-  style?: ViewStyle;
-  textStyle?: TextStyle;
+  style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
 }
 
 function Button(props: Props): JSX.Element {
@@ -27,7 +27,7 @@ function Button(props: Props): JSX.Element {
 
 function buttonStyle(
   { pressed }: { pressed: boolean },
-  extraStyle?: ViewStyle,
+  extraStyle?: StyleProp<ViewStyle>,
 ): StyleProp<ViewStyle> {
   const style: StyleProp<ViewStyle> = [styles.button];
   if (extraStyle) {

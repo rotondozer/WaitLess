@@ -32,6 +32,7 @@ const condensedText: TextStyle = {
 const text2: TextStyle = {
   fontSize: 18,
   fontWeight: "400",
+  letterSpacing: 1,
 };
 
 export { title, tabBar, buttonText, condensedText, text2 };
