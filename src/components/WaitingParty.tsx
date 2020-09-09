@@ -1,5 +1,15 @@
 import React from "react";
-import { View, Text, StyleSheet, Alert, ToastAndroid } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  ToastAndroid,
+  Image,
+  Pressable,
+  StyleProp,
+  ImageStyle,
+} from "react-native";
 import { Maybe } from "seidr";
 
 import { Party, UpdatePartyMutation, DeletePartyMutation } from "types";
@@ -23,13 +33,22 @@ function PartyWaiting({ party, onSeatOrRemoveParty }: Props): JSX.Element {
     <View style={styles.guestCount} key={id}>
       <View style={styles.topContainer}>
         <View style={styles.nameContainer}>
-          <Text style={[Fonts.title]}>{name}</Text>
+          <Text style={Fonts.title}>{name}</Text>
         </View>
-        <View style={styles.guestCountContainer}>
-          <Text style={Fonts.condensedText}>
+        <Pressable
+          style={editPartyButtonStyle}
+          onPress={() => {
+            console.log("EDIT PRESS");
+          }}>
+          <Text style={[Fonts.condensedText, { paddingRight: 5 }]}>
             {guestCount} {guestCount > 1 ? "people" : "person"}
           </Text>
-        </View>
+
+          <Image
+            style={styles.editIcon}
+            source={require("src/assets/edit.png")}
+          />
+        </Pressable>
       </View>
 
       <View style={styles.bottomContainer}>
@@ -61,6 +80,19 @@ function PartyWaiting({ party, onSeatOrRemoveParty }: Props): JSX.Element {
 }
 
 // -- PRIVATE
+
+function editPartyButtonStyle({
+  pressed,
+}: {
+  pressed: boolean;
+}): StyleProp<ImageStyle> {
+  return pressed
+    ? [
+        styles.guestCountContainer,
+        { backgroundColor: Colors.blackish.concat("70") },
+      ]
+    : styles.guestCountContainer;
+}
 
 enum Action {
   SEAT,
@@ -156,6 +188,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 5,
   },
   actionButtons: {
     marginHorizontal: 4,
@@ -180,6 +213,10 @@ const styles = StyleSheet.create({
   },
   seatText: {
     color: Colors.sageGray,
+  },
+  editIcon: {
+    height: 20,
+    width: 20,
   },
 });
 
