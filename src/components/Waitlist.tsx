@@ -104,7 +104,7 @@ function WaitList(): JSX.Element {
     return unsubscribeToPartyCreation(subscription);
   }, []); // Passing an empty deps array tells React to only run this on mount
 
-  function onSeatParty(party: Party): Party {
+  function onSeatOrRemoveParty(party: Party): Party {
     updateParties(prevState =>
       prevState.map(ps => ps.filter(p => p.id !== party.id)),
     );
@@ -117,7 +117,7 @@ function WaitList(): JSX.Element {
         {parties.caseOf<ReactNode>({
           Nothing: () => <Text>No Parties on the Waitlist!</Text>,
           Just: ps =>
-            ps.map(party => ({ party, onSeatParty })).map(PartyWaiting),
+            ps.map(party => ({ party, onSeatOrRemoveParty })).map(PartyWaiting),
         })}
       </ScrollView>
       <AddPartyButton />

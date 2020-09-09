@@ -1,21 +1,23 @@
 import React from "react";
 import { View, Text, StyleSheet, Alert, ToastAndroid } from "react-native";
-import { Party, UpdatePartyMutation } from "types";
+import { Maybe } from "seidr";
+
+import { Party, UpdatePartyMutation, DeletePartyMutation } from "types";
 import { Fonts, Colors } from "styles";
 import { Button } from "common";
 
 import { API, graphqlOperation } from "aws-amplify";
 import { GraphQLResult } from "@aws-amplify/api";
-import { updateParty } from "graphql/mutations";
+import { updateParty, deleteParty } from "graphql/mutations";
 
 /**
  * TODO: Make entire cell touchable with just name and size, then push new screen onPress
  */
 interface Props {
   party: Party;
-  onSeatParty: (p: Party) => Party;
+  onSeatOrRemoveParty: (p: Party) => Party;
 }
-function PartyWaiting({ party, onSeatParty }: Props): JSX.Element {
+function PartyWaiting({ party, onSeatOrRemoveParty }: Props): JSX.Element {
   const { id, name, guestCount } = party;
   return (
     <View style={styles.guestCount} key={id}>
@@ -33,7 +35,12 @@ function PartyWaiting({ party, onSeatParty }: Props): JSX.Element {
       <View style={styles.bottomContainer}>
         <Button
           text="X"
-          onPress={() => {}}
+          onPress={() =>
+            removePartyFromWait(party)
+              .then(onSeatOrRemoveParty)
+              .then(p => toastSuccess(Action.REMOVE, p))
+              .catch(e => alertFailure(Action.REMOVE, e))
+          }
           style={[styles.actionButtons, styles.xButton]}
           textStyle={[Fonts.text2, styles.xText]}
         />
@@ -41,9 +48,9 @@ function PartyWaiting({ party, onSeatParty }: Props): JSX.Element {
           text="Seat"
           onPress={() =>
             seatParty(party)
-              .then(onSeatParty)
-              .then(toastSuccess)
-              .catch(alertFailedCreation)
+              .then(onSeatOrRemoveParty)
+              .then(p => toastSuccess(Action.SEAT, p))
+              .catch(e => alertFailure(Action.SEAT, e))
           }
           style={[styles.actionButtons, styles.seatButton]}
           textStyle={[Fonts.text2, styles.seatText]}
@@ -55,13 +62,22 @@ function PartyWaiting({ party, onSeatParty }: Props): JSX.Element {
 
 // -- PRIVATE
 
-function alertFailedCreation(e: string): void {
-  Alert.alert(`Failed seating party!\n${e}`);
+enum Action {
+  SEAT,
+  REMOVE,
 }
 
-function toastSuccess(p: Party): void {
+function alertFailure(action: Action, e: string): void {
+  Alert.alert(
+    `Failed ${action === Action.SEAT ? "seating" : "removing"} party!\n${e}`,
+  );
+}
+
+function toastSuccess(action: Action, p: Party): void {
   ToastAndroid.show(
-    `${p.name} has been seated and removed from the waitlist!`,
+    `${p.name} has been ${
+      action === Action.SEAT ? "seated!" : "removed from the waitlist."
+    }`,
     ToastAndroid.SHORT,
   );
 }
@@ -77,11 +93,33 @@ async function seatParty(party: Party): Promise<Party> {
 
     return Promise.resolve(thing.data?.updateParty as Party);
   } catch (error) {
-    console.log(
-      `seating party with id ${party.id} failed`,
-      JSON.stringify(error),
-    );
-    return Promise.reject(error);
+    const err = JSON.stringify(error);
+    console.log(`seating party ${party.name} failed`, err);
+    return Promise.reject(err);
+  }
+}
+
+/**
+ * Removing a party from the waitlist is a simple delete for now.
+ * Potentially, a `removal` could archive the party so the record is not lost,
+ * and this aggregated data could be useful for users to understand the whens/whys
+ * parties were removed without being seated (e.g. the wait was too long).
+ */
+async function removePartyFromWait(party: Party): Promise<Party> {
+  const { id, waitingSince } = party;
+  try {
+    const removal = (await API.graphql(
+      graphqlOperation(deleteParty, { input: { id, waitingSince } }),
+    )) as GraphQLResult<DeletePartyMutation>;
+
+    return Maybe.fromNullable(removal.data)
+      .flatMap(d => Maybe.fromNullable(d.deleteParty))
+      .map(Promise.resolve)
+      .getOrElse(Promise.reject("")) as Promise<Party>;
+  } catch (error) {
+    const err = JSON.stringify(error);
+    console.log(`deleting party ${party.name} failed`, err);
+    return Promise.reject(err);
   }
 }
 
