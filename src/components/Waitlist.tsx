@@ -119,13 +119,15 @@ function WaitList(): JSX.Element {
   // Defining the component here lets me get the parties const and still use the
   // `component` prop on the Stack Screen
   const Parties: () => JSX.Element = () => (
-    <ScrollView alwaysBounceVertical style={Layouts.container}>
-      {parties.caseOf<ReactNode>({
-        Nothing: () => <Text>No Parties on the Waitlist!</Text>,
-        Just: ps => ps.map(PartyWaiting),
-      })}
+    <View style={Layouts.container}>
+      <ScrollView alwaysBounceVertical style={styles.listContainer}>
+        {parties.caseOf<ReactNode>({
+          Nothing: () => <Text>No Parties on the Waitlist!</Text>,
+          Just: ps => ps.map(PartyWaiting),
+        })}
+      </ScrollView>
       <AddPartyButton />
-    </ScrollView>
+    </View>
   );
 
   return (
@@ -150,5 +152,12 @@ function AddPartyButton(): JSX.Element {
     />
   );
 }
+
+const styles = StyleSheet.create({
+  listContainer: {
+    borderBottomColor: Colors.blue,
+    borderBottomWidth: 2,
+  },
+});
 
 export default WaitList;
