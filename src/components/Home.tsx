@@ -1,16 +1,22 @@
 import React from "react";
 import { View, Text, Pressable, StyleSheet, StatusBar } from "react-native";
+import { enableScreens } from "react-native-screens";
+import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { Colors, Fonts } from "styles";
-import { RootStackParamList } from "../types";
+import { RootStackParamList, WaitlistStackParamList } from "types";
 import Waitlist from "./Waitlist";
+import AddPartyForm from "./AddPartyForm";
 
 // -- NAVIGATOR
 
 const Tab = createMaterialTopTabNavigator();
+
+enableScreens();
+const Stack = createNativeStackNavigator<WaitlistStackParamList>();
 
 type Navigation = StackNavigationProp<RootStackParamList, "Home">;
 
@@ -38,7 +44,7 @@ function Home(props: Props): JSX.Element {
           style: { backgroundColor },
           indicatorStyle: { backgroundColor: Colors.darkRed },
         }}>
-        <Tab.Screen name="Waitlist" component={Waitlist} />
+        <Tab.Screen name="Waitlist" component={WaitlistStack} />
         <Tab.Screen name="Tables" component={Tables} />
       </Tab.Navigator>
     </>
@@ -50,6 +56,15 @@ function Tables(): JSX.Element {
 }
 
 // -- PRIVATE
+
+function WaitlistStack(): JSX.Element {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Waitlist" component={Waitlist} />
+      <Stack.Screen name="AddPartyForm" component={AddPartyForm} />
+    </Stack.Navigator>
+  );
+}
 
 function SettingsButton(props: { navigation: Navigation }): JSX.Element {
   return (

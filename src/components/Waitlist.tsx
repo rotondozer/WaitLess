@@ -6,29 +6,21 @@ import React, {
   useEffect,
 } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { enableScreens } from "react-native-screens";
-import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Maybe, Nothing } from "seidr";
 
 import { UserContext } from "state/user_context";
-import { Fonts, Layouts, Colors } from "styles";
-import {
-  WaitlistStackParamList,
-  Party,
-  ListPartiesQuery,
-  OnCreatePartySubscription,
-} from "types";
+import { Layouts, Colors } from "styles";
+import { WaitlistStackParamList, Party, ListPartiesQuery } from "types";
 import { Button } from "common";
-import AddPartyForm from "./AddPartyForm";
+import PartyWaiting from "./WaitingParty";
 
 import { API, graphqlOperation } from "aws-amplify";
 import { listParties } from "graphql/queries";
 import { GraphQLResult } from "@aws-amplify/api";
 import { onCreateParty } from "graphql/subscriptions";
 import Observable from "zen-observable-ts";
-import PartyWaiting from "./WaitingParty";
 
 const maybeNull = Maybe.fromNullable;
 
@@ -73,11 +65,6 @@ function unsubscribeToPartyCreation(subscription: any): () => void {
   };
 }
 
-// -- NAVIGATOR
-
-enableScreens();
-const Stack = createNativeStackNavigator<WaitlistStackParamList>();
-
 // -- VIEW
 
 function WaitList(): JSX.Element {
@@ -116,9 +103,7 @@ function WaitList(): JSX.Element {
     return unsubscribeToPartyCreation(subscription);
   }, []); // Passing an empty deps array tells React to only run this on mount
 
-  // Defining the component here lets me get the parties const and still use the
-  // `component` prop on the Stack Screen
-  const Parties: () => JSX.Element = () => (
+  return (
     <View style={Layouts.container}>
       <ScrollView alwaysBounceVertical style={styles.listContainer}>
         {parties.caseOf<ReactNode>({
@@ -128,13 +113,6 @@ function WaitList(): JSX.Element {
       </ScrollView>
       <AddPartyButton />
     </View>
-  );
-
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Waitlist" component={Parties} />
-      <Stack.Screen name="AddPartyForm" component={AddPartyForm} />
-    </Stack.Navigator>
   );
 }
 
