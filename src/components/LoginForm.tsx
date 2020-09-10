@@ -4,6 +4,7 @@ import { View, Text, TextInput, Alert, StyleSheet, Button } from "react-native";
 import * as User from "../api/user";
 import { ActiveUser } from "../types";
 import { Fonts } from "styles";
+import { Auth } from "aws-amplify";
 
 interface LoginFormProps {
   onLogin: (user: ActiveUser.ActiveUser) => void;
@@ -30,13 +31,34 @@ function LoginForm(props: LoginFormProps): JSX.Element {
       />
       <Button
         title="Submit"
-        onPress={() => login(username, password, props.onLogin)}
+        onPress={() =>
+          Auth.signIn(username, password)
+            .then(thing => {
+              console.log("THING", thing);
+              props.onLogin(
+                ActiveUser.User("fake-id", "fake-token", "fake-email"),
+              );
+            })
+            .catch(e => {
+              console.log("Error", e);
+            })
+        }
       />
     </View>
   );
 }
 
 // -- PRIVATE
+
+async function signIn(username: string, password: string): Promise<any> {
+  try {
+    const user = await Auth.signIn(username, password);
+    return Promise.resolve(user);
+  } catch (error) {
+    console.log("error signing in", error);
+    return Promise.reject(JSON.stringify(error));
+  }
+}
 
 function login(
   username: string,

@@ -8,7 +8,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Amplify from "aws-amplify";
 import awsconfig from "./aws-exports";
 
-// import LoginForm from "./components/LoginForm";
+import LoginForm from "./components/LoginForm";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
 import { UserContext } from "./state/user_context";
@@ -38,23 +38,24 @@ function App(): JSX.Element {
   return (
     <NavigationContainer>
       <View style={{ flex: 1 }}>
-        {/* {activeUser.caseOf({
+        {activeUser.caseOf({
           None: () => <LoginForm onLogin={updateUser} />,
-          User: (_, __, email) => ( */}
-        <UserContext.Provider value={{ user: activeUser, updateUser }}>
-          <Stack.Navigator
-            screenOptions={({ route }) => ({
-              headerShown: route.name === "Settings",
-            })}>
-            <Stack.Screen
-              name="Home"
-              component={Home}
-              initialParams={{ email: "TEMP TODO" }}
-            />
-            <Stack.Screen name="Settings" component={Settings} />
-          </Stack.Navigator>
-        </UserContext.Provider>
-        {/* ), })} */}
+          User: (_, __, email) => (
+            <UserContext.Provider value={{ user: activeUser, updateUser }}>
+              <Stack.Navigator
+                screenOptions={({ route }) => ({
+                  headerShown: route.name === "Settings",
+                })}>
+                <Stack.Screen
+                  name="Home"
+                  component={Home}
+                  initialParams={{ email: "TEMP TODO" }}
+                />
+                <Stack.Screen name="Settings" component={Settings} />
+              </Stack.Navigator>
+            </UserContext.Provider>
+          ),
+        })}
       </View>
     </NavigationContainer>
   );
