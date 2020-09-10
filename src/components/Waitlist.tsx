@@ -1,13 +1,7 @@
-import React, {
-  ReactNode,
-  useCallback,
-  useState,
-  useContext,
-  useEffect,
-} from "react";
+import React, { ReactNode, useCallback, useState, useContext } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
+import { useFocusEffect } from "@react-navigation/native";
+import { StackScreenProps } from "@react-navigation/stack";
 import { Maybe, Nothing } from "seidr";
 
 import { UserContext } from "state/user_context";
@@ -16,8 +10,6 @@ import { WaitlistStackParamList } from "types";
 import { Party } from "api";
 import { Button } from "common";
 import PartyWaiting from "./WaitingParty";
-
-const maybeNull = Maybe.fromNullable;
 
 type PartiesState = Maybe<Array<Party.Party>>;
 
@@ -38,14 +30,12 @@ function WaitList({ navigation }: Props): JSX.Element {
     }, []),
   );
 
-  function onNewParty(party: Party.Party): void {
+  function addPartyToState(party: Party.Party): Party.Party {
     updateParties(prevState => prevState.map(ps => ps.concat(party)));
+    return party;
   }
 
-  // TODO: callback isntead of sub?
-  useEffect(() => Party.partySubEffect(onNewParty), []); // Passing an empty deps array tells React to only run this on mount
-
-  function onSeatOrRemoveParty(party: Party.Party): Party.Party {
+  function removePartyFromState(party: Party.Party): Party.Party {
     updateParties(prevState =>
       prevState.map(ps => ps.filter(p => p.id !== party.id)),
     );
@@ -58,28 +48,22 @@ function WaitList({ navigation }: Props): JSX.Element {
         {parties.caseOf<ReactNode>({
           Nothing: () => <Text>No Parties on the Waitlist!</Text>,
           Just: ps =>
-            ps
-              .map(party => ({ party, onSeatOrRemoveParty, navigation }))
-              .map(PartyWaiting),
+            ps.map(party => (
+              <PartyWaiting
+                party={party}
+                navigation={navigation}
+                onSeatOrRemoveParty={removePartyFromState}
+              />
+            )),
         })}
       </ScrollView>
-      <AddPartyButton />
+      <Button
+        text="Add Party"
+        onPress={() =>
+          navigation.navigate("AddPartyForm", { onAddParty: addPartyToState })
+        }
+      />
     </View>
-  );
-}
-
-// -- PRIVATE
-
-function AddPartyButton(): JSX.Element {
-  const navigation = useNavigation<
-    StackNavigationProp<WaitlistStackParamList, "Waitlist">
-  >();
-
-  return (
-    <Button
-      text="Add Party"
-      onPress={() => navigation.navigate("AddPartyForm")}
-    />
   );
 }
 
