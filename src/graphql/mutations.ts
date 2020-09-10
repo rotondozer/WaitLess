@@ -20,10 +20,8 @@ export const createParty = /* GraphQL */ `
         maxSeats
         minSeats
         name
-        author
       }
       waitingSince
-      author
     }
   }
 `;
@@ -35,7 +33,6 @@ export const createTable = /* GraphQL */ `
       maxSeats
       minSeats
       name
-      author
     }
   }
 `;
@@ -57,10 +54,8 @@ export const deleteParty = /* GraphQL */ `
         maxSeats
         minSeats
         name
-        author
       }
       waitingSince
-      author
     }
   }
 `;
@@ -72,7 +67,6 @@ export const deleteTable = /* GraphQL */ `
       maxSeats
       minSeats
       name
-      author
     }
   }
 `;
@@ -94,10 +88,8 @@ export const updateParty = /* GraphQL */ `
         maxSeats
         minSeats
         name
-        author
       }
       waitingSince
-      author
     }
   }
 `;
@@ -109,7 +101,6 @@ export const updateTable = /* GraphQL */ `
       maxSeats
       minSeats
       name
-      author
     }
   }
 `;

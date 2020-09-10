@@ -20,10 +20,8 @@ export const getParty = /* GraphQL */ `
         maxSeats
         minSeats
         name
-        author
       }
       waitingSince
-      author
     }
   }
 `;
@@ -35,7 +33,6 @@ export const getTable = /* GraphQL */ `
       maxSeats
       minSeats
       name
-      author
     }
   }
 `;
@@ -57,7 +54,6 @@ export const listParties = /* GraphQL */ `
         phone
         seatedAt
         waitingSince
-        author
       }
       nextToken
     }
@@ -76,7 +72,6 @@ export const listTables = /* GraphQL */ `
         maxSeats
         minSeats
         name
-        author
       }
       nextToken
     }

@@ -141,10 +141,8 @@ export type CreatePartyMutation = {
       maxSeats: number,
       minSeats: number,
       name: string,
-      author: string | null,
     } | null,
     waitingSince: string,
-    author: string | null,
   } | null,
 };
 
@@ -160,7 +158,6 @@ export type CreateTableMutation = {
     maxSeats: number,
     minSeats: number,
     name: string,
-    author: string | null,
   } | null,
 };
 
@@ -187,10 +184,8 @@ export type DeletePartyMutation = {
       maxSeats: number,
       minSeats: number,
       name: string,
-      author: string | null,
     } | null,
     waitingSince: string,
-    author: string | null,
   } | null,
 };
 
@@ -206,7 +201,6 @@ export type DeleteTableMutation = {
     maxSeats: number,
     minSeats: number,
     name: string,
-    author: string | null,
   } | null,
 };
 
@@ -233,10 +227,8 @@ export type UpdatePartyMutation = {
       maxSeats: number,
       minSeats: number,
       name: string,
-      author: string | null,
     } | null,
     waitingSince: string,
-    author: string | null,
   } | null,
 };
 
@@ -252,7 +244,6 @@ export type UpdateTableMutation = {
     maxSeats: number,
     minSeats: number,
     name: string,
-    author: string | null,
   } | null,
 };
 
@@ -280,10 +271,8 @@ export type GetPartyQuery = {
       maxSeats: number,
       minSeats: number,
       name: string,
-      author: string | null,
     } | null,
     waitingSince: string,
-    author: string | null,
   } | null,
 };
 
@@ -300,7 +289,6 @@ export type GetTableQuery = {
     maxSeats: number,
     minSeats: number,
     name: string,
-    author: string | null,
   } | null,
 };
 
@@ -325,7 +313,6 @@ export type ListPartiesQuery = {
       phone: string | null,
       seatedAt: string | null,
       waitingSince: string,
-      author: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -347,7 +334,6 @@ export type ListTablesQuery = {
       maxSeats: number,
       minSeats: number,
       name: string,
-      author: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -372,10 +358,8 @@ export type OnCreatePartySubscription = {
       maxSeats: number,
       minSeats: number,
       name: string,
-      author: string | null,
     } | null,
     waitingSince: string,
-    author: string | null,
   } | null,
 };
 
@@ -395,7 +379,6 @@ export type OnCreateTableSubscription = {
     maxSeats: number,
     minSeats: number,
     name: string,
-    author: string | null,
   } | null,
 };
 
@@ -418,10 +401,8 @@ export type OnDeletePartySubscription = {
       maxSeats: number,
       minSeats: number,
       name: string,
-      author: string | null,
     } | null,
     waitingSince: string,
-    author: string | null,
   } | null,
 };
 
@@ -441,7 +422,6 @@ export type OnDeleteTableSubscription = {
     maxSeats: number,
     minSeats: number,
     name: string,
-    author: string | null,
   } | null,
 };
 
@@ -464,10 +444,8 @@ export type OnUpdatePartySubscription = {
       maxSeats: number,
       minSeats: number,
       name: string,
-      author: string | null,
     } | null,
     waitingSince: string,
-    author: string | null,
   } | null,
 };
 
@@ -487,6 +465,5 @@ export type OnUpdateTableSubscription = {
     maxSeats: number,
     minSeats: number,
     name: string,
-    author: string | null,
   } | null,
 };

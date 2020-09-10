@@ -20,10 +20,8 @@ export const onCreateParty = /* GraphQL */ `
         maxSeats
         minSeats
         name
-        author
       }
       waitingSince
-      author
     }
   }
 `;
@@ -47,7 +45,6 @@ export const onCreateTable = /* GraphQL */ `
       maxSeats
       minSeats
       name
-      author
     }
   }
 `;
@@ -69,10 +66,8 @@ export const onDeleteParty = /* GraphQL */ `
         maxSeats
         minSeats
         name
-        author
       }
       waitingSince
-      author
     }
   }
 `;
@@ -96,7 +91,6 @@ export const onDeleteTable = /* GraphQL */ `
       maxSeats
       minSeats
       name
-      author
     }
   }
 `;
@@ -118,10 +112,8 @@ export const onUpdateParty = /* GraphQL */ `
         maxSeats
         minSeats
         name
-        author
       }
       waitingSince
-      author
     }
   }
 `;
@@ -145,7 +137,6 @@ export const onUpdateTable = /* GraphQL */ `
       maxSeats
       minSeats
       name
-      author
     }
   }
 `;
