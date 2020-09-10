@@ -2,105 +2,114 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createTable = /* GraphQL */ `
-  mutation CreateTable($input: CreateTableInput!) {
-    createTable(input: $input) {
-      id
-      name
-      maxSeats
-      minSeats
-      description
-    }
-  }
-`;
-export const updateTable = /* GraphQL */ `
-  mutation UpdateTable($input: UpdateTableInput!) {
-    updateTable(input: $input) {
-      id
-      name
-      maxSeats
-      minSeats
-      description
-    }
-  }
-`;
-export const deleteTable = /* GraphQL */ `
-  mutation DeleteTable($input: DeleteTableInput!) {
-    deleteTable(input: $input) {
-      id
-      name
-      maxSeats
-      minSeats
-      description
-    }
-  }
-`;
 export const createParty = /* GraphQL */ `
   mutation CreateParty($input: CreatePartyInput!) {
     createParty(input: $input) {
-      id
-      name
-      guestCount
-      isWaiting
-      waitingSince
-      estWait
-      seatedAt
-      phone
       email
+      estWait
+      guestCount
+      id
+      isWaiting
+      name
       notes
+      phone
+      seatedAt
       table {
+        description
         id
-        name
         maxSeats
         minSeats
-        description
+        name
+        author
       }
+      waitingSince
+      author
     }
   }
 `;
-export const updateParty = /* GraphQL */ `
-  mutation UpdateParty($input: UpdatePartyInput!) {
-    updateParty(input: $input) {
+export const createTable = /* GraphQL */ `
+  mutation CreateTable($input: CreateTableInput!) {
+    createTable(input: $input) {
+      description
       id
+      maxSeats
+      minSeats
       name
-      guestCount
-      isWaiting
-      waitingSince
-      estWait
-      seatedAt
-      phone
-      email
-      notes
-      table {
-        id
-        name
-        maxSeats
-        minSeats
-        description
-      }
+      author
     }
   }
 `;
 export const deleteParty = /* GraphQL */ `
   mutation DeleteParty($input: DeletePartyInput!) {
     deleteParty(input: $input) {
-      id
-      name
-      guestCount
-      isWaiting
-      waitingSince
-      estWait
-      seatedAt
-      phone
       email
+      estWait
+      guestCount
+      id
+      isWaiting
+      name
       notes
+      phone
+      seatedAt
       table {
+        description
         id
-        name
         maxSeats
         minSeats
-        description
+        name
+        author
       }
+      waitingSince
+      author
+    }
+  }
+`;
+export const deleteTable = /* GraphQL */ `
+  mutation DeleteTable($input: DeleteTableInput!) {
+    deleteTable(input: $input) {
+      description
+      id
+      maxSeats
+      minSeats
+      name
+      author
+    }
+  }
+`;
+export const updateParty = /* GraphQL */ `
+  mutation UpdateParty($input: UpdatePartyInput!) {
+    updateParty(input: $input) {
+      email
+      estWait
+      guestCount
+      id
+      isWaiting
+      name
+      notes
+      phone
+      seatedAt
+      table {
+        description
+        id
+        maxSeats
+        minSeats
+        name
+        author
+      }
+      waitingSince
+      author
+    }
+  }
+`;
+export const updateTable = /* GraphQL */ `
+  mutation UpdateTable($input: UpdateTableInput!) {
+    updateTable(input: $input) {
+      description
+      id
+      maxSeats
+      minSeats
+      name
+      author
     }
   }
 `;

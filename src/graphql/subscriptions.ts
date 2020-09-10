@@ -2,141 +2,150 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateTable = /* GraphQL */ `
-  subscription OnCreateTable(
-    $id: ID
-    $name: String
-    $maxSeats: Int
-    $minSeats: Int
-    $description: String
-  ) {
-    onCreateTable(
-      id: $id
-      name: $name
-      maxSeats: $maxSeats
-      minSeats: $minSeats
-      description: $description
-    ) {
-      id
-      name
-      maxSeats
-      minSeats
-      description
-    }
-  }
-`;
-export const onUpdateTable = /* GraphQL */ `
-  subscription OnUpdateTable(
-    $id: ID
-    $name: String
-    $maxSeats: Int
-    $minSeats: Int
-    $description: String
-  ) {
-    onUpdateTable(
-      id: $id
-      name: $name
-      maxSeats: $maxSeats
-      minSeats: $minSeats
-      description: $description
-    ) {
-      id
-      name
-      maxSeats
-      minSeats
-      description
-    }
-  }
-`;
-export const onDeleteTable = /* GraphQL */ `
-  subscription OnDeleteTable(
-    $id: ID
-    $name: String
-    $maxSeats: Int
-    $minSeats: Int
-    $description: String
-  ) {
-    onDeleteTable(
-      id: $id
-      name: $name
-      maxSeats: $maxSeats
-      minSeats: $minSeats
-      description: $description
-    ) {
-      id
-      name
-      maxSeats
-      minSeats
-      description
-    }
-  }
-`;
 export const onCreateParty = /* GraphQL */ `
   subscription OnCreateParty {
     onCreateParty {
-      id
-      name
-      guestCount
-      isWaiting
-      waitingSince
-      estWait
-      seatedAt
-      phone
       email
+      estWait
+      guestCount
+      id
+      isWaiting
+      name
       notes
+      phone
+      seatedAt
       table {
+        description
         id
-        name
         maxSeats
         minSeats
-        description
+        name
+        author
       }
+      waitingSince
+      author
     }
   }
 `;
-export const onUpdateParty = /* GraphQL */ `
-  subscription OnUpdateParty {
-    onUpdateParty {
+export const onCreateTable = /* GraphQL */ `
+  subscription OnCreateTable(
+    $description: String
+    $id: ID
+    $maxSeats: Int
+    $minSeats: Int
+    $name: String
+  ) {
+    onCreateTable(
+      description: $description
+      id: $id
+      maxSeats: $maxSeats
+      minSeats: $minSeats
+      name: $name
+    ) {
+      description
       id
+      maxSeats
+      minSeats
       name
-      guestCount
-      isWaiting
-      waitingSince
-      estWait
-      seatedAt
-      phone
-      email
-      notes
-      table {
-        id
-        name
-        maxSeats
-        minSeats
-        description
-      }
+      author
     }
   }
 `;
 export const onDeleteParty = /* GraphQL */ `
   subscription OnDeleteParty {
     onDeleteParty {
-      id
-      name
-      guestCount
-      isWaiting
-      waitingSince
-      estWait
-      seatedAt
-      phone
       email
+      estWait
+      guestCount
+      id
+      isWaiting
+      name
       notes
+      phone
+      seatedAt
       table {
+        description
         id
-        name
         maxSeats
         minSeats
-        description
+        name
+        author
       }
+      waitingSince
+      author
+    }
+  }
+`;
+export const onDeleteTable = /* GraphQL */ `
+  subscription OnDeleteTable(
+    $description: String
+    $id: ID
+    $maxSeats: Int
+    $minSeats: Int
+    $name: String
+  ) {
+    onDeleteTable(
+      description: $description
+      id: $id
+      maxSeats: $maxSeats
+      minSeats: $minSeats
+      name: $name
+    ) {
+      description
+      id
+      maxSeats
+      minSeats
+      name
+      author
+    }
+  }
+`;
+export const onUpdateParty = /* GraphQL */ `
+  subscription OnUpdateParty {
+    onUpdateParty {
+      email
+      estWait
+      guestCount
+      id
+      isWaiting
+      name
+      notes
+      phone
+      seatedAt
+      table {
+        description
+        id
+        maxSeats
+        minSeats
+        name
+        author
+      }
+      waitingSince
+      author
+    }
+  }
+`;
+export const onUpdateTable = /* GraphQL */ `
+  subscription OnUpdateTable(
+    $description: String
+    $id: ID
+    $maxSeats: Int
+    $minSeats: Int
+    $name: String
+  ) {
+    onUpdateTable(
+      description: $description
+      id: $id
+      maxSeats: $maxSeats
+      minSeats: $minSeats
+      name: $name
+    ) {
+      description
+      id
+      maxSeats
+      minSeats
+      name
+      author
     }
   }
 `;

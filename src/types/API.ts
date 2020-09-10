@@ -2,51 +2,25 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateTableInput = {
+export type CreatePartyInput = {
+  email?: string | null,
+  estWait?: string | null,
+  guestCount: number,
   id: string,
+  isWaiting: boolean,
   name: string,
+  notes?: string | null,
+  phone?: string | null,
+  seatedAt?: string | null,
+  waitingSince: string,
+};
+
+export type CreateTableInput = {
+  description?: string | null,
+  id: string,
   maxSeats: number,
   minSeats: number,
-  description?: string | null,
-};
-
-export type UpdateTableInput = {
-  id: string,
-  name?: string | null,
-  maxSeats: number,
-  minSeats?: number | null,
-  description?: string | null,
-};
-
-export type DeleteTableInput = {
-  id: string,
-  maxSeats: number,
-};
-
-export type CreatePartyInput = {
-  id: string,
   name: string,
-  guestCount: number,
-  isWaiting: boolean,
-  waitingSince: string,
-  estWait?: string | null,
-  seatedAt?: string | null,
-  phone?: string | null,
-  email?: string | null,
-  notes?: string | null,
-};
-
-export type UpdatePartyInput = {
-  id: string,
-  name?: string | null,
-  guestCount: number,
-  isWaiting?: boolean | null,
-  waitingSince: string,
-  estWait?: string | null,
-  seatedAt?: string | null,
-  phone?: string | null,
-  email?: string | null,
-  notes?: string | null,
 };
 
 export type DeletePartyInput = {
@@ -54,113 +28,94 @@ export type DeletePartyInput = {
   waitingSince: string,
 };
 
-export type TableTableFilterInput = {
-  id?: TableIDFilterInput | null,
-  name?: TableStringFilterInput | null,
-  maxSeats?: TableIntFilterInput | null,
-  minSeats?: TableIntFilterInput | null,
-  description?: TableStringFilterInput | null,
+export type DeleteTableInput = {
+  id: string,
+  maxSeats: number,
 };
 
-export type TableIDFilterInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
+export type UpdatePartyInput = {
+  email?: string | null,
+  estWait?: string | null,
+  guestCount: number,
+  id: string,
+  isWaiting?: boolean | null,
+  name?: string | null,
+  notes?: string | null,
+  phone?: string | null,
+  seatedAt?: string | null,
+  waitingSince: string,
 };
 
-export type TableStringFilterInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-};
-
-export type TableIntFilterInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  contains?: number | null,
-  notContains?: number | null,
-  between?: Array< number | null > | null,
+export type UpdateTableInput = {
+  description?: string | null,
+  id: string,
+  maxSeats: number,
+  minSeats?: number | null,
+  name?: string | null,
 };
 
 export type TablePartyFilterInput = {
-  id?: TableIDFilterInput | null,
-  name?: TableStringFilterInput | null,
-  guestCount?: TableIntFilterInput | null,
-  isWaiting?: TableBooleanFilterInput | null,
-  waitingSince?: TableStringFilterInput | null,
-  estWait?: TableStringFilterInput | null,
-  seatedAt?: TableStringFilterInput | null,
-  phone?: TableStringFilterInput | null,
   email?: TableStringFilterInput | null,
+  estWait?: TableStringFilterInput | null,
+  guestCount?: TableIntFilterInput | null,
+  id?: TableIDFilterInput | null,
+  isWaiting?: TableBooleanFilterInput | null,
+  name?: TableStringFilterInput | null,
   notes?: TableStringFilterInput | null,
+  phone?: TableStringFilterInput | null,
+  seatedAt?: TableStringFilterInput | null,
+  waitingSince?: TableStringFilterInput | null,
+};
+
+export type TableStringFilterInput = {
+  beginsWith?: string | null,
+  between?: Array< string | null > | null,
+  contains?: string | null,
+  eq?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ne?: string | null,
+  notContains?: string | null,
+};
+
+export type TableIntFilterInput = {
+  between?: Array< number | null > | null,
+  contains?: number | null,
+  eq?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ne?: number | null,
+  notContains?: number | null,
+};
+
+export type TableIDFilterInput = {
+  beginsWith?: string | null,
+  between?: Array< string | null > | null,
+  contains?: string | null,
+  eq?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ne?: string | null,
+  notContains?: string | null,
 };
 
 export type TableBooleanFilterInput = {
-  ne?: boolean | null,
   eq?: boolean | null,
+  ne?: boolean | null,
 };
 
-export type CreateTableMutationVariables = {
-  input: CreateTableInput,
-};
-
-export type CreateTableMutation = {
-  createTable:  {
-    __typename: "Table",
-    id: string,
-    name: string,
-    maxSeats: number,
-    minSeats: number,
-    description: string | null,
-  } | null,
-};
-
-export type UpdateTableMutationVariables = {
-  input: UpdateTableInput,
-};
-
-export type UpdateTableMutation = {
-  updateTable:  {
-    __typename: "Table",
-    id: string,
-    name: string,
-    maxSeats: number,
-    minSeats: number,
-    description: string | null,
-  } | null,
-};
-
-export type DeleteTableMutationVariables = {
-  input: DeleteTableInput,
-};
-
-export type DeleteTableMutation = {
-  deleteTable:  {
-    __typename: "Table",
-    id: string,
-    name: string,
-    maxSeats: number,
-    minSeats: number,
-    description: string | null,
-  } | null,
+export type TableTableFilterInput = {
+  description?: TableStringFilterInput | null,
+  id?: TableIDFilterInput | null,
+  maxSeats?: TableIntFilterInput | null,
+  minSeats?: TableIntFilterInput | null,
+  name?: TableStringFilterInput | null,
 };
 
 export type CreatePartyMutationVariables = {
@@ -170,52 +125,42 @@ export type CreatePartyMutationVariables = {
 export type CreatePartyMutation = {
   createParty:  {
     __typename: "Party",
-    id: string,
-    name: string,
-    guestCount: number,
-    isWaiting: boolean,
-    waitingSince: string,
-    estWait: string | null,
-    seatedAt: string | null,
-    phone: string | null,
     email: string | null,
+    estWait: string | null,
+    guestCount: number,
+    id: string,
+    isWaiting: boolean,
+    name: string,
     notes: string | null,
+    phone: string | null,
+    seatedAt: string | null,
     table:  {
       __typename: "Table",
+      description: string | null,
       id: string,
-      name: string,
       maxSeats: number,
       minSeats: number,
-      description: string | null,
+      name: string,
+      author: string | null,
     } | null,
+    waitingSince: string,
+    author: string | null,
   } | null,
 };
 
-export type UpdatePartyMutationVariables = {
-  input: UpdatePartyInput,
+export type CreateTableMutationVariables = {
+  input: CreateTableInput,
 };
 
-export type UpdatePartyMutation = {
-  updateParty:  {
-    __typename: "Party",
+export type CreateTableMutation = {
+  createTable:  {
+    __typename: "Table",
+    description: string | null,
     id: string,
+    maxSeats: number,
+    minSeats: number,
     name: string,
-    guestCount: number,
-    isWaiting: boolean,
-    waitingSince: string,
-    estWait: string | null,
-    seatedAt: string | null,
-    phone: string | null,
-    email: string | null,
-    notes: string | null,
-    table:  {
-      __typename: "Table",
-      id: string,
-      name: string,
-      maxSeats: number,
-      minSeats: number,
-      description: string | null,
-    } | null,
+    author: string | null,
   } | null,
 };
 
@@ -226,61 +171,88 @@ export type DeletePartyMutationVariables = {
 export type DeletePartyMutation = {
   deleteParty:  {
     __typename: "Party",
-    id: string,
-    name: string,
-    guestCount: number,
-    isWaiting: boolean,
-    waitingSince: string,
-    estWait: string | null,
-    seatedAt: string | null,
-    phone: string | null,
     email: string | null,
+    estWait: string | null,
+    guestCount: number,
+    id: string,
+    isWaiting: boolean,
+    name: string,
     notes: string | null,
+    phone: string | null,
+    seatedAt: string | null,
     table:  {
       __typename: "Table",
+      description: string | null,
       id: string,
-      name: string,
       maxSeats: number,
       minSeats: number,
-      description: string | null,
+      name: string,
+      author: string | null,
     } | null,
+    waitingSince: string,
+    author: string | null,
   } | null,
 };
 
-export type GetTableQueryVariables = {
-  id: string,
-  maxSeats: number,
+export type DeleteTableMutationVariables = {
+  input: DeleteTableInput,
 };
 
-export type GetTableQuery = {
-  getTable:  {
+export type DeleteTableMutation = {
+  deleteTable:  {
     __typename: "Table",
+    description: string | null,
     id: string,
-    name: string,
     maxSeats: number,
     minSeats: number,
-    description: string | null,
+    name: string,
+    author: string | null,
   } | null,
 };
 
-export type ListTablesQueryVariables = {
-  filter?: TableTableFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+export type UpdatePartyMutationVariables = {
+  input: UpdatePartyInput,
 };
 
-export type ListTablesQuery = {
-  listTables:  {
-    __typename: "TableConnection",
-    items:  Array< {
+export type UpdatePartyMutation = {
+  updateParty:  {
+    __typename: "Party",
+    email: string | null,
+    estWait: string | null,
+    guestCount: number,
+    id: string,
+    isWaiting: boolean,
+    name: string,
+    notes: string | null,
+    phone: string | null,
+    seatedAt: string | null,
+    table:  {
       __typename: "Table",
+      description: string | null,
       id: string,
-      name: string,
       maxSeats: number,
       minSeats: number,
-      description: string | null,
-    } | null > | null,
-    nextToken: string | null,
+      name: string,
+      author: string | null,
+    } | null,
+    waitingSince: string,
+    author: string | null,
+  } | null,
+};
+
+export type UpdateTableMutationVariables = {
+  input: UpdateTableInput,
+};
+
+export type UpdateTableMutation = {
+  updateTable:  {
+    __typename: "Table",
+    description: string | null,
+    id: string,
+    maxSeats: number,
+    minSeats: number,
+    name: string,
+    author: string | null,
   } | null,
 };
 
@@ -292,24 +264,43 @@ export type GetPartyQueryVariables = {
 export type GetPartyQuery = {
   getParty:  {
     __typename: "Party",
-    id: string,
-    name: string,
-    guestCount: number,
-    isWaiting: boolean,
-    waitingSince: string,
-    estWait: string | null,
-    seatedAt: string | null,
-    phone: string | null,
     email: string | null,
+    estWait: string | null,
+    guestCount: number,
+    id: string,
+    isWaiting: boolean,
+    name: string,
     notes: string | null,
+    phone: string | null,
+    seatedAt: string | null,
     table:  {
       __typename: "Table",
+      description: string | null,
       id: string,
-      name: string,
       maxSeats: number,
       minSeats: number,
-      description: string | null,
+      name: string,
+      author: string | null,
     } | null,
+    waitingSince: string,
+    author: string | null,
+  } | null,
+};
+
+export type GetTableQueryVariables = {
+  id: string,
+  maxSeats: number,
+};
+
+export type GetTableQuery = {
+  getTable:  {
+    __typename: "Table",
+    description: string | null,
+    id: string,
+    maxSeats: number,
+    minSeats: number,
+    name: string,
+    author: string | null,
   } | null,
 };
 
@@ -324,146 +315,178 @@ export type ListPartiesQuery = {
     __typename: "PartyConnection",
     items:  Array< {
       __typename: "Party",
-      id: string,
-      name: string,
-      guestCount: number,
-      isWaiting: boolean,
-      waitingSince: string,
-      estWait: string | null,
-      seatedAt: string | null,
-      phone: string | null,
       email: string | null,
+      estWait: string | null,
+      guestCount: number,
+      id: string,
+      isWaiting: boolean,
+      name: string,
       notes: string | null,
+      phone: string | null,
+      seatedAt: string | null,
+      waitingSince: string,
+      author: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
 };
 
-export type OnCreateTableSubscriptionVariables = {
-  id?: string | null,
-  name?: string | null,
-  maxSeats?: number | null,
-  minSeats?: number | null,
-  description?: string | null,
+export type ListTablesQueryVariables = {
+  filter?: TableTableFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
 };
 
-export type OnCreateTableSubscription = {
-  onCreateTable:  {
-    __typename: "Table",
-    id: string,
-    name: string,
-    maxSeats: number,
-    minSeats: number,
-    description: string | null,
-  } | null,
-};
-
-export type OnUpdateTableSubscriptionVariables = {
-  id?: string | null,
-  name?: string | null,
-  maxSeats?: number | null,
-  minSeats?: number | null,
-  description?: string | null,
-};
-
-export type OnUpdateTableSubscription = {
-  onUpdateTable:  {
-    __typename: "Table",
-    id: string,
-    name: string,
-    maxSeats: number,
-    minSeats: number,
-    description: string | null,
-  } | null,
-};
-
-export type OnDeleteTableSubscriptionVariables = {
-  id?: string | null,
-  name?: string | null,
-  maxSeats?: number | null,
-  minSeats?: number | null,
-  description?: string | null,
-};
-
-export type OnDeleteTableSubscription = {
-  onDeleteTable:  {
-    __typename: "Table",
-    id: string,
-    name: string,
-    maxSeats: number,
-    minSeats: number,
-    description: string | null,
+export type ListTablesQuery = {
+  listTables:  {
+    __typename: "TableConnection",
+    items:  Array< {
+      __typename: "Table",
+      description: string | null,
+      id: string,
+      maxSeats: number,
+      minSeats: number,
+      name: string,
+      author: string | null,
+    } | null > | null,
+    nextToken: string | null,
   } | null,
 };
 
 export type OnCreatePartySubscription = {
   onCreateParty:  {
     __typename: "Party",
-    id: string,
-    name: string,
-    guestCount: number,
-    isWaiting: boolean,
-    waitingSince: string,
-    estWait: string | null,
-    seatedAt: string | null,
-    phone: string | null,
     email: string | null,
+    estWait: string | null,
+    guestCount: number,
+    id: string,
+    isWaiting: boolean,
+    name: string,
     notes: string | null,
+    phone: string | null,
+    seatedAt: string | null,
     table:  {
       __typename: "Table",
+      description: string | null,
       id: string,
-      name: string,
       maxSeats: number,
       minSeats: number,
-      description: string | null,
+      name: string,
+      author: string | null,
     } | null,
+    waitingSince: string,
+    author: string | null,
   } | null,
 };
 
-export type OnUpdatePartySubscription = {
-  onUpdateParty:  {
-    __typename: "Party",
+export type OnCreateTableSubscriptionVariables = {
+  description?: string | null,
+  id?: string | null,
+  maxSeats?: number | null,
+  minSeats?: number | null,
+  name?: string | null,
+};
+
+export type OnCreateTableSubscription = {
+  onCreateTable:  {
+    __typename: "Table",
+    description: string | null,
     id: string,
+    maxSeats: number,
+    minSeats: number,
     name: string,
-    guestCount: number,
-    isWaiting: boolean,
-    waitingSince: string,
-    estWait: string | null,
-    seatedAt: string | null,
-    phone: string | null,
-    email: string | null,
-    notes: string | null,
-    table:  {
-      __typename: "Table",
-      id: string,
-      name: string,
-      maxSeats: number,
-      minSeats: number,
-      description: string | null,
-    } | null,
+    author: string | null,
   } | null,
 };
 
 export type OnDeletePartySubscription = {
   onDeleteParty:  {
     __typename: "Party",
-    id: string,
-    name: string,
-    guestCount: number,
-    isWaiting: boolean,
-    waitingSince: string,
-    estWait: string | null,
-    seatedAt: string | null,
-    phone: string | null,
     email: string | null,
+    estWait: string | null,
+    guestCount: number,
+    id: string,
+    isWaiting: boolean,
+    name: string,
     notes: string | null,
+    phone: string | null,
+    seatedAt: string | null,
     table:  {
       __typename: "Table",
+      description: string | null,
       id: string,
-      name: string,
       maxSeats: number,
       minSeats: number,
-      description: string | null,
+      name: string,
+      author: string | null,
     } | null,
+    waitingSince: string,
+    author: string | null,
+  } | null,
+};
+
+export type OnDeleteTableSubscriptionVariables = {
+  description?: string | null,
+  id?: string | null,
+  maxSeats?: number | null,
+  minSeats?: number | null,
+  name?: string | null,
+};
+
+export type OnDeleteTableSubscription = {
+  onDeleteTable:  {
+    __typename: "Table",
+    description: string | null,
+    id: string,
+    maxSeats: number,
+    minSeats: number,
+    name: string,
+    author: string | null,
+  } | null,
+};
+
+export type OnUpdatePartySubscription = {
+  onUpdateParty:  {
+    __typename: "Party",
+    email: string | null,
+    estWait: string | null,
+    guestCount: number,
+    id: string,
+    isWaiting: boolean,
+    name: string,
+    notes: string | null,
+    phone: string | null,
+    seatedAt: string | null,
+    table:  {
+      __typename: "Table",
+      description: string | null,
+      id: string,
+      maxSeats: number,
+      minSeats: number,
+      name: string,
+      author: string | null,
+    } | null,
+    waitingSince: string,
+    author: string | null,
+  } | null,
+};
+
+export type OnUpdateTableSubscriptionVariables = {
+  description?: string | null,
+  id?: string | null,
+  maxSeats?: number | null,
+  minSeats?: number | null,
+  name?: string | null,
+};
+
+export type OnUpdateTableSubscription = {
+  onUpdateTable:  {
+    __typename: "Table",
+    description: string | null,
+    id: string,
+    maxSeats: number,
+    minSeats: number,
+    name: string,
+    author: string | null,
   } | null,
 };
