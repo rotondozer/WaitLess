@@ -3,33 +3,22 @@ import {
   View,
   Text,
   StyleSheet,
-  Alert,
-  ToastAndroid,
   Image,
   Pressable,
   StyleProp,
   ImageStyle,
 } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Maybe } from "seidr";
 
-import {
-  Party,
-  UpdatePartyMutation,
-  DeletePartyMutation,
-  WaitlistStackParamList,
-} from "types";
+import { WaitlistStackParamList } from "types";
 import { Fonts, Colors } from "styles";
 import { Button } from "common";
-
-import { API, graphqlOperation } from "aws-amplify";
-import { GraphQLResult } from "@aws-amplify/api";
-import { updateParty, deleteParty } from "graphql/mutations";
+import { Party } from "api";
 
 interface Props {
   navigation: StackNavigationProp<WaitlistStackParamList, "Waitlist">;
-  party: Party;
-  onSeatOrRemoveParty: (p: Party) => Party;
+  party: Party.Party;
+  onSeatOrRemoveParty: (p: Party.Party) => Party.Party;
 }
 function PartyWaiting(props: Props): JSX.Element {
   const { navigation, party, onSeatOrRemoveParty } = props;
@@ -58,10 +47,10 @@ function PartyWaiting(props: Props): JSX.Element {
         <Button
           text="X"
           onPress={() =>
-            removePartyFromWait(party)
+            Party.removeFromWait(party)
               .then(onSeatOrRemoveParty)
-              .then(p => toastSuccess(Action.REMOVE, p))
-              .catch(e => alertFailure(Action.REMOVE, e))
+              .then(p => Party.toastSuccess(Party.Action.REMOVE, p))
+              .catch(e => Party.alertFailure(Party.Action.REMOVE, e))
           }
           style={[styles.actionButtons, styles.xButton]}
           textStyle={[Fonts.text2, styles.xText]}
@@ -69,10 +58,10 @@ function PartyWaiting(props: Props): JSX.Element {
         <Button
           text="Seat"
           onPress={() =>
-            seatParty(party)
+            Party.seat(party)
               .then(onSeatOrRemoveParty)
-              .then(p => toastSuccess(Action.SEAT, p))
-              .catch(e => alertFailure(Action.SEAT, e))
+              .then(p => Party.toastSuccess(Party.Action.SEAT, p))
+              .catch(e => Party.alertFailure(Party.Action.SEAT, e))
           }
           style={[styles.actionButtons, styles.seatButton]}
           textStyle={[Fonts.text2, styles.seatText]}
@@ -95,67 +84,6 @@ function editPartyButtonStyle({
         { backgroundColor: Colors.blackish.concat("70") },
       ]
     : styles.guestCountContainer;
-}
-
-enum Action {
-  SEAT,
-  REMOVE,
-}
-
-function alertFailure(action: Action, e: string): void {
-  Alert.alert(
-    `Failed ${action === Action.SEAT ? "seating" : "removing"} party!\n${e}`,
-  );
-}
-
-function toastSuccess(action: Action, p: Party): void {
-  ToastAndroid.show(
-    `${p.name} has been ${
-      action === Action.SEAT ? "seated!" : "removed from the waitlist."
-    }`,
-    ToastAndroid.SHORT,
-  );
-}
-
-// TODO: include table id when seating party
-async function seatParty(party: Party): Promise<Party> {
-  try {
-    const thing = (await API.graphql(
-      graphqlOperation(updateParty, {
-        input: { ...party, isWaiting: false },
-      }),
-    )) as GraphQLResult<UpdatePartyMutation>;
-
-    return Promise.resolve(thing.data?.updateParty as Party);
-  } catch (error) {
-    const err = JSON.stringify(error);
-    console.log(`seating party ${party.name} failed`, err);
-    return Promise.reject(err);
-  }
-}
-
-/**
- * Removing a party from the waitlist is a simple delete for now.
- * Potentially, a `removal` could archive the party so the record is not lost,
- * and this aggregated data could be useful for users to understand the whens/whys
- * parties were removed without being seated (e.g. the wait was too long).
- */
-async function removePartyFromWait(party: Party): Promise<Party> {
-  const { id, waitingSince } = party;
-  try {
-    const removal = (await API.graphql(
-      graphqlOperation(deleteParty, { input: { id, waitingSince } }),
-    )) as GraphQLResult<DeletePartyMutation>;
-
-    return Maybe.fromNullable(removal.data)
-      .flatMap(d => Maybe.fromNullable(d.deleteParty))
-      .map(Promise.resolve)
-      .getOrElse(Promise.reject("")) as Promise<Party>;
-  } catch (error) {
-    const err = JSON.stringify(error);
-    console.log(`deleting party ${party.name} failed`, err);
-    return Promise.reject(err);
-  }
 }
 
 // -- STYLES

@@ -1,25 +1,13 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, Alert, ToastAndroid } from "react-native";
+import { Text, View, StyleSheet, Alert } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Maybe } from "seidr";
 
 import { Party } from "api";
 import { WithUserContext, withUserContext } from "state/user_context";
 import { Input, Button } from "common";
-import {
-  ParseInt,
-  Time,
-  WaitlistStackParamList,
-  UpdatePartyMutation,
-  UpdatePartyInput,
-} from "types";
+import { ParseInt, Time, WaitlistStackParamList } from "types";
 import { Fonts, Layouts, Colors } from "styles";
-
-import { API, graphqlOperation } from "aws-amplify";
-import { GraphQLResult } from "@aws-amplify/api";
-import { updateParty } from "graphql/mutations";
-
-const maybeNull = Maybe.fromNullable;
 
 // -- VIEW
 
@@ -119,10 +107,10 @@ function EditPartyForm(props: WithUserContext<Props>): JSX.Element {
           style={styles.updateButton}
           textStyle={styles.updateButtonText}
           onPress={() =>
-            onUpdateParty(partyUpdates)
-              .then(toastSuccess)
+            Party.update(partyUpdates)
+              .then(p => Party.toastSuccess(Party.Action.UPDATE, p))
               .then(navigation.goBack)
-              .catch(alertFailure)
+              .catch(e => Party.alertFailure(Party.Action.UPDATE, e))
           }
         />
       </View>
@@ -134,32 +122,6 @@ function EditPartyForm(props: WithUserContext<Props>): JSX.Element {
       />
     </View>
   );
-}
-
-// -- PRIVATE
-
-function alertFailure(e: string): void {
-  Alert.alert(`Failed updating creating party!\n${e}`);
-}
-
-function toastSuccess(party: Party.Party): void {
-  ToastAndroid.show(`${party.name} successfully updated!`, ToastAndroid.SHORT);
-}
-
-async function onUpdateParty(party: UpdatePartyInput): Promise<Party.Party> {
-  try {
-    const updateResult = (await API.graphql(
-      graphqlOperation(updateParty, { input: party }),
-    )) as GraphQLResult<UpdatePartyMutation>;
-
-    return maybeNull(updateResult.data)
-      .flatMap(d => maybeNull(d.updateParty))
-      .map(Promise.resolve)
-      .getOrElse(Promise.reject("")) as Promise<Party.Party>;
-  } catch (err) {
-    console.log("Failed creating party", err);
-    return Promise.reject("");
-  }
 }
 
 // -- STYLES

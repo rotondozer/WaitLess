@@ -1,25 +1,13 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, Alert, ToastAndroid } from "react-native";
+import { Text, View, StyleSheet, Alert } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Maybe } from "seidr";
 
 import { Party } from "api";
-import { WithUserContext, withUserContext } from "../state/user_context";
-import { Input, Button } from "../common";
-import {
-  ParseInt,
-  Time,
-  WaitlistStackParamList,
-  CreatePartyMutation,
-} from "types";
+import { WithUserContext, withUserContext } from "state/user_context";
+import { Input, Button } from "common";
+import { ParseInt, Time, WaitlistStackParamList } from "types";
 import { Fonts, Layouts, Colors } from "../styles";
-
-import { API, graphqlOperation } from "aws-amplify";
-import { GraphQLResult } from "@aws-amplify/api";
-import { createParty } from "graphql/mutations";
-
-const maybeNull = Maybe.fromNullable;
 
 type Navigation = StackNavigationProp<WaitlistStackParamList, "AddPartyForm">;
 
@@ -99,12 +87,10 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
 
       <Button
         onPress={() =>
-          onCreateParty(name, guestCount, estWait)
-            .then(p => {
-              toastSuccess(p.name);
-              navigation.goBack();
-            })
-            .catch(alertFailedCreation)
+          Party.create(name, guestCount, estWait)
+            .then(p => Party.toastSuccess(Party.Action.CREATE, p))
+            .then(navigation.goBack)
+            .catch(e => Party.alertFailure(Party.Action.CREATE, e))
         }
         text="Add to Waitlist"
       />
@@ -116,42 +102,6 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
       />
     </View>
   );
-}
-
-// -- PRIVATE
-
-function alertFailedCreation(e: string): void {
-  Alert.alert(`Failed creating party!\n${e}`);
-}
-
-function toastSuccess(n: string): void {
-  ToastAndroid.show(
-    `${n} successfully added to the waitlist!`,
-    ToastAndroid.SHORT,
-  );
-}
-
-async function onCreateParty(
-  name: string,
-  guestCount: number,
-  estWait: Time.Time,
-): Promise<Party.Party> {
-  try {
-    const createResult = (await API.graphql(
-      graphqlOperation(createParty, {
-        input: Party.createInput(name, guestCount, estWait),
-      }),
-    )) as GraphQLResult<CreatePartyMutation>;
-
-    return maybeNull(createResult.data)
-      .flatMap(d => maybeNull(d.createParty))
-      .caseOf({ Just: Promise.resolve, Nothing: () => Promise.reject("") });
-  } catch (err) {
-    console.log("Failed creating party", err);
-    Promise.reject("");
-  }
-
-  return Promise.reject("");
 }
 
 // -- STYLES

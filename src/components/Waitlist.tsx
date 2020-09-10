@@ -12,58 +12,14 @@ import { Maybe, Nothing } from "seidr";
 
 import { UserContext } from "state/user_context";
 import { Layouts, Colors } from "styles";
-import { WaitlistStackParamList, Party, ListPartiesQuery } from "types";
+import { WaitlistStackParamList } from "types";
+import { Party } from "api";
 import { Button } from "common";
 import PartyWaiting from "./WaitingParty";
 
-import { API, graphqlOperation } from "aws-amplify";
-import { listParties } from "graphql/queries";
-import { GraphQLResult } from "@aws-amplify/api";
-import { onCreateParty } from "graphql/subscriptions";
-import Observable from "zen-observable-ts";
-
 const maybeNull = Maybe.fromNullable;
 
-type PartiesState = Maybe<Array<Party>>;
-
-async function fetchPartiesWaiting(): Promise<PartiesState> {
-  try {
-    const partiesResult = (await API.graphql(
-      graphqlOperation(listParties, { filter: { isWaiting: { eq: true } } }),
-    )) as GraphQLResult<ListPartiesQuery>;
-
-    const parties = maybeNull(partiesResult.data)
-      .flatMap(d => maybeNull(d.listParties))
-      .flatMap(lp => maybeNull(lp.items) as PartiesState);
-
-    console.log("the party's here?", parties.getOrElse([]));
-    return Promise.resolve(parties);
-  } catch (err) {
-    return Promise.reject(err);
-  }
-}
-
-/**
- * Tracking down the types for the AppSync subscriptions has been difficult.
- * `any` will have to do for now, because `OnCreatePartySubscription` is nested
- * inside 2 objects returned from the sub, so I'd still need to make a custom type
- * to represent that if there isn't one out of the codegen box that I'm missing
- */
-function partyCreationSub<T extends object = any>(): Observable<T> {
-  console.log("Subscribing to `onCreateParty`");
-  return API.graphql(graphqlOperation(onCreateParty)) as Observable<T>;
-}
-
-/**
- * Return a callback to be executed when the component unmounts
- * @param subscription the real type is in the zen-observable-ts package
- */
-function unsubscribeToPartyCreation(subscription: any): () => void {
-  return () => {
-    console.log("Unsubscribing to `onCreateParty`");
-    subscription.unsubscribe();
-  };
-}
+type PartiesState = Maybe<Array<Party.Party>>;
 
 // -- VIEW
 
@@ -77,7 +33,7 @@ function WaitList({ navigation }: Props): JSX.Element {
   useFocusEffect(
     useCallback(() => {
       console.log("Fetching Parties...");
-      fetchPartiesWaiting()
+      Party.fetchPartiesWaiting()
         .then(updateParties)
         .catch(e => console.log("fetchParties failed", JSON.stringify(e)));
     }, []),
@@ -85,12 +41,15 @@ function WaitList({ navigation }: Props): JSX.Element {
 
   // TODO: callback isntead of sub?
   useEffect(() => {
-    function partyUpdater(prevState: PartiesState, party: Party): PartiesState {
+    function partyUpdater(
+      prevState: PartiesState,
+      party: Party.Party,
+    ): PartiesState {
       console.log(`Adding party '${party.name}' to state`);
       return prevState.map(ps => ps.concat(party));
     }
 
-    const subscription = partyCreationSub().subscribe({
+    const subscription = Party.partyCreationSub().subscribe({
       next: data => {
         console.log("New party received via subscription", data);
 
@@ -98,15 +57,17 @@ function WaitList({ navigation }: Props): JSX.Element {
           .flatMap(v => maybeNull(v.data))
           .flatMap(d => maybeNull(d.onCreateParty))
           .map(p =>
-            updateParties(prevState => partyUpdater(prevState, p as Party)),
+            updateParties(prevState =>
+              partyUpdater(prevState, p as Party.Party),
+            ),
           );
       },
     });
 
-    return unsubscribeToPartyCreation(subscription);
+    return Party.unsubscribeToPartyCreation(subscription);
   }, []); // Passing an empty deps array tells React to only run this on mount
 
-  function onSeatOrRemoveParty(party: Party): Party {
+  function onSeatOrRemoveParty(party: Party.Party): Party.Party {
     updateParties(prevState =>
       prevState.map(ps => ps.filter(p => p.id !== party.id)),
     );
