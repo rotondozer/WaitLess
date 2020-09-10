@@ -1,15 +1,20 @@
 {
-    "dev": {
-        "awscloudformation": {
-            "AuthRoleName": "amplify-waitless-dev-152843-authRole",
-            "UnauthRoleArn": "arn:aws:iam::158929353081:role/amplify-waitless-dev-152843-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::158929353081:role/amplify-waitless-dev-152843-authRole",
-            "Region": "us-east-1",
-            "DeploymentBucketName": "amplify-waitless-dev-152843-deployment",
-            "UnauthRoleName": "amplify-waitless-dev-152843-unauthRole",
-            "StackName": "amplify-waitless-dev-152843",
-            "StackId": "arn:aws:cloudformation:us-east-1:158929353081:stack/amplify-waitless-dev-152843/85e1e3d0-e89b-11ea-8f20-0af6b1cd0899",
-            "AmplifyAppId": "d2s23x2hkxreh5"
-        }
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-waitless-dev-152843-authRole",
+      "UnauthRoleArn": "arn:aws:iam::158929353081:role/amplify-waitless-dev-152843-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::158929353081:role/amplify-waitless-dev-152843-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-waitless-dev-152843-deployment",
+      "UnauthRoleName": "amplify-waitless-dev-152843-unauthRole",
+      "StackName": "amplify-waitless-dev-152843",
+      "StackId": "arn:aws:cloudformation:us-east-1:158929353081:stack/amplify-waitless-dev-152843/85e1e3d0-e89b-11ea-8f20-0af6b1cd0899",
+      "AmplifyAppId": "d2s23x2hkxreh5"
+    },
+    "categories": {
+      "auth": {
+        "waitless192893ca": {}
+      }
     }
+  }
 }
