@@ -31,7 +31,12 @@ function PartyWaiting(props: Props): JSX.Element {
         </View>
         <Pressable
           style={editPartyButtonStyle}
-          onPress={() => navigation.navigate("EditPartyForm", { party })}>
+          onPress={() =>
+            navigation.navigate("EditPartyForm", {
+              party,
+              onRemoveParty: onSeatOrRemoveParty,
+            })
+          }>
           <Text style={[Fonts.condensedText, { paddingRight: 5 }]}>
             {party.guestCount} {party.guestCount > 1 ? "people" : "person"}
           </Text>
@@ -44,17 +49,6 @@ function PartyWaiting(props: Props): JSX.Element {
       </View>
 
       <View style={styles.bottomContainer}>
-        <Button
-          text="X"
-          onPress={() =>
-            Party.removeFromWait(party)
-              .then(onSeatOrRemoveParty)
-              .then(p => Party.toastSuccess(Party.Action.REMOVE, p))
-              .catch(e => Party.alertFailure(Party.Action.REMOVE, e))
-          }
-          style={[styles.actionButtons, styles.xButton]}
-          textStyle={[Fonts.text2, styles.xText]}
-        />
         <Button
           text="Seat"
           onPress={() =>
@@ -126,20 +120,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.whitish,
     borderWidth: 1,
   },
-  xButton: {
-    width: 40,
-    height: 40,
-    borderColor: Colors.darkRed,
-    elevation: 0,
-    borderRadius: 40,
-  },
-  xText: {
-    color: Colors.darkRed.concat("80"),
-    fontWeight: "bold",
-    fontSize: 12,
-  },
   seatButton: {
-    width: 270,
     borderColor: Colors.sageGray,
   },
   seatText: {

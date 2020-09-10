@@ -15,7 +15,7 @@ type Props = StackScreenProps<WaitlistStackParamList, "EditPartyForm">;
 
 function EditPartyForm(props: WithUserContext<Props>): JSX.Element {
   const { navigation } = props;
-  const { party } = props.route.params;
+  const { party, onRemoveParty } = props.route.params;
 
   const [name, updateName] = useState(party.name);
   const [guestCount, updateGuestCount] = useState(party.guestCount);
@@ -100,7 +100,12 @@ function EditPartyForm(props: WithUserContext<Props>): JSX.Element {
           text="Remove"
           style={styles.removeButton}
           textStyle={styles.removeButtonText}
-          onPress={() => console.log("TODO: REMOVE")}
+          onPress={() =>
+            Party.removeFromWait(party)
+              .then(onRemoveParty)
+              .then(p => Party.toastSuccess(Party.Action.REMOVE, p))
+              .catch(e => Party.alertFailure(Party.Action.REMOVE, e))
+          }
         />
         <Button
           text="Update"
