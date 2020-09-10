@@ -32,40 +32,18 @@ function WaitList({ navigation }: Props): JSX.Element {
 
   useFocusEffect(
     useCallback(() => {
-      console.log("Fetching Parties...");
       Party.fetchPartiesWaiting()
         .then(updateParties)
         .catch(e => console.log("fetchParties failed", JSON.stringify(e)));
     }, []),
   );
 
+  function onNewParty(party: Party.Party): void {
+    updateParties(prevState => prevState.map(ps => ps.concat(party)));
+  }
+
   // TODO: callback isntead of sub?
-  useEffect(() => {
-    function partyUpdater(
-      prevState: PartiesState,
-      party: Party.Party,
-    ): PartiesState {
-      console.log(`Adding party '${party.name}' to state`);
-      return prevState.map(ps => ps.concat(party));
-    }
-
-    const subscription = Party.partyCreationSub().subscribe({
-      next: data => {
-        console.log("New party received via subscription", data);
-
-        maybeNull(data.value)
-          .flatMap(v => maybeNull(v.data))
-          .flatMap(d => maybeNull(d.onCreateParty))
-          .map(p =>
-            updateParties(prevState =>
-              partyUpdater(prevState, p as Party.Party),
-            ),
-          );
-      },
-    });
-
-    return Party.unsubscribeToPartyCreation(subscription);
-  }, []); // Passing an empty deps array tells React to only run this on mount
+  useEffect(() => Party.partySubEffect(onNewParty), []); // Passing an empty deps array tells React to only run this on mount
 
   function onSeatOrRemoveParty(party: Party.Party): Party.Party {
     updateParties(prevState =>

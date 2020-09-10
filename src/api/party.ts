@@ -32,6 +32,7 @@ export type Party = Party_;
 // -- GETTERS
 
 export async function fetchPartiesWaiting(): Promise<Maybe<Array<Party>>> {
+  console.log("Fetching Parties...");
   try {
     const partiesResult = (await API.graphql(
       graphqlOperation(listParties, { filter: { isWaiting: { eq: true } } }),
@@ -41,14 +42,28 @@ export async function fetchPartiesWaiting(): Promise<Maybe<Array<Party>>> {
       .flatMap(d => maybeNull(d.listParties))
       .flatMap(lp => maybeNull(lp.items as Array<Party>));
 
-    console.log("the party's here?", parties.getOrElse([]));
     return Promise.resolve(parties);
   } catch (err) {
     return Promise.reject(err);
   }
 }
 
-// -- SUBSCRIPTIONS
+// -- SUBSCRIPTIONS() => {
+
+export function partySubEffect(onNewParty: (p: Party) => void): () => void {
+  const subscription = partyCreationSub().subscribe({
+    next: data => {
+      console.log("New party received via subscription", data);
+
+      maybeNull(data.value)
+        .flatMap(v => maybeNull(v.data))
+        .flatMap(d => maybeNull(d.onCreateParty))
+        .map(onNewParty);
+    },
+  });
+
+  return unsubscribeToPartyCreation(subscription);
+}
 
 /**
  * Tracking down the types for the AppSync subscriptions has been difficult.
@@ -56,7 +71,7 @@ export async function fetchPartiesWaiting(): Promise<Maybe<Array<Party>>> {
  * inside 2 objects returned from the sub, so I'd still need to make a custom type
  * to represent that if there isn't one out of the codegen box that I'm missing.
  */
-export function partyCreationSub<T extends object = any>(): Observable<T> {
+function partyCreationSub<T extends object = any>(): Observable<T> {
   console.log("Subscribing to `onCreateParty`");
   return API.graphql(graphqlOperation(onCreateParty)) as Observable<T>;
 }
@@ -65,12 +80,14 @@ export function partyCreationSub<T extends object = any>(): Observable<T> {
  * Return a callback to be executed when the component unmounts
  * @param subscription the real type is in the zen-observable-ts package
  */
-export function unsubscribeToPartyCreation(subscription: any): () => void {
+function unsubscribeToPartyCreation(subscription: any): () => void {
   return () => {
     console.log("Unsubscribing to `onCreateParty`");
     subscription.unsubscribe();
   };
 }
+
+// -- CREATE
 
 export async function create(
   name: string,
@@ -89,10 +106,23 @@ export async function create(
       .caseOf({ Just: Promise.resolve, Nothing: () => Promise.reject("") });
   } catch (err) {
     console.log("Failed creating party", err);
-    Promise.reject("");
+    return Promise.reject("");
   }
+}
 
-  return Promise.reject("");
+function createInput(
+  name: string,
+  guestCount: number,
+  estWait: Time.Time,
+): CreatePartyInput {
+  return {
+    id: uuid(),
+    name,
+    guestCount,
+    waitingSince: new Date().toISOString(),
+    estWait: Time.format(estWait),
+    isWaiting: true,
+  };
 }
 
 // -- UPDATES
@@ -193,21 +223,4 @@ export function toastSuccess(action: Action, p: Party): void {
     }
   };
   ToastAndroid.show(`${p.name} has been ${verbed()}`, ToastAndroid.SHORT);
-}
-
-// -- PRIVATE
-
-function createInput(
-  name: string,
-  guestCount: number,
-  estWait: Time.Time,
-): CreatePartyInput {
-  return {
-    id: uuid(),
-    name,
-    guestCount,
-    waitingSince: new Date().toISOString(),
-    estWait: Time.format(estWait),
-    isWaiting: true,
-  };
 }
