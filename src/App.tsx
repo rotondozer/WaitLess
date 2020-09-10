@@ -1,6 +1,6 @@
 import "react-native-gesture-handler"; // Needs to stay above everything else
 import React, { useState } from "react";
-import { View } from "react-native";
+import { View, YellowBox } from "react-native";
 import { enableScreens } from "react-native-screens";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -18,10 +18,16 @@ import { ActiveUser, RootStackParamList } from "./types";
 
 Amplify.configure(awsconfig);
 
-// -- NAVIGATOR
+// -- NAVIGATION
 
 enableScreens();
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+// Not using state persistence or deep linking, so ignoring the warning so I can pass callbacks as params.
+// https://reactnavigation.org/docs/troubleshooting/#i-get-the-warning-non-serializable-values-were-found-in-the-navigation-state
+YellowBox.ignoreWarnings([
+  "Non-serializable values were found in the navigation state",
+]);
 
 // -- ROOT VIEW
 

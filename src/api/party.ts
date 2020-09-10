@@ -31,7 +31,7 @@ export type Party = Party_;
 
 // -- GETTERS
 
-export async function fetchPartiesWaiting(): Promise<Maybe<Array<Party>>> {
+export async function fetchPartiesWaiting(): Promise<Array<Party>> {
   console.log("Fetching Parties...");
   try {
     const partiesResult = (await API.graphql(
@@ -40,7 +40,8 @@ export async function fetchPartiesWaiting(): Promise<Maybe<Array<Party>>> {
 
     const parties = maybeNull(partiesResult.data)
       .flatMap(d => maybeNull(d.listParties))
-      .flatMap(lp => maybeNull(lp.items as Array<Party>));
+      .flatMap(lp => maybeNull(lp.items as Array<Party>))
+      .getOrElse([]);
 
     return Promise.resolve(parties);
   } catch (err) {
