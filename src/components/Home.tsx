@@ -12,8 +12,8 @@ import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Auth } from "aws-amplify";
 
+import { User } from "api";
 import { Colors, Fonts } from "styles";
 import { RootStackParamList, WaitlistStackParamList } from "types";
 import Waitlist from "./Waitlist";
@@ -38,12 +38,11 @@ interface Props {
 
 function Home(props: Props): JSX.Element {
   const [user, updateUser] = useState("");
+
   useEffect(() => {
-    Auth.currentAuthenticatedUser().then(u => {
-      console.log("USER", u);
-      updateUser(u.username);
-    });
+    User.getCurrentUser(updateUser);
   }, []);
+
   return (
     <>
       <View style={styles.headerContainer}>

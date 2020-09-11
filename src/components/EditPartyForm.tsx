@@ -38,7 +38,7 @@ function EditPartyForm(props: WithUserContext<Props>): JSX.Element {
 
   return (
     <View style={Layouts.container}>
-      <Text style={styles.title}>Party Details</Text>
+      <Text style={styles.title}>Edit Party Details</Text>
       <View style={styles.partyFormContainer}>
         <Input
           withLabel="Name"

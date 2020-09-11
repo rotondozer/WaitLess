@@ -7,7 +7,7 @@ import { Party } from "./data";
  */
 
 export type RootStackParamList = {
-  Home: { email: string };
+  Home: undefined;
   Settings: undefined; // ActiveUser not on the param list because it's supplied with a React.Context HOC{ userId: string; token: string; email: string };
 };
 export type WaitlistStackParamList = {
