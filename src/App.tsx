@@ -7,72 +7,12 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import Amplify from "aws-amplify";
 import awsconfig from "./aws-exports";
-import { withAuthenticator, AmplifyTheme } from "aws-amplify-react-native";
 
 import Home from "./components/Home";
 import Settings from "./components/Settings";
 import { RootStackParamList } from "./types";
 import { Colors } from "styles";
-
-// -- AMPLIFY AUTHENTICATION
-
-import { I18n } from "aws-amplify";
-
-// https://github.com/aws-amplify/amplify-js/blob/main/packages/amplify-ui-components/src/common/Translations.ts
-I18n.putVocabulariesForLanguage("en-US", {
-  ["Sign in to your account"]: "Sign in to WaitLess",
-  // ["Please Sign In / Sign Up"]: "",
-});
-
-const container = Object.assign({}, AmplifyTheme.container, {
-  backgroundColor: Colors.whitish,
-});
-const button = Object.assign({}, AmplifyTheme.button, {
-  backgroundColor: Colors.blueGray,
-  borderRadius: 5,
-});
-const buttonDisabled = Object.assign({}, AmplifyTheme.button, {
-  backgroundColor: Colors.blueGray.concat("80"),
-  borderRadius: 5,
-});
-const sectionFooterLink = Object.assign({}, AmplifyTheme.sectionFooterLink, {
-  color: Colors.blue,
-});
-
-const AuthenticatorTheme = Object.assign({}, AmplifyTheme, {
-  container,
-  button,
-  buttonDisabled,
-  sectionFooterLink,
-});
-
-const signUpConfig = {
-  header: "Create a new WaitLess account",
-  hideAllDefaults: true,
-  signUpFields: [
-    {
-      label: "Username",
-      key: "username",
-      required: true,
-      displayOrder: 1,
-      type: "string",
-    },
-    {
-      label: "Password",
-      key: "password",
-      required: true,
-      displayOrder: 2,
-      type: "password",
-    },
-    {
-      label: "Email",
-      key: "email",
-      required: true,
-      displayOrder: 3,
-      type: "string",
-    },
-  ],
-};
+import { withAuthentication } from "api";
 
 // -- GRAPHQL API
 
@@ -109,11 +49,4 @@ function App(): JSX.Element {
   );
 }
 
-export default withAuthenticator(
-  App,
-  undefined,
-  undefined,
-  undefined,
-  AuthenticatorTheme,
-  signUpConfig,
-);
+export default withAuthentication(App);

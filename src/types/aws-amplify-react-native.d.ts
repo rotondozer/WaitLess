@@ -99,12 +99,12 @@ declare module "aws-amplify-react-native" {
     authenticatorComponents?: typeof AuthPiece[];
     signUpConfig?: SignUpConfig;
   }
-  interface WACompProps {
+  export interface WACompProps {
     authState: string;
     authData: any;
     onStateChange: (state: string, data: any) => void;
   }
-  interface WithAuthenticatorProps {
+  export interface WithAuthenticatorProps {
     authState?: string;
     onStateChange?: (state: string, data: any) => void;
     [propName: string]: any;
