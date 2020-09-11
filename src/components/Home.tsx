@@ -1,10 +1,18 @@
-import React from "react";
-import { View, Text, Pressable, StyleSheet, StatusBar } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  StatusBar,
+  Image,
+} from "react-native";
 import { enableScreens } from "react-native-screens";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { Auth } from "aws-amplify";
 
 import { Colors, Fonts } from "styles";
 import { RootStackParamList, WaitlistStackParamList } from "types";
@@ -28,22 +36,26 @@ interface Props {
   route: RouteProp<RootStackParamList, "Home">;
 }
 
-const backgroundColor = Colors.blueGray;
-
 function Home(props: Props): JSX.Element {
-  const { email } = props.route.params;
+  const [user, updateUser] = useState("");
+  useEffect(() => {
+    Auth.currentAuthenticatedUser().then(u => {
+      console.log("USER", u);
+      updateUser(u.username);
+    });
+  }, []);
   return (
     <>
-      {/* <View style={styles.headerContainer}>
-        <Text style={Fonts.title}>Hello, {email}!</Text>
+      <View style={styles.headerContainer}>
+        <Text style={Fonts.condensedText}>Hello, {user}!</Text>
         <SettingsButton navigation={props.navigation} />
-      </View> */}
-      <StatusBar backgroundColor={backgroundColor} barStyle="dark-content" />
+      </View>
+      <StatusBar backgroundColor={Colors.blueGray} barStyle="dark-content" />
       <Tab.Navigator
         tabBarOptions={{
           labelStyle: Fonts.tabBar,
-          style: { backgroundColor },
-          indicatorStyle: { backgroundColor: Colors.darkRed },
+          style: styles.tabBar,
+          indicatorStyle: styles.tabBarIndicator,
         }}>
         <Tab.Screen name="Waitlist" component={WaitlistStack} />
         <Tab.Screen name="Tables" component={Tables} />
@@ -71,7 +83,10 @@ function WaitlistStack(): JSX.Element {
 function SettingsButton(props: { navigation: Navigation }): JSX.Element {
   return (
     <Pressable onPress={() => props.navigation.navigate("Settings")}>
-      <Text>Settings</Text>
+      <Image
+        source={require("src/assets/settings.png")}
+        style={styles.settingsButton}
+      />
     </Pressable>
   );
 }
@@ -80,11 +95,23 @@ function SettingsButton(props: { navigation: Navigation }): JSX.Element {
 
 const styles = StyleSheet.create({
   headerContainer: {
+    backgroundColor: Colors.blueGray,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 50,
+    height: 25,
     padding: 5,
+  },
+  settingsButton: {
+    height: 25,
+    width: 25,
+  },
+  tabBar: {
+    backgroundColor: Colors.blueGray,
+    elevation: 0,
+  },
+  tabBarIndicator: {
+    backgroundColor: Colors.darkRed,
   },
 });
 
