@@ -1,6 +1,9 @@
-import axios, { AxiosPromise } from "axios";
-import { toNetworkRequest, NetworkRequest, BASE_URL } from "./network_request";
-import { ActiveUser } from "types";
+/**
+ * Amplify manages the majority of the authentication flow, primarily Sign In/Sign up
+ * with built-in UI components.
+ * Config for these components is managed in ./with_authentication, along with the HOC
+ * that wraps the App component to get the job done.
+ */
 import { Auth } from "aws-amplify";
 
 /**
@@ -36,37 +39,3 @@ export function signOut(): Promise<string> {
       return error;
     });
 }
-
-// ---- DEPRECATED ------
-
-interface UserPayload {
-  user: {
-    id: string;
-    email: string;
-    token: string;
-  };
-}
-
-function login(
-  email: string,
-  password: string,
-): NetworkRequest<ActiveUser.ActiveUser> {
-  return toNetworkRequest<UserPayload>("POST", "/sign-in", ActiveUser.None(), {
-    credentials: { email, password },
-  })
-    .map(res => res.data.user)
-    .map(({ id, token, email }) => ActiveUser.User(id, token, email));
-}
-
-function logout(userId: string, token: string): AxiosPromise {
-  return axios({
-    url: `${BASE_URL}/sign-out/${userId}`,
-    method: "DELETE",
-    headers: {
-      "content-type": "application/json",
-      Authorization: "Token token=" + token,
-    },
-  });
-}
-
-export { login, logout };

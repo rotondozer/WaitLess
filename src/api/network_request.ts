@@ -1,3 +1,7 @@
+/**
+ * @deprecated
+ * This app no longer uses axios or a RESTful API
+ */
 import axios, { Method, AxiosResponse, AxiosRequestConfig } from "axios";
 import { AsyncResult } from "seidr";
 import { NetworkRequestError, ActiveUser } from "types";
