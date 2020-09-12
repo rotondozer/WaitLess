@@ -19,6 +19,7 @@ import { RootStackParamList, WaitlistStackParamList } from "types";
 import Waitlist from "./Waitlist";
 import AddPartyForm from "./AddPartyForm";
 import EditPartyForm from "./EditPartyForm";
+import Tables from "./Tables";
 
 // -- NAVIGATOR
 
@@ -61,10 +62,6 @@ function Home(props: Props): JSX.Element {
       </Tab.Navigator>
     </>
   );
-}
-// Placeholder component
-function Tables(): JSX.Element {
-  return <View style={{ flex: 1 }} />;
 }
 
 // -- PRIVATE
