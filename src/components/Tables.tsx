@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { Layouts } from "styles";
+import { Layouts, Colors } from "styles";
 import { useFocusEffect } from "@react-navigation/native";
 import { Table } from "api";
 
@@ -15,17 +15,20 @@ function Tables(): JSX.Element {
     }, []),
   );
   return (
-    <View style={Layouts.container}>
+    <View style={[Layouts.container, styles.container]}>
       {tables.map(t => (
-        <TableItem table={t} />
+        <TableSquare table={t} key={t.id} />
       ))}
     </View>
   );
 }
 
-function TableItem({ table }: { table: Table.Table }): JSX.Element {
+function TableSquare({ table }: { table: Table.Table }): JSX.Element {
+  const occupiedStyle = table.parties;
+  console.log("table.parties", occupiedStyle);
   return (
     <View style={styles.table}>
+      <Text>ID: {table.id}</Text>
       <Text>{table.name}</Text>
       <Text>
         Seats {table.minSeats} - {table.maxSeats} guests.
@@ -35,10 +38,24 @@ function TableItem({ table }: { table: Table.Table }): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-evenly",
+  },
   table: {
-    height: 200,
-    width: 200,
+    height: 180,
+    width: 180,
     borderRadius: 5,
+    borderColor: Colors.darkRed,
+    borderWidth: 1,
+    marginVertical: 4,
+  },
+  occupiedTable: {
+    backgroundColor: Colors.red420.concat("80"),
+  },
+  availableTable: {
+    backgroundColor: Colors.sageGray.concat("80"),
   },
 });
 
