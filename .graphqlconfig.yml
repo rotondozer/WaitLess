@@ -1,5 +1,5 @@
 projects:
-  WaitLess:
+  waitless:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.ts
@@ -10,9 +10,3 @@ projects:
         codeGenTarget: typescript
         generatedFileName: src/types/API.ts
         docsFilePath: src/graphql
-        region: us-east-1
-        apiId: ljnl4elolzbgdfrpodbifolbne
-        maxDepth: 2
-extensions:
-  amplify:
-    version: 3

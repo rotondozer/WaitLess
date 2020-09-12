@@ -6,7 +6,7 @@ import {
   Party as Party_,
   Time,
   CreatePartyInput,
-  ListPartiesQuery,
+  ListPartysQuery,
   CreatePartyMutation,
   DeletePartyMutation,
   UpdatePartyMutation,
@@ -14,7 +14,7 @@ import {
 } from "types";
 
 import { API, graphqlOperation } from "aws-amplify";
-import { listParties } from "graphql/queries";
+import { listPartys } from "graphql/queries";
 import { GraphQLResult } from "@aws-amplify/api";
 import { onCreateParty } from "graphql/subscriptions";
 import Observable from "zen-observable-ts";
@@ -35,11 +35,11 @@ export async function fetchPartiesWaiting(): Promise<Array<Party>> {
   console.log("Fetching Parties...");
   try {
     const partiesResult = (await API.graphql(
-      graphqlOperation(listParties, { filter: { isWaiting: { eq: true } } }),
-    )) as GraphQLResult<ListPartiesQuery>;
+      graphqlOperation(listPartys, { filter: { isWaiting: { eq: true } } }),
+    )) as GraphQLResult<ListPartysQuery>;
 
     const parties = maybeNull(partiesResult.data)
-      .flatMap(d => maybeNull(d.listParties))
+      .flatMap(d => maybeNull(d.listPartys))
       .flatMap(lp => maybeNull(lp.items as Array<Party>))
       .getOrElse([]);
 

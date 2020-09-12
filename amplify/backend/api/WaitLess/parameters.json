@@ -1,5 +1,5 @@
 {
-    "AppSyncApiName": "WaitLess",
+    "AppSyncApiName": "waitless",
     "DynamoDBBillingMode": "PAY_PER_REQUEST",
     "DynamoDBEnableServerSideEncryption": false,
     "AuthCognitoUserPoolId": {
