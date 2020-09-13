@@ -3,8 +3,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateTable = /* GraphQL */ `
-  subscription OnCreateTable($owner: String!) {
-    onCreateTable(owner: $owner) {
+  subscription OnCreateTable {
+    onCreateTable {
       description
       id
       maxSeats
@@ -12,33 +12,29 @@ export const onCreateTable = /* GraphQL */ `
       name
       parties {
         items {
-          email
           estWait
           guestCount
           id
-          isWaiting
           name
           notes
           phone
           seatedAt
           departedAt
-          tableID
+          tableId
           waitingSince
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
 export const onUpdateTable = /* GraphQL */ `
-  subscription OnUpdateTable($owner: String!) {
-    onUpdateTable(owner: $owner) {
+  subscription OnUpdateTable {
+    onUpdateTable {
       description
       id
       maxSeats
@@ -46,33 +42,29 @@ export const onUpdateTable = /* GraphQL */ `
       name
       parties {
         items {
-          email
           estWait
           guestCount
           id
-          isWaiting
           name
           notes
           phone
           seatedAt
           departedAt
-          tableID
+          tableId
           waitingSince
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
 export const onDeleteTable = /* GraphQL */ `
-  subscription OnDeleteTable($owner: String!) {
-    onDeleteTable(owner: $owner) {
+  subscription OnDeleteTable {
+    onDeleteTable {
       description
       id
       maxSeats
@@ -80,90 +72,77 @@ export const onDeleteTable = /* GraphQL */ `
       name
       parties {
         items {
-          email
           estWait
           guestCount
           id
-          isWaiting
           name
           notes
           phone
           seatedAt
           departedAt
-          tableID
+          tableId
           waitingSince
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
 export const onCreateParty = /* GraphQL */ `
-  subscription OnCreateParty($owner: String!) {
-    onCreateParty(owner: $owner) {
-      email
+  subscription OnCreateParty {
+    onCreateParty {
       estWait
       guestCount
       id
-      isWaiting
       name
       notes
       phone
       seatedAt
       departedAt
-      tableID
+      tableId
       waitingSince
       createdAt
       updatedAt
-      owner
     }
   }
 `;
 export const onUpdateParty = /* GraphQL */ `
-  subscription OnUpdateParty($owner: String!) {
-    onUpdateParty(owner: $owner) {
-      email
+  subscription OnUpdateParty {
+    onUpdateParty {
       estWait
       guestCount
       id
-      isWaiting
       name
       notes
       phone
       seatedAt
       departedAt
-      tableID
+      tableId
       waitingSince
       createdAt
       updatedAt
-      owner
     }
   }
 `;
 export const onDeleteParty = /* GraphQL */ `
-  subscription OnDeleteParty($owner: String!) {
-    onDeleteParty(owner: $owner) {
-      email
+  subscription OnDeleteParty {
+    onDeleteParty {
       estWait
       guestCount
       id
-      isWaiting
       name
       notes
       phone
       seatedAt
       departedAt
-      tableID
+      tableId
       waitingSince
       createdAt
       updatedAt
-      owner
     }
   }
 `;

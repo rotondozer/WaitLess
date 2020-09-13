@@ -1,4 +1,4 @@
-type Table @model @auth(rules: [{ allow: owner }]) {
+type Table @model {
   description: String
   id: ID!
   maxSeats: Int!
@@ -7,20 +7,15 @@ type Table @model @auth(rules: [{ allow: owner }]) {
   parties: [Party] @connection(keyName: "byTable", fields: ["id"])
 }
 
-type Party
-  @model
-  @auth(rules: [{ allow: owner }])
-  @key(name: "byTable", fields: ["tableID", "seatedAt"]) {
-  email: AWSEmail
+type Party @model @key(name: "byTable", fields: ["tableId"]) {
   estWait: AWSTime
   guestCount: Int!
   id: ID!
-  isWaiting: Boolean!
   name: String!
   notes: String
   phone: AWSPhone
   seatedAt: AWSDateTime
   departedAt: AWSDateTime
-  tableID: ID
-  waitingSince: AWSDateTime!
+  tableId: ID!
+  waitingSince: AWSDateTime
 }

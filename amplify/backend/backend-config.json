@@ -1,6 +1,6 @@
 {
   "api": {
-    "waitless": {
+    "WaitLess": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
       "output": {

@@ -15,27 +15,23 @@ export const createTable = /* GraphQL */ `
       name
       parties {
         items {
-          email
           estWait
           guestCount
           id
-          isWaiting
           name
           notes
           phone
           seatedAt
           departedAt
-          tableID
+          tableId
           waitingSince
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -52,27 +48,23 @@ export const updateTable = /* GraphQL */ `
       name
       parties {
         items {
-          email
           estWait
           guestCount
           id
-          isWaiting
           name
           notes
           phone
           seatedAt
           departedAt
-          tableID
+          tableId
           waitingSince
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -89,27 +81,23 @@ export const deleteTable = /* GraphQL */ `
       name
       parties {
         items {
-          email
           estWait
           guestCount
           id
-          isWaiting
           name
           notes
           phone
           seatedAt
           departedAt
-          tableID
+          tableId
           waitingSince
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -119,21 +107,18 @@ export const createParty = /* GraphQL */ `
     $condition: ModelPartyConditionInput
   ) {
     createParty(input: $input, condition: $condition) {
-      email
       estWait
       guestCount
       id
-      isWaiting
       name
       notes
       phone
       seatedAt
       departedAt
-      tableID
+      tableId
       waitingSince
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -143,21 +128,18 @@ export const updateParty = /* GraphQL */ `
     $condition: ModelPartyConditionInput
   ) {
     updateParty(input: $input, condition: $condition) {
-      email
       estWait
       guestCount
       id
-      isWaiting
       name
       notes
       phone
       seatedAt
       departedAt
-      tableID
+      tableId
       waitingSince
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -167,21 +149,18 @@ export const deleteParty = /* GraphQL */ `
     $condition: ModelPartyConditionInput
   ) {
     deleteParty(input: $input, condition: $condition) {
-      email
       estWait
       guestCount
       id
-      isWaiting
       name
       notes
       phone
       seatedAt
       departedAt
-      tableID
+      tableId
       waitingSince
       createdAt
       updatedAt
-      owner
     }
   }
 `;

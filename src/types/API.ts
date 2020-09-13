@@ -85,42 +85,31 @@ export type DeleteTableInput = {
 };
 
 export type CreatePartyInput = {
-  email?: string | null,
   estWait?: string | null,
   guestCount: number,
   id?: string | null,
-  isWaiting: boolean,
   name: string,
   notes?: string | null,
   phone?: string | null,
   seatedAt?: string | null,
   departedAt?: string | null,
-  tableID?: string | null,
-  waitingSince: string,
+  tableId: string,
+  waitingSince?: string | null,
 };
 
 export type ModelPartyConditionInput = {
-  email?: ModelStringInput | null,
   estWait?: ModelStringInput | null,
   guestCount?: ModelIntInput | null,
-  isWaiting?: ModelBooleanInput | null,
   name?: ModelStringInput | null,
   notes?: ModelStringInput | null,
   phone?: ModelStringInput | null,
   seatedAt?: ModelStringInput | null,
   departedAt?: ModelStringInput | null,
-  tableID?: ModelIDInput | null,
+  tableId?: ModelIDInput | null,
   waitingSince?: ModelStringInput | null,
   and?: Array< ModelPartyConditionInput | null > | null,
   or?: Array< ModelPartyConditionInput | null > | null,
   not?: ModelPartyConditionInput | null,
-};
-
-export type ModelBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
 };
 
 export type ModelIDInput = {
@@ -140,17 +129,15 @@ export type ModelIDInput = {
 };
 
 export type UpdatePartyInput = {
-  email?: string | null,
   estWait?: string | null,
   guestCount?: number | null,
   id: string,
-  isWaiting?: boolean | null,
   name?: string | null,
   notes?: string | null,
   phone?: string | null,
   seatedAt?: string | null,
   departedAt?: string | null,
-  tableID?: string | null,
+  tableId?: string | null,
   waitingSince?: string | null,
 };
 
@@ -170,17 +157,15 @@ export type ModelTableFilterInput = {
 };
 
 export type ModelPartyFilterInput = {
-  email?: ModelStringInput | null,
   estWait?: ModelStringInput | null,
   guestCount?: ModelIntInput | null,
   id?: ModelIDInput | null,
-  isWaiting?: ModelBooleanInput | null,
   name?: ModelStringInput | null,
   notes?: ModelStringInput | null,
   phone?: ModelStringInput | null,
   seatedAt?: ModelStringInput | null,
   departedAt?: ModelStringInput | null,
-  tableID?: ModelIDInput | null,
+  tableId?: ModelIDInput | null,
   waitingSince?: ModelStringInput | null,
   and?: Array< ModelPartyFilterInput | null > | null,
   or?: Array< ModelPartyFilterInput | null > | null,
@@ -204,27 +189,23 @@ export type CreateTableMutation = {
       __typename: "ModelPartyConnection",
       items:  Array< {
         __typename: "Party",
-        email: string | null,
         estWait: string | null,
         guestCount: number,
         id: string,
-        isWaiting: boolean,
         name: string,
         notes: string | null,
         phone: string | null,
         seatedAt: string | null,
         departedAt: string | null,
-        tableID: string | null,
-        waitingSince: string,
+        tableId: string,
+        waitingSince: string | null,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -245,27 +226,23 @@ export type UpdateTableMutation = {
       __typename: "ModelPartyConnection",
       items:  Array< {
         __typename: "Party",
-        email: string | null,
         estWait: string | null,
         guestCount: number,
         id: string,
-        isWaiting: boolean,
         name: string,
         notes: string | null,
         phone: string | null,
         seatedAt: string | null,
         departedAt: string | null,
-        tableID: string | null,
-        waitingSince: string,
+        tableId: string,
+        waitingSince: string | null,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -286,27 +263,23 @@ export type DeleteTableMutation = {
       __typename: "ModelPartyConnection",
       items:  Array< {
         __typename: "Party",
-        email: string | null,
         estWait: string | null,
         guestCount: number,
         id: string,
-        isWaiting: boolean,
         name: string,
         notes: string | null,
         phone: string | null,
         seatedAt: string | null,
         departedAt: string | null,
-        tableID: string | null,
-        waitingSince: string,
+        tableId: string,
+        waitingSince: string | null,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -318,21 +291,18 @@ export type CreatePartyMutationVariables = {
 export type CreatePartyMutation = {
   createParty:  {
     __typename: "Party",
-    email: string | null,
     estWait: string | null,
     guestCount: number,
     id: string,
-    isWaiting: boolean,
     name: string,
     notes: string | null,
     phone: string | null,
     seatedAt: string | null,
     departedAt: string | null,
-    tableID: string | null,
-    waitingSince: string,
+    tableId: string,
+    waitingSince: string | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -344,21 +314,18 @@ export type UpdatePartyMutationVariables = {
 export type UpdatePartyMutation = {
   updateParty:  {
     __typename: "Party",
-    email: string | null,
     estWait: string | null,
     guestCount: number,
     id: string,
-    isWaiting: boolean,
     name: string,
     notes: string | null,
     phone: string | null,
     seatedAt: string | null,
     departedAt: string | null,
-    tableID: string | null,
-    waitingSince: string,
+    tableId: string,
+    waitingSince: string | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -370,21 +337,18 @@ export type DeletePartyMutationVariables = {
 export type DeletePartyMutation = {
   deleteParty:  {
     __typename: "Party",
-    email: string | null,
     estWait: string | null,
     guestCount: number,
     id: string,
-    isWaiting: boolean,
     name: string,
     notes: string | null,
     phone: string | null,
     seatedAt: string | null,
     departedAt: string | null,
-    tableID: string | null,
-    waitingSince: string,
+    tableId: string,
+    waitingSince: string | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -404,27 +368,23 @@ export type GetTableQuery = {
       __typename: "ModelPartyConnection",
       items:  Array< {
         __typename: "Party",
-        email: string | null,
         estWait: string | null,
         guestCount: number,
         id: string,
-        isWaiting: boolean,
         name: string,
         notes: string | null,
         phone: string | null,
         seatedAt: string | null,
         departedAt: string | null,
-        tableID: string | null,
-        waitingSince: string,
+        tableId: string,
+        waitingSince: string | null,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -450,7 +410,6 @@ export type ListTablesQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -463,21 +422,18 @@ export type GetPartyQueryVariables = {
 export type GetPartyQuery = {
   getParty:  {
     __typename: "Party",
-    email: string | null,
     estWait: string | null,
     guestCount: number,
     id: string,
-    isWaiting: boolean,
     name: string,
     notes: string | null,
     phone: string | null,
     seatedAt: string | null,
     departedAt: string | null,
-    tableID: string | null,
-    waitingSince: string,
+    tableId: string,
+    waitingSince: string | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -492,28 +448,21 @@ export type ListPartysQuery = {
     __typename: "ModelPartyConnection",
     items:  Array< {
       __typename: "Party",
-      email: string | null,
       estWait: string | null,
       guestCount: number,
       id: string,
-      isWaiting: boolean,
       name: string,
       notes: string | null,
       phone: string | null,
       seatedAt: string | null,
       departedAt: string | null,
-      tableID: string | null,
-      waitingSince: string,
+      tableId: string,
+      waitingSince: string | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
-};
-
-export type OnCreateTableSubscriptionVariables = {
-  owner: string,
 };
 
 export type OnCreateTableSubscription = {
@@ -528,32 +477,24 @@ export type OnCreateTableSubscription = {
       __typename: "ModelPartyConnection",
       items:  Array< {
         __typename: "Party",
-        email: string | null,
         estWait: string | null,
         guestCount: number,
         id: string,
-        isWaiting: boolean,
         name: string,
         notes: string | null,
         phone: string | null,
         seatedAt: string | null,
         departedAt: string | null,
-        tableID: string | null,
-        waitingSince: string,
+        tableId: string,
+        waitingSince: string | null,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
-};
-
-export type OnUpdateTableSubscriptionVariables = {
-  owner: string,
 };
 
 export type OnUpdateTableSubscription = {
@@ -568,32 +509,24 @@ export type OnUpdateTableSubscription = {
       __typename: "ModelPartyConnection",
       items:  Array< {
         __typename: "Party",
-        email: string | null,
         estWait: string | null,
         guestCount: number,
         id: string,
-        isWaiting: boolean,
         name: string,
         notes: string | null,
         phone: string | null,
         seatedAt: string | null,
         departedAt: string | null,
-        tableID: string | null,
-        waitingSince: string,
+        tableId: string,
+        waitingSince: string | null,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
-};
-
-export type OnDeleteTableSubscriptionVariables = {
-  owner: string,
 };
 
 export type OnDeleteTableSubscription = {
@@ -608,101 +541,76 @@ export type OnDeleteTableSubscription = {
       __typename: "ModelPartyConnection",
       items:  Array< {
         __typename: "Party",
-        email: string | null,
         estWait: string | null,
         guestCount: number,
         id: string,
-        isWaiting: boolean,
         name: string,
         notes: string | null,
         phone: string | null,
         seatedAt: string | null,
         departedAt: string | null,
-        tableID: string | null,
-        waitingSince: string,
+        tableId: string,
+        waitingSince: string | null,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
-};
-
-export type OnCreatePartySubscriptionVariables = {
-  owner: string,
 };
 
 export type OnCreatePartySubscription = {
   onCreateParty:  {
     __typename: "Party",
-    email: string | null,
     estWait: string | null,
     guestCount: number,
     id: string,
-    isWaiting: boolean,
     name: string,
     notes: string | null,
     phone: string | null,
     seatedAt: string | null,
     departedAt: string | null,
-    tableID: string | null,
-    waitingSince: string,
+    tableId: string,
+    waitingSince: string | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
-};
-
-export type OnUpdatePartySubscriptionVariables = {
-  owner: string,
 };
 
 export type OnUpdatePartySubscription = {
   onUpdateParty:  {
     __typename: "Party",
-    email: string | null,
     estWait: string | null,
     guestCount: number,
     id: string,
-    isWaiting: boolean,
     name: string,
     notes: string | null,
     phone: string | null,
     seatedAt: string | null,
     departedAt: string | null,
-    tableID: string | null,
-    waitingSince: string,
+    tableId: string,
+    waitingSince: string | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
-};
-
-export type OnDeletePartySubscriptionVariables = {
-  owner: string,
 };
 
 export type OnDeletePartySubscription = {
   onDeleteParty:  {
     __typename: "Party",
-    email: string | null,
     estWait: string | null,
     guestCount: number,
     id: string,
-    isWaiting: boolean,
     name: string,
     notes: string | null,
     phone: string | null,
     seatedAt: string | null,
     departedAt: string | null,
-    tableID: string | null,
-    waitingSince: string,
+    tableId: string,
+    waitingSince: string | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };

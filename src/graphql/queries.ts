@@ -12,27 +12,23 @@ export const getTable = /* GraphQL */ `
       name
       parties {
         items {
-          email
           estWait
           guestCount
           id
-          isWaiting
           name
           notes
           phone
           seatedAt
           departedAt
-          tableID
+          tableId
           waitingSince
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -51,10 +47,12 @@ export const listTables = /* GraphQL */ `
         name
         parties {
           nextToken
+          items {
+            name
+          }
         }
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -63,21 +61,18 @@ export const listTables = /* GraphQL */ `
 export const getParty = /* GraphQL */ `
   query GetParty($id: ID!) {
     getParty(id: $id) {
-      email
       estWait
       guestCount
       id
-      isWaiting
       name
       notes
       phone
       seatedAt
       departedAt
-      tableID
+      tableId
       waitingSince
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -89,21 +84,18 @@ export const listPartys = /* GraphQL */ `
   ) {
     listPartys(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        email
         estWait
         guestCount
         id
-        isWaiting
         name
         notes
         phone
         seatedAt
         departedAt
-        tableID
+        tableId
         waitingSince
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
