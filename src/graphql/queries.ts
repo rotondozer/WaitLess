@@ -7,6 +7,7 @@ export const getTable = /* GraphQL */ `
     getTable(id: $id) {
       description
       id
+      isOccupied
       maxSeats
       minSeats
       name
@@ -42,17 +43,12 @@ export const listTables = /* GraphQL */ `
       items {
         description
         id
+        isOccupied
         maxSeats
         minSeats
         name
         parties {
           nextToken
-          items {
-            id
-            name
-            seatedAt
-            departedAt
-          }
         }
         createdAt
         updatedAt

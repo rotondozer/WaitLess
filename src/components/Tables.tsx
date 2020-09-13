@@ -17,34 +17,32 @@ function Tables(props: Props): JSX.Element {
 
   useFocusEffect(
     useCallback(() => {
-      Table.fetchAll()
+      const getTables = showOnlyAvailable
+        ? Table.getAllAvailable
+        : Table.getAll;
+
+      getTables()
         .then(updateTables)
         .catch(e => console.log("fetchParties failed", JSON.stringify(e)));
-    }, []),
+    }, [showOnlyAvailable]),
   );
-
-  const visibleTables = showOnlyAvailable
-    ? tables.filter(t => !Table.isOccupied(t))
-    : tables;
 
   return (
     <View style={[Layouts.container, styles.container]}>
-      {visibleTables.map(t => (
+      {tables.map(t => (
         <TableSquare table={t} key={t.id} />
       ))}
     </View>
   );
 }
 
-interface TableSquareProps {
-  table: Table.Table;
-  isOccupied: boolean; // TODO: just add `isOccupied` to Table table in DB?
-}
 function TableSquare({ table }: { table: Table.Table }): JSX.Element {
-  const occupiedStyle = table.parties;
-  console.log("table.parties", occupiedStyle);
+  const occupiedStyle = table.isOccupied
+    ? styles.occupiedTable
+    : styles.availableTable;
+
   return (
-    <View style={styles.table}>
+    <View style={[styles.table, occupiedStyle]}>
       <Text>ID: {table.id}</Text>
       <Text>{table.name}</Text>
       <Text>

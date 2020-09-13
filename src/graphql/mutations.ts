@@ -10,6 +10,7 @@ export const createTable = /* GraphQL */ `
     createTable(input: $input, condition: $condition) {
       description
       id
+      isOccupied
       maxSeats
       minSeats
       name
@@ -43,6 +44,7 @@ export const updateTable = /* GraphQL */ `
     updateTable(input: $input, condition: $condition) {
       description
       id
+      isOccupied
       maxSeats
       minSeats
       name
@@ -76,6 +78,7 @@ export const deleteTable = /* GraphQL */ `
     deleteTable(input: $input, condition: $condition) {
       description
       id
+      isOccupied
       maxSeats
       minSeats
       name

@@ -259,9 +259,3 @@ export function toastSuccess(action: Action, p: Party): void {
   };
   ToastAndroid.show(`${p.name} has been ${verbed()}`, ToastAndroid.SHORT);
 }
-
-// -- HELPERS
-
-export function isWaiting(party: Party): boolean {
-  return party.tableId === WAITING_ID;
-}

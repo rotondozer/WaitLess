@@ -1,6 +1,7 @@
 type Table @model {
   description: String
   id: ID!
+  isOccupied: Boolean!
   maxSeats: Int!
   minSeats: Int!
   name: String!

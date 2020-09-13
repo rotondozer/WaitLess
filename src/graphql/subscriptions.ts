@@ -7,6 +7,7 @@ export const onCreateTable = /* GraphQL */ `
     onCreateTable {
       description
       id
+      isOccupied
       maxSeats
       minSeats
       name
@@ -37,6 +38,7 @@ export const onUpdateTable = /* GraphQL */ `
     onUpdateTable {
       description
       id
+      isOccupied
       maxSeats
       minSeats
       name
@@ -67,6 +69,7 @@ export const onDeleteTable = /* GraphQL */ `
     onDeleteTable {
       description
       id
+      isOccupied
       maxSeats
       minSeats
       name
