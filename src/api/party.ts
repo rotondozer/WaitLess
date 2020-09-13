@@ -25,6 +25,13 @@ import { createParty, deleteParty, updateParty } from "graphql/mutations";
  * It consolidates common types & function calls
  */
 
+/**
+ * Waiting parties are associated with a "waiting table" that is not rendered, rather than
+ * having tableId as null.
+ * (leaving the tableId as optional also caused issues with generated the @connection)
+ */
+const WAITING_ID = "waiting-table-id";
+
 const maybeNull = Maybe.fromNullable;
 
 export type Party = Party_;
@@ -35,7 +42,7 @@ export async function fetchPartiesWaiting(): Promise<Array<Party>> {
   console.log("Fetching Parties...");
   try {
     const partiesResult = (await API.graphql(
-      graphqlOperation(listPartys, { filter: { isWaiting: { eq: true } } }),
+      graphqlOperation(listPartys, { filter: { tableId: { eq: WAITING_ID } } }),
     )) as GraphQLResult<ListPartysQuery>;
 
     const parties = maybeNull(partiesResult.data)
@@ -90,15 +97,43 @@ function unsubscribeToPartyCreation(subscription: any): () => void {
 
 // -- CREATE
 
-export async function create(
+/**
+ * A party cannot be seated immediately and is added to the waitlist. This applies the default tableId
+ * reserved for waiting parties. When they are seated at a table, update it to be the available
+ * table's id using `Party.seatAt`
+ */
+export function addToWaitlist(
   name: string,
   guestCount: number,
   estWait: Time.Time,
 ): Promise<Party> {
+  return create(name, guestCount, WAITING_ID, Time.format(estWait));
+}
+
+/**
+ * There are available Tables to sit the party at when they enter the restaurant and do not need
+ * to be added to the waitlist. I still create the Party instance to record their seating data,
+ * and also because there needs to be a way for available tables to fill up before the Waitlist
+ * is required!
+ */
+export function seatImmediately(
+  tableId: string,
+  guestCount: number,
+  name?: string,
+): Promise<Party> {
+  return create(maybeNull(name).getOrElse("NONE"), guestCount, tableId);
+}
+
+async function create(
+  name: string,
+  guestCount: number,
+  tableId: string,
+  estWait?: string,
+): Promise<Party> {
   try {
     const createResult = (await API.graphql(
       graphqlOperation(createParty, {
-        input: createInput(name, guestCount, estWait),
+        input: createInput(name, guestCount, tableId, estWait),
       }),
     )) as GraphQLResult<CreatePartyMutation>;
 
@@ -114,15 +149,16 @@ export async function create(
 function createInput(
   name: string,
   guestCount: number,
-  estWait: Time.Time,
+  tableId: string,
+  estWait?: string,
 ): CreatePartyInput {
   return {
     id: uuid(),
-    name,
+    name: maybeNull(name).getOrElse("NONE"),
     guestCount,
-    waitingSince: new Date().toISOString(),
-    estWait: Time.format(estWait),
-    isWaiting: true,
+    [estWait ? "waitingSince" : "seatedAt"]: new Date().toISOString(),
+    estWait,
+    tableId,
   };
 }
 
@@ -144,13 +180,11 @@ export async function update(party: UpdatePartyInput): Promise<Party> {
   }
 }
 
-// TODO: include table id when seating party
-export async function seat(party: Party): Promise<Party> {
+export async function seatAt(tableId: string, party: Party): Promise<Party> {
   try {
+    const input: UpdatePartyInput = { ...party, tableId };
     const thing = (await API.graphql(
-      graphqlOperation(updateParty, {
-        input: { ...party, isWaiting: false },
-      }),
+      graphqlOperation(updateParty, { input }),
     )) as GraphQLResult<UpdatePartyMutation>;
 
     return Promise.resolve(thing.data?.updateParty as Party);
@@ -224,4 +258,10 @@ export function toastSuccess(action: Action, p: Party): void {
     }
   };
   ToastAndroid.show(`${p.name} has been ${verbed()}`, ToastAndroid.SHORT);
+}
+
+// -- HELPERS
+
+export function isWaiting(party: Party): boolean {
+  return party.tableId === WAITING_ID;
 }

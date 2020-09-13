@@ -87,7 +87,7 @@ function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
 
       <Button
         onPress={() =>
-          Party.create(name, guestCount, estWait)
+          Party.addToWaitlist(name, guestCount, estWait)
             .then(p => Party.toastSuccess(Party.Action.CREATE, p))
             .then(navigation.goBack)
             .catch(e => Party.alertFailure(Party.Action.CREATE, e))
