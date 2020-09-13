@@ -72,6 +72,7 @@ function WaitlistStack(): JSX.Element {
       <Stack.Screen name="Waitlist" component={Waitlist} />
       <Stack.Screen name="AddPartyForm" component={AddPartyForm} />
       <Stack.Screen name="EditPartyForm" component={EditPartyForm} />
+      <Stack.Screen name="Tables" component={Tables} />
     </Stack.Navigator>
   );
 }

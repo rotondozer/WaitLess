@@ -48,7 +48,10 @@ export const listTables = /* GraphQL */ `
         parties {
           nextToken
           items {
+            id
             name
+            seatedAt
+            departedAt
           }
         }
         createdAt

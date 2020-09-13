@@ -14,4 +14,5 @@ export type WaitlistStackParamList = {
   Waitlist: undefined;
   AddPartyForm: { onAddParty: (p: Party) => Party }; // ActiveUser not on the param list because it's supplied with a React.Context HOC
   EditPartyForm: { party: Party; onRemoveParty: (p: Party) => Party };
+  Tables: { showOnlyAvailable?: boolean };
 };

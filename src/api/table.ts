@@ -33,3 +33,18 @@ export async function fetchAll(): Promise<Array<Table>> {
     return Promise.reject(error);
   }
 }
+
+// -- HELPERS
+
+export function isOccupied(table: Table): boolean {
+  return maybeNull(table.parties)
+    .flatMap(ps => maybeNull(ps.items))
+    .map(parties =>
+      parties.some(party =>
+        maybeNull(party)
+          .map<boolean>(p => !p.departedAt)
+          .getOrElse(false),
+      ),
+    )
+    .getOrElse(false);
+}

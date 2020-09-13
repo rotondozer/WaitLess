@@ -52,7 +52,7 @@ function PartyWaiting(props: Props): JSX.Element {
         <Button
           text="Seat"
           onPress={
-            () => console.log("show table list")
+            () => navigation.navigate("Tables", { showOnlyAvailable: true })
             // Party.seatAt(party)
             //   .then(onSeatOrRemoveParty)
             //   .then(p => Party.toastSuccess(Party.Action.SEAT, p))
