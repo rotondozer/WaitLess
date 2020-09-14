@@ -2,20 +2,21 @@ import React, { useCallback, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Layouts } from "styles";
 import { useFocusEffect } from "@react-navigation/native";
-import { Table } from "api";
+import { Table, Party } from "api";
 import { StackScreenProps } from "@react-navigation/stack";
-import { TablesStackParamList } from "types";
+import { WaitlistStackParamList } from "types";
 import TableSquare from "./TableSquare";
 
-type Props = StackScreenProps<TablesStackParamList, "Tables">;
+type Props = StackScreenProps<WaitlistStackParamList, "AvailableTables">;
 
-function Tables(props: Props): JSX.Element {
+function AvailableTables(props: Props): JSX.Element {
   const [tables, updateTables] = useState<Array<Table.Table>>([]);
-  const { navigation } = props;
+
+  const { party } = props.route.params || { partyId: "" };
 
   useFocusEffect(
     useCallback(() => {
-      Table.getAll()
+      Table.getAllAvailable()
         .then(updateTables)
         .catch(e => console.log("fetchParties failed", JSON.stringify(e)));
     }, []),
@@ -25,9 +26,14 @@ function Tables(props: Props): JSX.Element {
     <View style={[Layouts.container, styles.container]}>
       {tables.map(table => (
         <TableSquare
-          key={table.id}
           table={table}
-          onPress={() => navigation.navigate("TableDetails", { table })}
+          key={table.id}
+          onPress={() =>
+            Table.updateAsOccupied(table.id)
+              .then(t => Party.seatAt(t.id, party.id))
+              .then(p => Party.toastSuccess(Party.Action.SEAT, p))
+              .catch(e => Party.alertFailure(Party.Action.SEAT, e))
+          }
         />
       ))}
     </View>
@@ -42,4 +48,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Tables;
+export default AvailableTables;

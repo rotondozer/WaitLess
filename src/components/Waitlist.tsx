@@ -1,14 +1,13 @@
-import React, { useCallback, useState, useContext } from "react";
+import React, { useCallback, useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 
-import { UserContext } from "state/user_context";
 import { Layouts, Colors } from "styles";
 import { WaitlistStackParamList } from "types";
 import { Party } from "api";
 import { Button } from "common";
-import PartyWaiting from "./WaitingParty";
+import WaitingParty from "./WaitingParty";
 
 // -- VIEW
 
@@ -16,8 +15,6 @@ type Props = StackScreenProps<WaitlistStackParamList, "Waitlist">;
 
 function WaitList({ navigation }: Props): JSX.Element {
   const [parties, updateParties] = useState<Array<Party.Party>>([]);
-
-  const { user } = useContext(UserContext);
 
   useFocusEffect(
     useCallback(() => {
@@ -42,7 +39,7 @@ function WaitList({ navigation }: Props): JSX.Element {
       <ScrollView alwaysBounceVertical style={styles.listContainer}>
         {parties.length > 0 ? (
           parties.map(party => (
-            <PartyWaiting
+            <WaitingParty
               key={party.id}
               party={party}
               navigation={navigation}

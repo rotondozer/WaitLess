@@ -51,12 +51,11 @@ function PartyWaiting(props: Props): JSX.Element {
       <View style={styles.bottomContainer}>
         <Button
           text="Seat"
-          onPress={
-            () => navigation.navigate("Tables", { showOnlyAvailable: true })
-            // Party.seatAt(party)
-            //   .then(onSeatOrRemoveParty)
-            //   .then(p => Party.toastSuccess(Party.Action.SEAT, p))
-            //   .catch(e => Party.alertFailure(Party.Action.SEAT, e))
+          onPress={() =>
+            navigation.navigate("AvailableTables", {
+              party,
+              onSeatParty: onSeatOrRemoveParty,
+            })
           }
           style={[styles.actionButtons, styles.seatButton]}
           textStyle={[Fonts.text2, styles.seatText]}

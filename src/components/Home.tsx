@@ -13,20 +13,26 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { User } from "api";
+import { User, Table } from "api";
 import { Colors, Fonts } from "styles";
-import { RootStackParamList, WaitlistStackParamList } from "types";
+import {
+  RootStackParamList,
+  WaitlistStackParamList,
+  TablesStackParamList,
+} from "types";
 import Waitlist from "./Waitlist";
 import AddPartyForm from "./AddPartyForm";
 import EditPartyForm from "./EditPartyForm";
 import Tables from "./Tables";
+import AvailableTables from "./AvailableTables";
 
 // -- NAVIGATOR
 
 const Tab = createMaterialTopTabNavigator();
 
 enableScreens();
-const Stack = createNativeStackNavigator<WaitlistStackParamList>();
+const WaitStack = createNativeStackNavigator<WaitlistStackParamList>();
+const TableStack = createNativeStackNavigator<TablesStackParamList>();
 
 type Navigation = StackNavigationProp<RootStackParamList, "Home">;
 
@@ -58,7 +64,7 @@ function Home(props: Props): JSX.Element {
           indicatorStyle: styles.tabBarIndicator,
         }}>
         <Tab.Screen name="Waitlist" component={WaitlistStack} />
-        <Tab.Screen name="Tables" component={Tables} />
+        <Tab.Screen name="Tables" component={TablesStack} />
       </Tab.Navigator>
     </>
   );
@@ -66,14 +72,33 @@ function Home(props: Props): JSX.Element {
 
 // -- PRIVATE
 
+function TablesStack(): JSX.Element {
+  return (
+    <TableStack.Navigator screenOptions={{ headerShown: false }}>
+      <TableStack.Screen name="Tables" component={Tables} />
+      <TableStack.Screen name="TableDetails" component={TableDetails} />
+    </TableStack.Navigator>
+  );
+}
+
+function TableDetails(table: Table.Table): JSX.Element {
+  // TODO: getPartiesForTable()
+  return (
+    <View style={{ flex: 1, backgroundColor: Colors.blue }}>
+      <Text style={Fonts.title}>Table Details</Text>
+      <Text style={Fonts.text2}>{table.name}</Text>
+    </View>
+  );
+}
+
 function WaitlistStack(): JSX.Element {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Waitlist" component={Waitlist} />
-      <Stack.Screen name="AddPartyForm" component={AddPartyForm} />
-      <Stack.Screen name="EditPartyForm" component={EditPartyForm} />
-      <Stack.Screen name="Tables" component={Tables} />
-    </Stack.Navigator>
+    <WaitStack.Navigator screenOptions={{ headerShown: false }}>
+      <WaitStack.Screen name="Waitlist" component={Waitlist} />
+      <WaitStack.Screen name="AddPartyForm" component={AddPartyForm} />
+      <WaitStack.Screen name="EditPartyForm" component={EditPartyForm} />
+      <WaitStack.Screen name="AvailableTables" component={AvailableTables} />
+    </WaitStack.Navigator>
   );
 }
 

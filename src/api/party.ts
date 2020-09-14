@@ -180,9 +180,9 @@ export async function update(party: UpdatePartyInput): Promise<Party> {
   }
 }
 
-export async function seatAt(tableId: string, party: Party): Promise<Party> {
+export async function seatAt(tableId: string, partyId: string): Promise<Party> {
   try {
-    const input: UpdatePartyInput = { ...party, tableId };
+    const input: UpdatePartyInput = { id: partyId, tableId };
     const thing = (await API.graphql(
       graphqlOperation(updateParty, { input }),
     )) as GraphQLResult<UpdatePartyMutation>;
@@ -190,7 +190,8 @@ export async function seatAt(tableId: string, party: Party): Promise<Party> {
     return Promise.resolve(thing.data?.updateParty as Party);
   } catch (error) {
     const err = JSON.stringify(error);
-    console.log(`seating party ${party.name} failed`, err);
+    console.log(`seating party with id ${partyId} failed`, err);
+
     return Promise.reject(err);
   }
 }

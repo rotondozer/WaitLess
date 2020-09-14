@@ -2,11 +2,18 @@ import "react-native-get-random-values"; // needs to be above uuid import
 // import { ToastAndroid, Alert } from "react-native";
 // import { v4 as uuid } from "uuid";
 import { Maybe } from "seidr";
-import { Table as Table_, ListTablesQuery, ModelTableFilterInput } from "types";
+import {
+  Table as Table_,
+  ListTablesQuery,
+  ModelTableFilterInput,
+  UpdateTableInput,
+  UpdateTableMutation,
+} from "types";
 
 import { API, graphqlOperation } from "aws-amplify";
 import { listTables } from "graphql/queries";
 import { GraphQLResult } from "@aws-amplify/api";
+import { updateTable } from "graphql/mutations";
 
 const maybeNull = Maybe.fromNullable;
 
@@ -24,15 +31,7 @@ const WAITING_ID = "waiting-table-id";
 export function getAllOccupied(): Promise<Array<Table>> {
   return getTables({ isOccupied: { eq: true } });
 }
-/**
- * isOccupied could be undefined, so test that it's explicitly
- * *not* equal to true.
- * TODO: replace GraphQL field `isOccupied` with `status` enum?
- * enum Status {
-     OCCUPIED,
-     AVAILABLE,
-   }
- */
+
 export function getAllAvailable(): Promise<Array<Table>> {
   return getTables({ isOccupied: { eq: false } });
 }
@@ -68,6 +67,32 @@ async function getTables(
   } catch (err) {
     const error = JSON.stringify(err);
     console.log("Failed Fetching Tables", error);
+
+    return Promise.reject(error);
+  }
+}
+
+// -- UPDATERS
+
+export function updateAsOccupied(tableId: string): Promise<Table> {
+  return update({ id: tableId, isOccupied: true });
+}
+
+async function update(input: UpdateTableInput): Promise<Table> {
+  console.log("Updating Tables...");
+
+  try {
+    const tablesResult = (await API.graphql(
+      graphqlOperation(updateTable, { input }),
+    )) as GraphQLResult<UpdateTableMutation>;
+
+    return maybeNull(tablesResult.data)
+      .flatMap(d => maybeNull(d.updateTable))
+      .map(t => Promise.resolve(t as Table))
+      .getOrElse(Promise.reject("null value returned"));
+  } catch (err) {
+    const error = JSON.stringify(err);
+    console.log("Failed updating Table", error);
 
     return Promise.reject(error);
   }
