@@ -6,12 +6,12 @@ import { Maybe } from "seidr";
 import { Party } from "api";
 import { WithUserContext, withUserContext } from "state/user_context";
 import { Input, Button } from "common";
-import { ParseInt, Time, WaitlistStackParamList } from "types";
+import { ParseInt, Time, RootStackParamList } from "types";
 import { Fonts, Layouts, Colors } from "styles";
 
 // -- VIEW
 
-type Props = StackScreenProps<WaitlistStackParamList, "EditPartyForm">;
+type Props = StackScreenProps<RootStackParamList, "EditPartyForm">;
 
 function EditPartyForm(props: WithUserContext<Props>): JSX.Element {
   const { navigation } = props;

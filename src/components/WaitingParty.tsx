@@ -10,13 +10,13 @@ import {
 } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { WaitlistStackParamList } from "types";
+import { RootStackParamList } from "types";
 import { Fonts, Colors } from "styles";
 import { Button } from "common";
 import { Party } from "api";
 
 interface Props {
-  navigation: StackNavigationProp<WaitlistStackParamList, "Waitlist">;
+  navigation: StackNavigationProp<RootStackParamList, "Home">;
   party: Party.Party;
 }
 function PartyWaiting(props: Props): JSX.Element {

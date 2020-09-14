@@ -4,10 +4,10 @@ import { Layouts } from "styles";
 import { useFocusEffect } from "@react-navigation/native";
 import { Table, Party } from "api";
 import { StackScreenProps } from "@react-navigation/stack";
-import { WaitlistStackParamList } from "types";
+import { RootStackParamList } from "types";
 import TableSquare from "./TableSquare";
 
-type Props = StackScreenProps<WaitlistStackParamList, "AvailableTables">;
+type Props = StackScreenProps<RootStackParamList, "AvailableTables">;
 
 function AvailableTables(props: Props): JSX.Element {
   const [tables, updateTables] = useState<Array<Table.Table>>([]);

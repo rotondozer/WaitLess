@@ -8,11 +8,16 @@ import { NavigationContainer } from "@react-navigation/native";
 import Amplify from "aws-amplify";
 import awsconfig from "./aws-exports";
 
-import Home from "./components/Home";
-import Settings from "./components/Settings";
 import { RootStackParamList } from "./types";
 import { Colors } from "styles";
 import { withAuthentication } from "api";
+
+import Home from "./components/Home";
+import Settings from "./components/Settings";
+import EditPartyForm from "./components/EditPartyForm";
+import AddPartyForm from "./components/AddPartyForm";
+import AvailableTables from "./components/AvailableTables";
+import TableDetails from "./components/TableDetails";
 
 // -- GRAPHQL API
 
@@ -37,12 +42,16 @@ function App(): JSX.Element {
       <View style={{ flex: 1 }}>
         <Stack.Navigator
           screenOptions={({ route }) => ({
-            headerShown: route.name === "Settings",
+            headerShown: route.name !== "Home",
             headerStyle: { backgroundColor: Colors.blueGray },
             headerTintColor: Colors.blackish,
           })}>
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Settings" component={Settings} />
+          <Stack.Screen name="EditPartyForm" component={EditPartyForm} />
+          <Stack.Screen name="AddPartyForm" component={AddPartyForm} />
+          <Stack.Screen name="AvailableTables" component={AvailableTables} />
+          <Stack.Screen name="TableDetails" component={TableDetails} />
         </Stack.Navigator>
       </View>
     </NavigationContainer>

@@ -7,44 +7,28 @@ import {
   StatusBar,
   Image,
 } from "react-native";
-import { enableScreens } from "react-native-screens";
-import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 
-import { User, Table } from "api";
+import { User } from "api";
 import { Colors, Fonts } from "styles";
-import {
-  RootStackParamList,
-  WaitlistStackParamList,
-  TablesStackParamList,
-} from "types";
+import { RootStackParamList } from "types";
 import Waitlist from "./Waitlist";
-import AddPartyForm from "./AddPartyForm";
-import EditPartyForm from "./EditPartyForm";
 import Tables from "./Tables";
-import AvailableTables from "./AvailableTables";
 
 // -- NAVIGATOR
 
 const Tab = createMaterialTopTabNavigator();
 
-enableScreens();
-const WaitStack = createNativeStackNavigator<WaitlistStackParamList>();
-const TableStack = createNativeStackNavigator<TablesStackParamList>();
-
 type Navigation = StackNavigationProp<RootStackParamList, "Home">;
 
 // -- VIEW
 
-interface Props {
-  navigation: Navigation;
-  route: RouteProp<RootStackParamList, "Home">;
-}
+type Props = StackScreenProps<RootStackParamList, "Home">;
 
 function Home(props: Props): JSX.Element {
   const [user, updateUser] = useState("");
+  const { navigation } = props;
 
   useEffect(() => {
     User.getCurrentUser(updateUser);
@@ -52,55 +36,27 @@ function Home(props: Props): JSX.Element {
 
   return (
     <>
-      <View style={styles.headerContainer}>
-        <Text style={Fonts.condensedText}>Hello, {user}!</Text>
-        <SettingsButton navigation={props.navigation} />
-      </View>
       <StatusBar backgroundColor={Colors.blueGray} barStyle="dark-content" />
+      {
+        <View style={styles.headerContainer}>
+          <Text style={Fonts.condensedText}>Hello, {user}!</Text>
+          <SettingsButton navigation={navigation} />
+        </View>
+      }
       <Tab.Navigator
         tabBarOptions={{
           labelStyle: Fonts.tabBar,
           style: styles.tabBar,
           indicatorStyle: styles.tabBarIndicator,
         }}>
-        <Tab.Screen name="Waitlist" component={WaitlistStack} />
-        <Tab.Screen name="Tables" component={TablesStack} />
+        <Tab.Screen name="Waitlist" component={Waitlist} />
+        <Tab.Screen name="Tables" component={Tables} />
       </Tab.Navigator>
     </>
   );
 }
 
 // -- PRIVATE
-
-function TablesStack(): JSX.Element {
-  return (
-    <TableStack.Navigator screenOptions={{ headerShown: false }}>
-      <TableStack.Screen name="Tables" component={Tables} />
-      <TableStack.Screen name="TableDetails" component={TableDetails} />
-    </TableStack.Navigator>
-  );
-}
-
-function TableDetails(table: Table.Table): JSX.Element {
-  // TODO: getPartiesForTable()
-  return (
-    <View style={{ flex: 1, backgroundColor: Colors.blue }}>
-      <Text style={Fonts.title}>Table Details</Text>
-      <Text style={Fonts.text2}>{table.name}</Text>
-    </View>
-  );
-}
-
-function WaitlistStack(): JSX.Element {
-  return (
-    <WaitStack.Navigator screenOptions={{ headerShown: false }}>
-      <WaitStack.Screen name="Waitlist" component={Waitlist} />
-      <WaitStack.Screen name="AddPartyForm" component={AddPartyForm} />
-      <WaitStack.Screen name="EditPartyForm" component={EditPartyForm} />
-      <WaitStack.Screen name="AvailableTables" component={AvailableTables} />
-    </WaitStack.Navigator>
-  );
-}
 
 function SettingsButton(props: { navigation: Navigation }): JSX.Element {
   return (

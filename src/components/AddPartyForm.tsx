@@ -1,22 +1,19 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet, Alert } from "react-native";
 import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 
 import { Party } from "api";
 import { WithUserContext, withUserContext } from "state/user_context";
 import { Input, Button } from "common";
-import { ParseInt, Time, WaitlistStackParamList } from "types";
+import { ParseInt, Time, RootStackParamList } from "types";
 import { Fonts, Layouts, Colors } from "../styles";
 
-type Navigation = StackNavigationProp<WaitlistStackParamList, "AddPartyForm">;
+type Navigation = StackNavigationProp<RootStackParamList, "AddPartyForm">;
 
 // -- VIEW
 
-interface Props {
-  navigation: Navigation;
-  route: RouteProp<WaitlistStackParamList, "AddPartyForm">;
-}
+type Props = StackScreenProps<RootStackParamList, "AddPartyForm">;
 
 function AddPartyForm(props: WithUserContext<Props>): JSX.Element {
   const { user, navigation } = props;

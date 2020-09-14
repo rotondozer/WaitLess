@@ -4,16 +4,16 @@ import { useFocusEffect } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 
 import { Layouts, Colors } from "styles";
-import { WaitlistStackParamList } from "types";
+import { RootStackParamList } from "types";
 import { Party } from "api";
 import { Button } from "common";
 import WaitingParty from "./WaitingParty";
 
 // -- VIEW
 
-type Props = StackScreenProps<WaitlistStackParamList, "Waitlist">;
+type Props = StackScreenProps<RootStackParamList, "Home">;
 
-function WaitList({ navigation }: Props): JSX.Element {
+function Waitlist({ navigation }: Props): JSX.Element {
   const [parties, updateParties] = useState<Array<Party.Party>>([]);
 
   useFocusEffect(
@@ -61,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WaitList;
+export default Waitlist;

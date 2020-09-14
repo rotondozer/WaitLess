@@ -4,10 +4,10 @@ import { Layouts } from "styles";
 import { useFocusEffect } from "@react-navigation/native";
 import { Table } from "api";
 import { StackScreenProps } from "@react-navigation/stack";
-import { TablesStackParamList } from "types";
+import { RootStackParamList } from "types";
 import TableSquare from "./TableSquare";
 
-type Props = StackScreenProps<TablesStackParamList, "Tables">;
+type Props = StackScreenProps<RootStackParamList, "Home">;
 
 function Tables(props: Props): JSX.Element {
   const [tables, updateTables] = useState<Array<Table.Table>>([]);
