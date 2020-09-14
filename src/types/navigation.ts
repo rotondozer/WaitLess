@@ -13,8 +13,8 @@ export type RootStackParamList = {
 export type WaitlistStackParamList = {
   Waitlist: undefined;
   AddPartyForm: { onAddParty: (p: Party) => Party }; // ActiveUser not on the param list because it's supplied with a React.Context HOC
-  EditPartyForm: { party: Party; onRemoveParty: (p: Party) => Party };
-  AvailableTables: { party: Party; onSeatParty: (p: Party) => Party };
+  EditPartyForm: { party: Party };
+  AvailableTables: { party: Party };
 };
 export type TablesStackParamList = {
   Tables: undefined;

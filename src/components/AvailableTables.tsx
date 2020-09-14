@@ -11,8 +11,8 @@ type Props = StackScreenProps<WaitlistStackParamList, "AvailableTables">;
 
 function AvailableTables(props: Props): JSX.Element {
   const [tables, updateTables] = useState<Array<Table.Table>>([]);
-
-  const { party } = props.route.params || { partyId: "" };
+  const { navigation } = props;
+  const { party } = props.route.params;
 
   useFocusEffect(
     useCallback(() => {
@@ -32,6 +32,7 @@ function AvailableTables(props: Props): JSX.Element {
             Table.updateAsOccupied(table.id)
               .then(t => Party.seatAt(t.id, party.id))
               .then(p => Party.toastSuccess(Party.Action.SEAT, p))
+              .then(() => navigation.goBack())
               .catch(e => Party.alertFailure(Party.Action.SEAT, e))
           }
         />

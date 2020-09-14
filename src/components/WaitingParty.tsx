@@ -18,10 +18,9 @@ import { Party } from "api";
 interface Props {
   navigation: StackNavigationProp<WaitlistStackParamList, "Waitlist">;
   party: Party.Party;
-  onSeatOrRemoveParty: (p: Party.Party) => Party.Party;
 }
 function PartyWaiting(props: Props): JSX.Element {
-  const { navigation, party, onSeatOrRemoveParty } = props;
+  const { navigation, party } = props;
 
   return (
     <View style={styles.guestCount} key={party.id}>
@@ -31,12 +30,7 @@ function PartyWaiting(props: Props): JSX.Element {
         </View>
         <Pressable
           style={editPartyButtonStyle}
-          onPress={() =>
-            navigation.navigate("EditPartyForm", {
-              party,
-              onRemoveParty: onSeatOrRemoveParty,
-            })
-          }>
+          onPress={() => navigation.navigate("EditPartyForm", { party })}>
           <Text style={[Fonts.condensedText, { paddingRight: 5 }]}>
             {party.guestCount} {party.guestCount > 1 ? "people" : "person"}
           </Text>
@@ -51,12 +45,7 @@ function PartyWaiting(props: Props): JSX.Element {
       <View style={styles.bottomContainer}>
         <Button
           text="Seat"
-          onPress={() =>
-            navigation.navigate("AvailableTables", {
-              party,
-              onSeatParty: onSeatOrRemoveParty,
-            })
-          }
+          onPress={() => navigation.navigate("AvailableTables", { party })}
           style={[styles.actionButtons, styles.seatButton]}
           textStyle={[Fonts.text2, styles.seatText]}
         />

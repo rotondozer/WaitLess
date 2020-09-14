@@ -29,11 +29,6 @@ function WaitList({ navigation }: Props): JSX.Element {
     return party;
   }
 
-  function removePartyFromState(party: Party.Party): Party.Party {
-    updateParties(ps => ps.filter(p => p.id !== party.id));
-    return party;
-  }
-
   return (
     <View style={Layouts.container}>
       <ScrollView alwaysBounceVertical style={styles.listContainer}>
@@ -43,7 +38,6 @@ function WaitList({ navigation }: Props): JSX.Element {
               key={party.id}
               party={party}
               navigation={navigation}
-              onSeatOrRemoveParty={removePartyFromState}
             />
           ))
         ) : (
