@@ -8,10 +8,12 @@ import {
   ModelTableFilterInput,
   UpdateTableInput,
   UpdateTableMutation,
+  GetTableQuery,
+  GetTableQueryVariables,
 } from "types";
 
 import { API, graphqlOperation } from "aws-amplify";
-import { listTables } from "graphql/queries";
+import { listTables, getTable } from "graphql/queries";
 import { GraphQLResult } from "@aws-amplify/api";
 import { updateTable } from "graphql/mutations";
 
@@ -40,6 +42,29 @@ export function getAll(): Promise<Array<Table>> {
   return getTables();
 }
 
+/**
+ * Fetch a single Table, including all parties associated with that Table.
+ */
+export async function getOne(tableId: string): Promise<Table> {
+  const getVars: GetTableQueryVariables = { id: tableId };
+
+  try {
+    const tablesResult = (await API.graphql(
+      graphqlOperation(getTable, getVars),
+    )) as GraphQLResult<GetTableQuery>;
+
+    return maybeNull(tablesResult.data)
+      .flatMap(d => maybeNull(d.getTable))
+      .map(t => Promise.resolve(t as Table))
+      .getOrElse(Promise.reject("null value returned"));
+  } catch (err) {
+    const error = JSON.stringify(err);
+    console.log("Failed Fetching Table with id: " + tableId, error);
+
+    return Promise.reject(error);
+  }
+}
+
 const defaultFilter: ModelTableFilterInput = {
   id: { ne: WAITING_ID },
 };
@@ -66,7 +91,7 @@ async function getTables(
     return Promise.resolve(tables);
   } catch (err) {
     const error = JSON.stringify(err);
-    console.log("Failed Fetching Tables", error);
+    console.log("Failed fetching Tables", error);
 
     return Promise.reject(error);
   }

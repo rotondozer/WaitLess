@@ -27,7 +27,11 @@ function Tables(props: Props): JSX.Element {
         <TableSquare
           key={table.id}
           table={table}
-          onPress={() => navigation.navigate("TableDetails", { table })}
+          onPress={() =>
+            Table.getOne(table.id).then(tableWithParties =>
+              navigation.navigate("TableDetails", { table: tableWithParties }),
+            )
+          }
         />
       ))}
     </View>
